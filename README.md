@@ -1,6 +1,6 @@
 
 ## Setup Development Environment
-### Prequisites
+### Prerequisites
   - Editor:
 	  - [Visual Studio Code](https://code.visualstudio.com/)
 	  - [WebStorm](https://www.jetbrains.com/webstorm/)
