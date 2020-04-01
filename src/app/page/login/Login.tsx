@@ -15,8 +15,9 @@ import { Link } from 'react-router-dom';
 import { AuthServiceProps, withAuthService } from '../../../service/AuthService';
 import { ClassNameMap } from '@material-ui/core/styles/withStyles';
 import { Alert } from '@material-ui/lab';
+import { Trans, WithTranslation, withTranslation } from 'react-i18next';
 
-interface LoginProps extends StyledComponentProps, AuthServiceProps{
+interface LoginProps extends StyledComponentProps, AuthServiceProps, WithTranslation {
     classes: ClassNameMap;
 }
 
@@ -27,7 +28,6 @@ interface LoginState {
 }
 
 class Login extends React.Component<LoginProps, LoginState> {
-
 
 
     constructor(props: Readonly<LoginProps>) {
@@ -47,20 +47,20 @@ class Login extends React.Component<LoginProps, LoginState> {
     };
 
     private handleFieldChange = <T extends keyof LoginState>(field: T) => (event: React.ChangeEvent<HTMLInputElement>) => {
-        this.setState({[field]: event.target.value});
+        this.setState({ [field]: event.target.value });
     };
 
     public render() {
-        const { classes } = this.props;
+        const { classes, t } = this.props;
         const { error } = this.state;
         return (
-            <Container component="main" maxWidth="xs">
+            <Container component="main" maxWidth="sm">
                 <div className={classes.paper}>
                     <Avatar className={classes.avatar}>
-                        <Icons.LockOutlined />
+                        <Icons.LockOutlined/>
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        Sign in
+                        <Trans>login:title</Trans>
                     </Typography>
                     <form className={classes.form} noValidate onSubmit={this.handleLogin}>
                         <TextField
@@ -69,7 +69,7 @@ class Login extends React.Component<LoginProps, LoginState> {
                             required
                             fullWidth
                             id="email"
-                            label="Email Address"
+                            label={t('login:email')}
                             name="email"
                             autoComplete="email"
                             onChange={this.handleFieldChange('email')}
@@ -82,7 +82,7 @@ class Login extends React.Component<LoginProps, LoginState> {
                             required
                             fullWidth
                             name="password"
-                            label="Password"
+                            label={t('login:password')}
                             type="password"
                             id="password"
                             autoComplete="current-password"
@@ -90,7 +90,7 @@ class Login extends React.Component<LoginProps, LoginState> {
                             error={!!error}
                         />
                         {error &&
-                        <Alert severity="error" >
+                        <Alert severity="error">
                             {error}
                         </Alert>
                         }
@@ -101,17 +101,17 @@ class Login extends React.Component<LoginProps, LoginState> {
                             color="primary"
                             className={classes.submit}
                         >
-                            Sign In
+                            <Trans>login:signIn</Trans>
                         </Button>
                         <Grid container>
                             <Grid item xs>
-                                <Link to="#">
-                                    Forgot password?
+                                <Link to="/resetpassword">
+                                    <Trans>login:resetPassword</Trans>
                                 </Link>
                             </Grid>
                             <Grid item>
-                                <Link to="#">
-                                    {"Don't have an account? Sign Up"}
+                                <Link to="/register">
+                                    <Trans>login:signUp</Trans>
                                 </Link>
                             </Grid>
                         </Grid>
@@ -122,4 +122,4 @@ class Login extends React.Component<LoginProps, LoginState> {
     }
 }
 
-export default withAuthService(withStyles(LoginStyle)(Login));
+export default withTranslation()(withAuthService(withStyles(LoginStyle)(Login)));
