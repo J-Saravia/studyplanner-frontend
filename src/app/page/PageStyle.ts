@@ -10,7 +10,7 @@ const PageStyle = (theme: Theme) => createStyles({
         flexGrow: 1,
         height: '100%',
         overflow: 'auto',
-        padding: theme.spacing(3),
+        padding: theme.spacing(1),
     },
     toolbar: {
         display: 'flex',
