@@ -18,13 +18,15 @@ import {
     Theme
 } from '@material-ui/core';
 import * as Icons from '@material-ui/icons';
-import HiddenJs from '@material-ui/core/Hidden/HiddenJs';
 import MenuStyle from './MenuStyle';
 import clsx from 'clsx';
 import { AuthServiceProps, withAuthService } from '../../service/AuthService';
 import { Breakpoint } from '@material-ui/core/styles/createBreakpoints';
+import ConfirmationDialog from '../dialog/ConfirmationDialog';
+import { Trans, WithTranslation, withTranslation } from 'react-i18next';
+import LanguageSelector from '../dialog/LanguageSelectionDialog';
 
-interface MenuProps extends WithWidthProps, StyledComponentProps, AuthServiceProps {
+interface MenuProps extends WithWidthProps, StyledComponentProps, AuthServiceProps, WithTranslation {
     classes: ClassNameMap;
     theme: Theme;
     width: Breakpoint;
@@ -32,6 +34,7 @@ interface MenuProps extends WithWidthProps, StyledComponentProps, AuthServicePro
 
 interface MenuState {
     open?: boolean;
+    hasUserRequestedLogout?: boolean;
 }
 
 class Menu extends React.Component<MenuProps, MenuState> {
@@ -42,12 +45,25 @@ class Menu extends React.Component<MenuProps, MenuState> {
     }
 
     private handleDrawerToggle = () => {
-        this.setState({ open: !this.state.open })
+        this.setState({ open: !this.state.open });
+    };
+
+    private handleLogout = () => {
+        this.setState({ hasUserRequestedLogout: true });
+    };
+
+    private handleLogoutConfirmation = () => {
+        this.setState({ hasUserRequestedLogout: false });
+        this.props.authService.logout();
+    };
+
+    private handleLogoutCancel = () => {
+        this.setState({ hasUserRequestedLogout: false });
     };
 
     public render = () => {
         const { classes, width, theme } = this.props;
-        const { open } = this.state;
+        const { open, hasUserRequestedLogout } = this.state;
         const isMobile = isWidthDown('sm', width);
         return (
             <div>
@@ -64,32 +80,11 @@ class Menu extends React.Component<MenuProps, MenuState> {
                             })}
                             onClick={this.handleDrawerToggle}
                         >
-                            <Icons.Menu />
+                            <Icons.Menu/>
                         </IconButton>
                         <Typography variant="h6" className={classes.title}>
                             Modulplaner
                         </Typography>
-                        <div className={classes.grow} />
-                        <HiddenJs smDown>
-                            <IconButton
-                                edge="end"
-                                aria-label="Create New Entry"
-                                aria-controls="new-entry"
-                                aria-haspopup="true"
-                                color="inherit"
-                            >
-                                <Icons.AddCircle fontSize="large"/>
-                            </IconButton>
-                            <IconButton
-                                edge="end"
-                                aria-label="Current user"
-                                aria-controls="current-user"
-                                aria-haspopup="true"
-                                color="inherit"
-                            >
-                                <Icons.AccountCircle fontSize="large"/>
-                            </IconButton>
-                        </HiddenJs>
                     </Toolbar>
                 </AppBar>
                 <Drawer
@@ -110,25 +105,39 @@ class Menu extends React.Component<MenuProps, MenuState> {
                 >
                     <div className={classes.toolbar}>
                         <IconButton onClick={this.handleDrawerToggle}>
-                            {theme.direction === 'rtl' ? <Icons.ChevronRight /> : <Icons.ChevronLeft />}
+                            {theme.direction === 'rtl' ? <Icons.ChevronRight/> : <Icons.ChevronLeft/>}
                         </IconButton>
                     </div>
-                    <Divider />
+                    <Divider/>
                     <List className={classes.list}>
                         <ListItem button>
-                            <ListItemIcon><Icons.Home /></ListItemIcon>
-                            <ListItemText primary={"Home"} />
+                            <ListItemIcon><Icons.Home/></ListItemIcon>
+                            <ListItemText primary={'Home'}/>
                         </ListItem>
-                        <div className={classes.grow} />
-                        <ListItem button onClick={() => this.props.authService.logout()}>
-                            <ListItemIcon><Icons.ExitToApp /></ListItemIcon>
-                            <ListItemText primary={"Logout"} />
+                        <div className={classes.grow}/>
+                        <LanguageSelector>
+                            <ListItem button>
+                                <ListItemIcon><Icons.Language/></ListItemIcon>
+                                <ListItemText primary={<Trans>translation:language</Trans>}/>
+                            </ListItem>
+                        </LanguageSelector>
+                        <ListItem button onClick={this.handleLogout}>
+                            <ListItemIcon><Icons.ExitToApp/></ListItemIcon>
+                            <ListItemText primary={<Trans>translation:messages.logout.title</Trans>}/>
                         </ListItem>
                     </List>
                 </Drawer>
+                <ConfirmationDialog
+                    title={'translation:messages.logout.title'}
+                    content={'translation:messages.logout.content'}
+                    confirmLabel={'translation:messages.logout.confirm'}
+                    onConfirm={this.handleLogoutConfirmation}
+                    onCancel={this.handleLogoutCancel}
+                    open={hasUserRequestedLogout}
+                />
             </div>
         );
     }
 }
 
-export default withAuthService(withWidth()(withStyles(MenuStyle)(withTheme(Menu))));
+export default withTranslation()(withAuthService(withWidth()(withStyles(MenuStyle)(withTheme(Menu)))));
