@@ -8,6 +8,8 @@ i18n
     .use(I18nextBrowserLanguageDetector)
     .use(initReactI18next)
     .init({
+        ns: ['translation', 'dialog', 'login'],
+        defaultNS: 'translation',
         fallbackLng: 'en',
         debug: true,
         interpolation: {
