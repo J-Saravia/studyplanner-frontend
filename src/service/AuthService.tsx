@@ -15,7 +15,9 @@ export default class AuthService {
     private studentSubject = new Rx.Subject<Student>();
     private currentStudent?: Student;
 
-    private constructor() {}
+    private constructor() {
+        this.currentStudent = StudentService.INSTANCE.list()[0];
+    }
 
     public isLoggedIn() {
         return !!this.token;
@@ -25,7 +27,7 @@ export default class AuthService {
         return this.currentStudent;
     }
 
-    public addStudentListener(observer: (value: Student) => void) : Rx.Subscription {
+    public addStudentListener(observer: (value: Student) => void): Rx.Subscription {
         return this.studentSubject.subscribe(observer);
     }
 
@@ -37,7 +39,7 @@ export default class AuthService {
         if (!student) {
             return Promise.reject('invalid credentials');
         }
-        const response = await Promise.resolve({token: '', refreshToken: ''}); // TODO: Add actual implementation once backend is available
+        const response = await Promise.resolve({ token: '', refreshToken: '' }); // TODO: Add actual implementation once backend is available
         this.studentSubject.next(this.currentStudent = student);
         return response;
     }
@@ -48,11 +50,11 @@ export default class AuthService {
         if (expired) {
             await this.refresh();
         }
-        return { 'Authorization' : `Bearer ${this.token?.tokenString}` };
+        return { 'Authorization': `Bearer ${this.token?.tokenString}` };
     }
 
     public refresh(): Promise<AuthResponse> {
-        return Promise.resolve({token: '', refreshToken: ''}); // TODO: send refresh token to server and update local values accordingly
+        return Promise.resolve({ token: '', refreshToken: '' }); // TODO: send refresh token to server and update local values accordingly
     }
 
     public logout() {
@@ -61,24 +63,22 @@ export default class AuthService {
     }
 
     public test() {
-        return "TEST";
+        return 'TEST';
     }
 }
 
 // https://medium.com/@thehappybug/using-react-context-in-a-typescript-app-c4ef7504c858
 
-const {Provider, Consumer} = React.createContext(AuthService.INSTANCE);
+const { Provider, Consumer } = React.createContext(AuthService.INSTANCE);
 
 export interface AuthServiceProps {
     authService: AuthService;
 }
 
-export const withAuthService = <
-    P extends AuthServiceProps
-    >(Component: React.ComponentType<P>): React.FC<Omit<P, keyof AuthServiceProps>> =>
+export const withAuthService = <P extends AuthServiceProps>(Component: React.ComponentType<P>): React.FC<Omit<P, keyof AuthServiceProps>> =>
     props => (
         <Consumer>
-            {value => <Component {...props as P} authService={value} />}
+            {value => <Component {...props as P} authService={value}/>}
         </Consumer>
     );
 
