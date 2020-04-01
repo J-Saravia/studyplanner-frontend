@@ -2,15 +2,15 @@ import * as React from 'react';
 import SemesterPreview from './SemesterPreview';
 import { StyledComponentProps, withStyles } from '@material-ui/core';
 import SemesterListStyle from './SemesterListStyle';
-import ModuleVisit from '../../model/ModuleVisit';
-import { StudentServiceProps, withStudentService } from '../../service/StudentService';
+import ModuleVisit from '../../../model/ModuleVisit';
+import { StudentServiceProps, withStudentService } from '../../../service/StudentService';
 import { ClassNameMap } from '@material-ui/core/styles/withStyles';
-import { ModuleVisitServiceProps, withModuleVisitService } from '../../service/ModuleVisitService';
-import DeleteModuleVisitDialog from './dialog/DeleteModuleVisitDialog';
-import { AuthServiceProps, withAuthService } from '../../service/AuthService';
+import { ModuleVisitServiceProps, withModuleVisitService } from '../../../service/ModuleVisitService';
+import DeleteModuleVisitDialog from '../dialog/DeleteModuleVisitDialog';
+import { AuthServiceProps, withAuthService } from '../../../service/AuthService';
 
 interface SemesterListState {
-    semesterModuleMap?: {[key: string]: ModuleVisit[]};
+    semesterModuleMap?: { [key: string]: ModuleVisit[] };
     moduleVisitToDelete?: ModuleVisit;
 }
 
@@ -18,7 +18,7 @@ interface SemesterListProps extends StudentServiceProps, ModuleVisitServiceProps
     classes: ClassNameMap;
 }
 
-class SemesterList extends React.Component<SemesterListProps, SemesterListState>{
+class SemesterList extends React.Component<SemesterListProps, SemesterListState> {
 
 
     constructor(props: Readonly<SemesterListProps>) {
@@ -36,7 +36,7 @@ class SemesterList extends React.Component<SemesterListProps, SemesterListState>
     }
 
     private handleConfirmDelete = () => {
-        const {moduleVisitToDelete, semesterModuleMap} = this.state;
+        const { moduleVisitToDelete, semesterModuleMap } = this.state;
         if (moduleVisitToDelete && semesterModuleMap) {
             this.props.moduleVisitService.delete(moduleVisitToDelete.id as string);
             semesterModuleMap[moduleVisitToDelete.semester] = semesterModuleMap[moduleVisitToDelete.semester].filter(mv => mv.id !== moduleVisitToDelete.id);
@@ -45,11 +45,11 @@ class SemesterList extends React.Component<SemesterListProps, SemesterListState>
     };
 
     private handleCancelDelete = () => {
-        this.setState({moduleVisitToDelete: undefined})
+        this.setState({ moduleVisitToDelete: undefined })
     };
 
     private handleDeleteModuleVisit = (moduleVisitToDelete: ModuleVisit) => {
-        this.setState({moduleVisitToDelete})
+        this.setState({ moduleVisitToDelete })
     };
 
     public render() {
@@ -58,20 +58,27 @@ class SemesterList extends React.Component<SemesterListProps, SemesterListState>
         let totalCredits = 0;
         let currentCredits = 0;
         let currentNegativeCredits = 0;
+        let weighedGradeSum = 0;
+        let divider = 0;
         if (semesterModuleMap) {
             const keys = Object.keys(semesterModuleMap);
             keys.forEach(key => {
                 semesterModuleMap[key].forEach(mv => {
                     const credits = mv.module.credits;
-                   totalCredits += credits;
-                   if (mv.state === 'passed') {
-                       currentCredits += credits;
-                   } else {
-                       currentNegativeCredits += credits;
-                   }
+                    totalCredits += credits;
+                    if (mv.state === 'passed') {
+                        currentCredits += credits;
+                        weighedGradeSum += mv.module.credits * mv.grade;
+                        divider += mv.module.credits;
+                    } else if (mv.state === 'failed') {
+                        currentNegativeCredits += credits;
+                        weighedGradeSum += mv.module.credits * mv.grade;
+                        divider += mv.module.credits;
+                    }
                 });
             });
         }
+        let averageGrade = weighedGradeSum / divider;
 
         return (
             <div className={classes.root}>
@@ -87,7 +94,9 @@ class SemesterList extends React.Component<SemesterListProps, SemesterListState>
                 </div>
                 <div>{currentCredits} / {totalCredits}</div>
                 <div>{currentNegativeCredits} / 60</div>
-                <DeleteModuleVisitDialog open={!!this.state.moduleVisitToDelete} onCancel={this.handleCancelDelete} onDelete={this.handleConfirmDelete} />
+                <div>Grade: {averageGrade}</div>
+                <DeleteModuleVisitDialog open={!!this.state.moduleVisitToDelete} onCancel={this.handleCancelDelete}
+                                         onConfirm={this.handleConfirmDelete}/>
             </div>
         );
     }

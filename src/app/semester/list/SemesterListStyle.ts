@@ -1,9 +1,7 @@
 import { createStyles, Theme } from '@material-ui/core';
 
 const SemesterListStyle = (theme: Theme) => createStyles({
-    root: {
-
-    },
+    root: {},
     list: {
         margin: theme.spacing(1),
         padding: theme.spacing(1),

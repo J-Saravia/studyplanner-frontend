@@ -3,7 +3,7 @@ import { Chip, isWidthDown, StyledComponentProps, withStyles, withWidth, WithWid
 import SemesterModuleVisitStyle from './SemesterModuleVisitStyle';
 import clsx from 'clsx';
 import { ClassNameMap } from '@material-ui/core/styles/withStyles';
-import ModuleVisit from '../../model/ModuleVisit';
+import ModuleVisit from '../../../model/ModuleVisit';
 import { Breakpoint } from '@material-ui/core/styles/createBreakpoints';
 
 interface SemesterModuleProps extends WithWidthProps, StyledComponentProps, WithWidthProps {
@@ -22,15 +22,17 @@ class SemesterModuleVisit extends React.Component<SemesterModuleProps, any> {
     }
 
     private onMouseEnter = () => {
-        this.setState({isMouseOver: true});
+        this.setState({ isMouseOver: true });
     };
 
     private onMouseLeave = () => {
-        this.setState({isMouseOver: false});
+        this.setState({ isMouseOver: false });
     };
 
     private onClick = (event: React.MouseEvent<HTMLDivElement>) => {
         event.currentTarget.blur();
+        event.preventDefault();
+        event.stopPropagation();
         const { onClick } = this.props;
         if (onClick) {
             onClick();
@@ -39,6 +41,8 @@ class SemesterModuleVisit extends React.Component<SemesterModuleProps, any> {
 
     private onDelete = (event: React.MouseEvent<HTMLDivElement>) => {
         event.currentTarget.blur();
+        event.preventDefault();
+        event.stopPropagation();
         const { onDelete } = this.props;
         if (onDelete) {
             onDelete();
@@ -67,6 +71,7 @@ class SemesterModuleVisit extends React.Component<SemesterModuleProps, any> {
                 onDelete={(!isMobile && onDelete) ? this.onDelete : undefined}
                 onClick={onClick && this.onClick}
                 onMouseEnter={this.onMouseEnter}
+                onMouseOver={this.onMouseEnter}
                 onMouseLeave={this.onMouseLeave}
                 color="primary"
                 classes={{

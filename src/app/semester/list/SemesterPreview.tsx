@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {
-    IconButton, isWidthDown,
+    IconButton, isWidthDown, Link,
     StyledComponentProps,
     Typography,
     withStyles,
@@ -10,14 +10,15 @@ import {
 import SemesterPreviewStyle from './SemesterPreviewStyle';
 import { AddCircle } from '@material-ui/icons';
 import { ClassNameMap } from '@material-ui/core/styles/withStyles';
-import { ModuleVisitServiceProps, withModuleVisitService } from '../../service/ModuleVisitService';
-import ModuleVisit from '../../model/ModuleVisit';
-import { StudentServiceProps, withStudentService } from '../../service/StudentService';
+import { ModuleVisitServiceProps, withModuleVisitService } from '../../../service/ModuleVisitService';
+import ModuleVisit from '../../../model/ModuleVisit';
+import { StudentServiceProps, withStudentService } from '../../../service/StudentService';
 import SemesterModuleVisit from './SemesterModuleVisit';
 import { Breakpoint } from '@material-ui/core/styles/createBreakpoints';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 
-interface SemesterPreviewProps extends ModuleVisitServiceProps, StyledComponentProps, StudentServiceProps, WithWidthProps {
+interface SemesterPreviewProps extends ModuleVisitServiceProps, StyledComponentProps, StudentServiceProps, WithWidthProps, RouteComponentProps {
     classes: ClassNameMap;
     semester: string;
     moduleVisits: ModuleVisit[];
@@ -39,7 +40,7 @@ class SemesterPreview extends React.Component<SemesterPreviewProps, SemesterPrev
     }
 
     private moduleVisitClickHandler = (selectedModuleVisit: ModuleVisit) => () => {
-        this.setState({selectedModuleVisit})
+        this.setState({ selectedModuleVisit });
     };
 
     private moduleVisitDeleteHandler = (deletingModuleVisit: ModuleVisit) => () => {
@@ -50,6 +51,10 @@ class SemesterPreview extends React.Component<SemesterPreviewProps, SemesterPrev
 
     private handleAddButtonClick = () => {
         // TODO: implement this
+    };
+
+    private handleSelected = () => {
+        this.props.history.push(`/semester/${this.props.semester}`);
     };
 
     public render() {
@@ -66,11 +71,11 @@ class SemesterPreview extends React.Component<SemesterPreviewProps, SemesterPrev
         });
 
         return (
-            <div className={classes.root} >
-                <div className={classes.header}>
-                    <Typography variant="h6" className={classes.title}>{ semester }</Typography>
-                    <hr className={classes.rule} />
-                </div>
+            <div className={classes.root}>
+                <Link href={`/semester/${semester}`} onClick={this.handleSelected} className={classes.header}>
+                    <Typography variant="h6" className={classes.title}>{semester}</Typography>
+                    <hr className={classes.rule}/>
+                </Link>
                 <div className={classes.content}>
                     <div className={classes.modules}>
                         {moduleVisits && moduleVisits.map(mv => (
@@ -82,18 +87,21 @@ class SemesterPreview extends React.Component<SemesterPreviewProps, SemesterPrev
                             />
                         ))}
                     </div>
-                    <div className={classes.button}>
-                      <IconButton color="primary" size="small" onClick={this.handleAddButtonClick}>
-                        <AddCircle fontSize="large"/>
-                      </IconButton>
-                    </div>
+                    <IconButton color="primary" size="medium" onClick={this.handleAddButtonClick}>
+                        <AddCircle
+                            classes={{
+                                root: classes.button
+                            }}
+                        />
+                    </IconButton>
                     {!isMobile && <div className={classes.summary}>
                         {currentCredits} / {maxCredits}
                     </div>}
                 </div>
+                selected: {this.state.selectedModuleVisit?.module.code}
             </div>
         );
     }
 }
 
-export default withWidth()(withStudentService(withModuleVisitService(withStyles(SemesterPreviewStyle)(SemesterPreview))));
+export default withRouter(withWidth()(withStudentService(withModuleVisitService(withStyles(SemesterPreviewStyle)(SemesterPreview)))));
