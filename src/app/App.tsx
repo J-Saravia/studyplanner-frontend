@@ -7,12 +7,14 @@ import MainTheme from './MainTheme';
 
 function App() {
     return (
-        <BrowserRouter>
-            <ThemeProvider theme={MainTheme}>
-                <CssBaseline />
-                <Page />
-            </ThemeProvider>
-        </BrowserRouter>
+        <React.Suspense fallback={<div/>}>
+            <BrowserRouter>
+                <ThemeProvider theme={MainTheme}>
+                    <CssBaseline/>
+                    <Page/>
+                </ThemeProvider>
+            </BrowserRouter>
+        </React.Suspense>
     );
 }
 
