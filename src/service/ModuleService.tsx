@@ -27,14 +27,14 @@ export default class ModuleService {
             }
             return random;
         };
-        for(let i = 0; i < 1000; ++i) {
+        for (let i = 0; i < 1000; ++i) {
             let credits = 3;
             let cRandom = Math.random();
             if (cRandom > 0.5 && cRandom < 0.8) {
                 credits = 2;
             } else if (cRandom >= 0.8 && cRandom < 0.95) {
                 credits = 6;
-            } else  if (cRandom >= 0.95) {
+            } else if (cRandom >= 0.95) {
                 credits = 12;
             }
             let hs = Math.random() >= 0.5;
@@ -51,7 +51,7 @@ export default class ModuleService {
         }
         this.modules.forEach(m => {
             let depCount = Math.floor(Math.random() * 6);
-            for(let i = 0; i < depCount; ++i) {
+            for (let i = 0; i < depCount; ++i) {
                 m.requirements.push(randomModuleFor(m));
             }
         })
@@ -75,15 +75,13 @@ export default class ModuleService {
 
 // https://medium.com/@thehappybug/using-react-context-in-a-typescript-app-c4ef7504c858
 
-const {Provider, Consumer} = React.createContext(ModuleService.INSTANCE);
+const { Provider, Consumer } = React.createContext(ModuleService.INSTANCE);
 
 export interface ModuleServiceProps {
     moduleService: ModuleService;
 }
 
-export const withModuleService = <
-    P extends ModuleServiceProps
-    >(Component: React.ComponentType<P>): React.FC<Omit<P, keyof ModuleServiceProps>> => {
+export const withModuleService = <P extends ModuleServiceProps>(Component: React.ComponentType<P>): React.FC<Omit<P, keyof ModuleServiceProps>> => {
     return props => (
         <Consumer>
             {value => <Component {...props as P} moduleService={value}/>}
@@ -91,6 +89,6 @@ export const withModuleService = <
     );
 };
 
-export const ModuleServiceProvider : React.FC<ModuleServiceProps> = props => (
+export const ModuleServiceProvider: React.FC<ModuleServiceProps> = props => (
     <Provider value={props.moduleService}>{props.children}</Provider>
 );
