@@ -1,0 +1,13 @@
+{
+  "confirmation": {
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "content": "Are you sure you want to proceed with this action?",
+    "title": "Confirm action"
+  },
+  "selection": {
+    "title": "Selection",
+    "select": "Select",
+    "cancel": "Cancel"
+  }
+}
