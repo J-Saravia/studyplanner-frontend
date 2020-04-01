@@ -1,1 +1,21 @@
-{}
+{
+  "language": "English",
+  "messages": {
+    "logout": {
+      "title": "Logout",
+      "content": "Are you sure you want to log out?",
+      "confirm": "Logout"
+    },
+    "moduleVisit": {
+      "delete": {
+        "title": "Delete Module Visit",
+        "text": "You are about to delete a module visit, are you sure you want to do this?",
+        "confirm": "Delete"
+      }
+    }
+  },
+  "languages": {
+    "de": "German",
+    "en": "English"
+  }
+}
