@@ -19,10 +19,10 @@ export default class ModuleVisitService {
             let totalCreditCount = 0;
             let totalNegativeCreditCount = 0;
             const studentSkill = Math.random() - 0.5;
-            const extraCreds = Math.random() >= 0.9 ? Math.floor(Math.random() * 21) : 0;
+            const extraCredits = Math.random() >= 0.9 ? Math.floor(Math.random() * 21) : 0;
             const startSemester = +student.semester;
-            const semesterCount = Math.ceil((2020 - startSemester) * 2 + (Math.random() >= 0.5 ? 0 : 1));
-            const averageCreditsPerSemester = ((180 + extraCreds) / (Math.max(6, semesterCount)));
+            const semesterCount = Math.ceil((2020 - startSemester) * 2 + (Math.random() >= 0.5 ? 0 : 1) + (Math.random() >= 0.9 ? 1 : 0));
+            const averageCreditsPerSemester = ((180 + extraCredits) / (Math.max(6, semesterCount)));
             let cs = 0;
             for (let i = 0; i < semesterCount; ++i) {
                 const semester = `${i % 2 === 0 || i === 0 ? 'hs' : 'fs'}${Math.floor(startSemester + cs)}`;
@@ -30,27 +30,27 @@ export default class ModuleVisitService {
                 const isFutureSemester = semester === 'hs2020' || (startSemester + cs >= 2021);
                 let creditCount = 0;
                 const addedModules: Module[] = [];
-                while (creditCount <= averageCreditsPerSemester && totalCreditCount < 180 + extraCreds) {
+                while (creditCount <= averageCreditsPerSemester && totalCreditCount < 180 + extraCredits) {
                     let module = ms[Math.floor(Math.random() * ms.length)];
                     while (addedModules.indexOf(module) !== -1 || creditCount + module.credits > 35) {
                         module = ms[Math.floor(Math.random() * ms.length)];
                     }
                     addedModules.push(module);
-                    let grade = (isCurrentSemester || isFutureSemester ? 0 : (1 + ( Math.random() * 5)));
+                    let grade = ((isCurrentSemester && Math.random() < 0.9) || isFutureSemester ? 0 : (1 + (Math.random() * 5)));
                     if (grade > 0 && grade <= 4 && (Math.random() >= studentSkill || module.credits >= 6)) {
                         grade += 2;
                         if (grade <= 4 && module.credits >= 6) {
                             grade += .5;
                         }
                     }
-                    if (grade < 3.75 && totalNegativeCreditCount + module.credits >= 60) {
-                        grade = 3.75;
-                    }
-                    if (grade < 3.75) {
-                        totalNegativeCreditCount += module.credits;
+                    if (grade > 0 && grade < 3.75 && totalNegativeCreditCount + module.credits >= 60) {
+                        grade = 4;
                     }
                     grade = +grade.toFixed(2);
-                    const state = isFutureSemester ? 'planned' : isCurrentSemester ? 'ongoing' : grade < 3.75 ? 'failed' : 'passed';
+                    if (grade > 0 && grade < 3.75) {
+                        totalNegativeCreditCount += module.credits;
+                    }
+                    const state = grade > 0 ? grade < 3.75 ? 'failed' : 'passed' : isFutureSemester ? 'planned' : 'ongoing';
                     const visit: ModuleVisit = {
                         id: uuid.v4(),
                         grade,
@@ -84,7 +84,7 @@ export default class ModuleVisitService {
             visitMap[v.semester].push(v);
         });
         Object.keys(visitMap).forEach(key => {
-            visitMap[key] = visitMap[key].sort((a,b) => ModuleVisitService.compareModuleVisits(a,b));
+            visitMap[key] = visitMap[key].sort((a, b) => ModuleVisitService.compareModuleVisits(a, b));
         });
         return visitMap;
     }
@@ -130,15 +130,13 @@ export default class ModuleVisitService {
 
 // https://medium.com/@thehappybug/using-react-context-in-a-typescript-app-c4ef7504c858
 
-const {Provider, Consumer} = React.createContext(ModuleVisitService.INSTANCE);
+const { Provider, Consumer } = React.createContext(ModuleVisitService.INSTANCE);
 
 export interface ModuleVisitServiceProps {
     moduleVisitService: ModuleVisitService;
 }
 
-export const withModuleVisitService = <
-    P extends ModuleVisitServiceProps
-    >(Component: React.ComponentType<P>): React.FC<Omit<P, keyof ModuleVisitServiceProps>> => {
+export const withModuleVisitService = <P extends ModuleVisitServiceProps>(Component: React.ComponentType<P>): React.FC<Omit<P, keyof ModuleVisitServiceProps>> => {
     return props => (
         <Consumer>
             {value => <Component {...props as P} moduleVisitService={value}/>}
@@ -146,6 +144,6 @@ export const withModuleVisitService = <
     );
 };
 
-export const ModuleVisitServiceProvider : React.FC<ModuleVisitServiceProps> = props => (
+export const ModuleVisitServiceProvider: React.FC<ModuleVisitServiceProps> = props => (
     <Provider value={props.moduleVisitService}>{props.children}</Provider>
 );
