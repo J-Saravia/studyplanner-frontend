@@ -8,7 +8,7 @@ export default class StudentService {
 
     private readonly students: Student[] = [];
     private names = ['Jan', 'Peter', 'Hans', 'Ives', 'Mario', 'Marina', 'Phine', 'Kim', 'Gina', 'Elisabeth', 'Li', 'Timothy'];
-    private surnames = ['Müller', 'Meier', 'Hauser', 'Spengler', 'Smith', 'Ali' ,'Metzger', 'Schweizer'];
+    private surnames = ['Müller', 'Meier', 'Hauser', 'Spengler', 'Smith', 'Ali', 'Metzger', 'Schweizer'];
     private mailEndings = ['bluewin.ch', 'gmail.com', 'gmx.net', 'hotmail.com', 'fhnw.ch', 'students.fhnw.ch'];
 
     private constructor() {
@@ -19,7 +19,7 @@ export default class StudentService {
             semester: '2017'
         });
         const random = (b: number) => Math.floor(Math.random() * b);
-        for(let i = 0; i < 10; ++i) {
+        for (let i = 0; i < 10; ++i) {
             const name = this.names[random(this.names.length)];
             const surname = this.surnames[random(this.surnames.length)];
             const mailEnding = this.mailEndings[random(this.mailEndings.length)];
@@ -27,7 +27,7 @@ export default class StudentService {
             const semester = `${2020 - (1 + Math.random() * 5)}`;
             const degree = 'Computer Science';  // will be id
             const password = 'Passw0rd1234';
-            this.create({email, semester, degree, password});
+            this.create({ email, semester, degree, password });
         }
         console.log(this.students);
     }
@@ -51,7 +51,7 @@ export default class StudentService {
 
     public update(id: string, student: Student) {
         let index = this.students.findIndex(s => s.id === id);
-        if (index === -1) return Promise.reject("Not found");
+        if (index === -1) return Promise.reject('Not found');
         student.id = id;
         this.students.splice(index, 1, student);
         return Promise.resolve(student);
@@ -59,7 +59,7 @@ export default class StudentService {
 
     public delete(id: string) {
         let index = this.students.findIndex(s => s.id === id);
-        if (index === -1) return Promise.reject("Not found");
+        if (index === -1) return Promise.reject('Not found');
         this.students.splice(index, 1);
         return Promise.resolve();
     }
@@ -68,21 +68,19 @@ export default class StudentService {
 
 // https://medium.com/@thehappybug/using-react-context-in-a-typescript-app-c4ef7504c858
 
-const {Provider, Consumer} = React.createContext(StudentService.INSTANCE);
+const { Provider, Consumer } = React.createContext(StudentService.INSTANCE);
 
 export interface StudentServiceProps {
     studentService: StudentService;
 }
 
-export const withStudentService = <
-    P extends StudentServiceProps
-    >(Component: React.ComponentType<P>): React.FC<Omit<P, keyof StudentServiceProps>> =>
+export const withStudentService = <P extends StudentServiceProps>(Component: React.ComponentType<P>): React.FC<Omit<P, keyof StudentServiceProps>> =>
     props => (
         <Consumer>
             {value => <Component {...props as P} studentService={value}/>}
         </Consumer>
     );
 
-export const StudentServiceProvider : React.FC<StudentServiceProps> = props => (
+export const StudentServiceProvider: React.FC<StudentServiceProps> = props => (
     <Provider value={props.studentService}>{props.children}</Provider>
 );
