@@ -5,6 +5,13 @@
       "title": "Abmelden",
       "content": "Sind Sie sich sicher, dass Sie sich abmelden wollen?",
       "confirm": "Abmelden"
+    },
+    "moduleVisit": {
+      "delete": {
+        "title": "Löschen",
+        "text": "Sie sind dabei einen Modulbesuch zu löschen, sind Sie sich sicher?",
+        "confirm": "Löschen"
+      }
     }
   },
   "languages": {
