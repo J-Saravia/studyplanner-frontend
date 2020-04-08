@@ -6,16 +6,16 @@ import SemesterList from '../semester/list/SemesterList';
 import { AuthServiceProps, withAuthService } from '../../service/AuthService';
 import { ClassNameMap } from '@material-ui/core/styles/withStyles';
 import Login from './login/Login';
-import Student from '../../model/Student';
 import { Switch, Route } from 'react-router-dom';
 import SemesterView from '../semester/detail/SemesterView';
+import Protected from './Protected';
 
 interface PageProps extends AuthServiceProps, StyledComponentProps {
     classes: ClassNameMap;
 }
 
 interface PageState {
-    student?: Student;
+    isInitialising?: boolean;
 }
 
 class Page extends React.Component<PageProps, PageState> {
@@ -24,19 +24,21 @@ class Page extends React.Component<PageProps, PageState> {
     constructor(props: Readonly<PageProps>) {
         super(props);
         this.state = {
-            student: props.authService.getCurrentStudent(),
+            isInitialising: true
         };
     }
 
     componentDidMount() {
-        this.props.authService.addStudentListener(student => this.setState({ student }));
+        this.props.authService.tryAuthFromCache()
+            .then(_ => this.setState({isInitialising: false}))
+            .catch(_ => this.setState({isInitialising: false}));
     }
 
     public render() {
         const { classes } = this.props;
-        const { student } = this.state;
-        if (!student) {
-            return <Login/>;
+        const { isInitialising } = this.state;
+        if (isInitialising) {
+            return 'loading...';
         }
         return (
             <div className={classes.root}>
@@ -44,12 +46,14 @@ class Page extends React.Component<PageProps, PageState> {
                 <Paper className={classes.content}>
                     <div className={classes.toolbar}/>
                     <Switch>
-                        <Route path="/semester/:id">
-                            <SemesterView/>
-                        </Route>
-                        <Route>
-                            <SemesterList/>
-                        </Route>
+                        <Protected fallback={<Login />}>
+                            <Route path="/semester/:id">
+                                <SemesterView/>
+                            </Route>
+                            <Route>
+                                <SemesterList/>
+                            </Route>
+                        </Protected>
                     </Switch>
                 </Paper>
             </div>
