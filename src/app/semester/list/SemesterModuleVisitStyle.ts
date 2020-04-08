@@ -50,6 +50,7 @@ const SemesterModuleVisitStyle = (theme: Theme) => createStyles({
     },
     label: {
         color: theme.palette.common.black,
+        textAlign: 'center'
     },
     button: {
         position: 'absolute',
