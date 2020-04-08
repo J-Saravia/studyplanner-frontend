@@ -19,9 +19,11 @@ export default class AuthService {
     private token?: Token;
     private refreshToken?: Token;
     private studentSubject = new Rx.Subject<Student>();
+    private authStateSubject = new Rx.Subject<boolean>();
     private currentStudent?: Student;
 
     private constructor() {}
+
 
     /**
      * Returns true if there is a token set and said token is still valid.
@@ -41,42 +43,47 @@ export default class AuthService {
      * This function tries to load the token from the localStorage and checks if it is still valid.
      * If the token is valid, it will load the current Student object from the backend and return it.
      * If the token is invalid or absent, the function will try to retrieve a new token using the refresh token if available and then returns the current Student object.
-     * If all this fails, the function will just return undefined, thus indicating a failed authFromCache.
+     * If all this fails, the function will just return undefined, thus indicating a failed auth from cache.
      * This function will notify all listeners of studentSubject, if and when the login was successful.
      */
     public async tryAuthFromCache(): Promise<Student | undefined> {
-        const tokenString = localStorage.getItem('tokenString');
-        const refreshTokenString = localStorage.getItem('refreshTokenString');
-        // We can just skip this if no refresh token is present
-        if (refreshTokenString) {
-            const refreshToken = new Token(refreshTokenString);
-            if (tokenString) {
-                const token = new Token(tokenString);
-                try {
-                    if (token.isValid()) {
-                        this.token = token;
-                        this.refreshToken = refreshToken;
-                        const student = await StudentService.INSTANCE.findById(token.sub);
-                        this.studentSubject.next(this.currentStudent = student);
-                        return student;
+        if (!this.isLoggedIn()) {
+            const tokenString = localStorage.getItem('tokenString');
+            const refreshTokenString = localStorage.getItem('refreshTokenString');
+            // We can just skip this if no refresh token is present
+            if (refreshTokenString) {
+                const refreshToken = new Token(refreshTokenString);
+                if (tokenString) {
+                    const token = new Token(tokenString);
+                    try {
+                        if (token.isValid()) {
+                            this.token = token;
+                            this.refreshToken = refreshToken;
+                            const student = await StudentService.INSTANCE.findById(token.sub);
+                            this.studentSubject.next(this.currentStudent = student);
+                            this.authStateSubject.next(true);
+                            return student;
+                        }
+                    } catch (ignored) {
+                        // token seems to be valid, the request for the student failed however.
+                        // We will just try to refresh the token if possible
                     }
-                } catch (ignored) {
-                    // token seems to be valid, the request for the student failed however.
-                    // We will just try to refresh the token if possible
+                }
+                if (refreshToken.isValid()) {
+                    this.refreshToken = refreshToken;
+                    try {
+                        await this.refresh();
+                        return this.currentStudent;
+                    } catch (ignored) {
+                        // Refresh failed, logout and remove local auth data
+                        this.logout();
+                    }
                 }
             }
-            if (refreshToken.isValid()) {
-                this.refreshToken = refreshToken;
-                try {
-                    await this.refresh();
-                    return this.currentStudent;
-                } catch (ignored) {
-                    // Refresh failed, logout and remove local auth data
-                    this.logout();
-                }
-            }
+            return undefined;
+        } else {
+            return this.currentStudent;
         }
-        return undefined;
     }
 
     /**
@@ -85,6 +92,14 @@ export default class AuthService {
      */
     public addStudentListener(observer: (value: Student) => void): Rx.Subscription {
         return this.studentSubject.subscribe(observer);
+    }
+
+    /**
+     * Adds a listener for changes to the current auth state
+     * @param observer
+     */
+    public addAuthStateListener(observer: (value: boolean) => void): Rx.Subscription {
+        return this.authStateSubject.subscribe(observer);
     }
 
     /**
@@ -139,6 +154,7 @@ export default class AuthService {
 
             localStorage.setItem('tokenString', response.token);
             localStorage.setItem('refreshTokenString', response.refreshToken);
+            this.authStateSubject.next(true);
         } catch (e) {
             console.error('An error occurred while trying to handle an auth response.', e);
             this.logout();
@@ -155,6 +171,7 @@ export default class AuthService {
         this.token = undefined;
         this.refreshToken = undefined;
         this.studentSubject.next(this.currentStudent = undefined);
+        this.authStateSubject.next(false);
     }
 }
 
