@@ -27,20 +27,20 @@ class SemesterList extends React.Component<SemesterListProps, SemesterListState>
     }
 
     public componentDidMount() {
-        const student = this.props.authService.getCurrentStudent();
-        if (student) {
-            this.props.moduleVisitService.list(student.id as string).then(
-                (semesterModuleMap: { [key: string]: ModuleVisit[] }) => this.setState({ semesterModuleMap })
-            );
-        }
+        this.props.moduleVisitService.list().then(
+            (semesterModuleMap: { [key: string]: ModuleVisit[] }) => this.setState({ semesterModuleMap })
+        );
     }
 
     private handleConfirmDelete = () => {
         const { moduleVisitToDelete, semesterModuleMap } = this.state;
         if (moduleVisitToDelete && semesterModuleMap) {
-            this.props.moduleVisitService.delete(moduleVisitToDelete.id as string);
-            semesterModuleMap[moduleVisitToDelete.semester] = semesterModuleMap[moduleVisitToDelete.semester].filter(mv => mv.id !== moduleVisitToDelete.id);
-            this.setState({ moduleVisitToDelete: undefined })
+            this.props.moduleVisitService.delete(moduleVisitToDelete.id as string).then(_ => {
+                const list = semesterModuleMap[moduleVisitToDelete.semester];
+                const index = list.indexOf(moduleVisitToDelete);
+                list.splice(index, 1);
+                this.setState({ moduleVisitToDelete: undefined })
+            }).catch(_ => this.setState({ moduleVisitToDelete: undefined }));
         }
     };
 
