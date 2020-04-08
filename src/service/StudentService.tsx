@@ -1,6 +1,7 @@
-import Student from '../model/Student';
+import Student, { StudentDto } from '../model/Student';
 import * as React from 'react';
 import HttpClient from './HttpClient';
+import DegreeService from './DegreeService';
 
 export default class StudentService {
 
@@ -11,19 +12,26 @@ export default class StudentService {
     private constructor() {}
 
     public findById(id: string): Promise<Student> {
-        return this.restClient.getOne(id);
+        return this.restClient.getOne<StudentDto>(id).then(this.convertDto);
     }
 
     public create(student: Student): Promise<Student> {
-        return this.restClient.post(student);
+        return this.restClient.post<StudentDto>(student).then(this.convertDto);
     }
 
     public update(id: string, student: Student): Promise<Student> {
-        return this.restClient.put(id, student);
+        return this.restClient.put<StudentDto>(id, student).then(this.convertDto);
     }
 
-    public delete(id: string) {
+    public delete(id: string): Promise<void> {
         return this.restClient.delete(id);
+    }
+
+    private async convertDto(dto: StudentDto): Promise<Student> {
+        return {
+            ...dto,
+            degree: await DegreeService.INSTANCE.findById(dto.degree)
+        };
     }
 
 }
