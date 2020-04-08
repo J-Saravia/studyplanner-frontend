@@ -25,6 +25,7 @@ import { Breakpoint } from '@material-ui/core/styles/createBreakpoints';
 import ConfirmationDialog from '../dialog/ConfirmationDialog';
 import { Trans, WithTranslation, withTranslation } from 'react-i18next';
 import LanguageSelector from '../dialog/LanguageSelectionDialog';
+import Protected from './Protected';
 
 interface MenuProps extends WithWidthProps, StyledComponentProps, AuthServiceProps, WithTranslation {
     classes: ClassNameMap;
@@ -110,10 +111,12 @@ class Menu extends React.Component<MenuProps, MenuState> {
                     </div>
                     <Divider/>
                     <List className={classes.list}>
-                        <ListItem button>
-                            <ListItemIcon><Icons.Home/></ListItemIcon>
-                            <ListItemText primary={'Home'}/>
-                        </ListItem>
+                        <Protected silent>
+                            <ListItem button>
+                                <ListItemIcon><Icons.Home/></ListItemIcon>
+                                <ListItemText primary={'Home'}/>
+                            </ListItem>
+                        </Protected>
                         <div className={classes.grow}/>
                         <LanguageSelector>
                             <ListItem button>
@@ -121,10 +124,12 @@ class Menu extends React.Component<MenuProps, MenuState> {
                                 <ListItemText primary={<Trans>translation:language</Trans>}/>
                             </ListItem>
                         </LanguageSelector>
-                        <ListItem button onClick={this.handleLogout}>
-                            <ListItemIcon><Icons.ExitToApp/></ListItemIcon>
-                            <ListItemText primary={<Trans>translation:messages.logout.title</Trans>}/>
-                        </ListItem>
+                        <Protected silent>
+                            <ListItem button onClick={this.handleLogout}>
+                                <ListItemIcon><Icons.ExitToApp/></ListItemIcon>
+                                <ListItemText primary={<Trans>translation:messages.logout.title</Trans>}/>
+                            </ListItem>
+                        </Protected>
                     </List>
                 </Drawer>
                 <ConfirmationDialog
