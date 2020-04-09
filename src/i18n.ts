@@ -9,8 +9,9 @@ i18n
     .use(initReactI18next)
     .init({
         ns: ['translation', 'dialog', 'login'],
+        whitelist: ['en', 'de'],
         defaultNS: 'translation',
-        fallbackLng: 'en',
+        fallbackLng: 'de',
         debug: true,
         interpolation: {
             escapeValue: false,

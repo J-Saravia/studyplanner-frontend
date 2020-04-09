@@ -12,7 +12,8 @@
         "text": "You are about to delete a module visit, are you sure you want to do this?",
         "confirm": "Delete"
       }
-    }
+    },
+    "unauthorized": "Access denied"
   },
   "languages": {
     "de": "German",

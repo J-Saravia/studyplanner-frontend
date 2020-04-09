@@ -13,6 +13,8 @@
         "confirm": "Löschen"
       }
     }
+    },
+    "unauthorized": "Zugriff verweigert"
   },
   "languages": {
     "de": "Deutsch",

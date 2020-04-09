@@ -1,67 +1,37 @@
-import Student from '../model/Student';
+import Student, { StudentDto } from '../model/Student';
 import * as React from 'react';
-import * as uuid from 'uuid';
+import HttpClient from './HttpClient';
+import DegreeService from './DegreeService';
 
 export default class StudentService {
 
     public static readonly INSTANCE = new StudentService();
 
-    private readonly students: Student[] = [];
-    private names = ['Jan', 'Peter', 'Hans', 'Ives', 'Mario', 'Marina', 'Phine', 'Kim', 'Gina', 'Elisabeth', 'Li', 'Timothy'];
-    private surnames = ['Müller', 'Meier', 'Hauser', 'Spengler', 'Smith', 'Ali', 'Metzger', 'Schweizer'];
-    private mailEndings = ['bluewin.ch', 'gmail.com', 'gmx.net', 'hotmail.com', 'fhnw.ch', 'students.fhnw.ch'];
+    private restClient = new HttpClient('students');
 
-    private constructor() {
-        this.create({
-            email: `caligos@trivetia.org`,
-            degree: 'Computer Science', // will be id
-            password: 'nhlarcm8z',
-            semester: '2017'
-        });
-        const random = (b: number) => Math.floor(Math.random() * b);
-        for (let i = 0; i < 10; ++i) {
-            const name = this.names[random(this.names.length)];
-            const surname = this.surnames[random(this.surnames.length)];
-            const mailEnding = this.mailEndings[random(this.mailEndings.length)];
-            const email = `${name}.${surname}@${mailEnding}`.toLowerCase();
-            const semester = `${2020 - (1 + Math.random() * 5)}`;
-            const degree = 'Computer Science';  // will be id
-            const password = 'Passw0rd1234';
-            this.create({ email, semester, degree, password });
-        }
-        console.log(this.students);
+    private constructor() {}
+
+    public findById(id: string): Promise<Student> {
+        return this.restClient.getOne<StudentDto>(id).then(this.convertDto);
     }
 
-    /**
-     * @deprecated Will not be usable in the final version, only for testing
-     */
-    public list() {
-        return this.students;
+    public create(student: Student): Promise<Student> {
+        return this.restClient.post<StudentDto>(student).then(this.convertDto);
     }
 
-    public find(id: string) {
-        return Promise.resolve(this.students.find(s => s.id === id));
+    public update(id: string, student: Student): Promise<Student> {
+        return this.restClient.put<StudentDto>(id, student).then(this.convertDto);
     }
 
-    public create(student: Student) {
-        student.id = uuid.v4();
-        this.students.push(student);
-        return Promise.resolve(student);
+    public delete(id: string): Promise<void> {
+        return this.restClient.delete(id);
     }
 
-    public update(id: string, student: Student) {
-        let index = this.students.findIndex(s => s.id === id);
-        if (index === -1) return Promise.reject('Not found');
-        student.id = id;
-        this.students.splice(index, 1, student);
-        return Promise.resolve(student);
-    }
-
-    public delete(id: string) {
-        let index = this.students.findIndex(s => s.id === id);
-        if (index === -1) return Promise.reject('Not found');
-        this.students.splice(index, 1);
-        return Promise.resolve();
+    private async convertDto(dto: StudentDto): Promise<Student> {
+        return {
+            ...dto,
+            degree: await DegreeService.INSTANCE.findById(dto.degree)
+        };
     }
 
 }
