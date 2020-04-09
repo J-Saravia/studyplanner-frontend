@@ -46,14 +46,16 @@ class Page extends React.Component<PageProps, PageState> {
                 <Paper className={classes.content}>
                     <div className={classes.toolbar}/>
                     <Switch>
-                        <Protected fallback={<Login />}>
-                            <Route path="/semester/:id">
+                        <Route path="/semester/:id">
+                            <Protected fallback={<Login />}>
                                 <SemesterView/>
-                            </Route>
-                            <Route>
+                            </Protected>
+                        </Route>
+                        <Route>
+                            <Protected fallback={<Login />}>
                                 <SemesterList/>
-                            </Route>
-                        </Protected>
+                            </Protected>
+                        </Route>
                     </Switch>
                 </Paper>
             </div>

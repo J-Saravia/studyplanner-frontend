@@ -13,6 +13,7 @@ import { ClassNameMap } from '@material-ui/core/styles/withStyles';
 import SemesterModuleVisit from './SemesterModuleVisit';
 import { Breakpoint } from '@material-ui/core/styles/createBreakpoints';
 import ModuleVisit from '../../../model/ModuleVisit';
+import { Link } from 'react-router-dom';
 
 
 interface SemesterPreviewProps extends StyledComponentProps, WithWidthProps {
@@ -65,10 +66,10 @@ class SemesterPreview extends React.Component<SemesterPreviewProps, SemesterPrev
 
         return (
             <div className={classes.root}>
-                <div className={classes.header}>
+                <Link to={`/semester/${semester}`} className={classes.header}>
                     <Typography variant="h6" className={classes.title}>{semester}</Typography>
                     <hr className={classes.rule}/>
-                </div>
+                </Link>
                 <div className={classes.content}>
                     <div className={classes.modules}>
                         {moduleVisits && moduleVisits.map(mv => (
