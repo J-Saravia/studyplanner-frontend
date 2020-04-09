@@ -35,41 +35,36 @@ class SemesterView extends React.Component<SemesterViewProps, SemesterViewState>
     }
 
     componentDidMount(): void {
-        this.props.moduleVisitService.list().then(map => this.setState({visits: map[this.props.match.params.id]}));
-        let currentStudent = this.props.authService.getCurrentStudent();
-        if (currentStudent) {
-            this.props.moduleVisitService.list(currentStudent.id as string)
-                .then(map => this.setState({semesterMap: map[this.state.semester]}));
-        }
+        this.props.moduleVisitService.list().then(map => this.setState({semesterMap: map[this.state.semester]}));
     }
 
     private moduleVisitClickHandler = (selectedModuleVisit: ModuleVisit) => () => {
         // TODO: implement this
-    };
+    }
 
     private moduleVisitDeleteHandler = (deletingModuleVisit: ModuleVisit) => () => {
-        this.setState({ deletingModuleVisit })
-    };
+        this.setState({deletingModuleVisit})
+    }
 
     private handleConfirmDelete = () => {
-        const { deletingModuleVisit} = this.state;
-        let { semesterMap } = this.state;
+        const {deletingModuleVisit} = this.state;
+        let {semesterMap} = this.state;
         if (deletingModuleVisit && semesterMap) {
             this.props.moduleVisitService.delete(deletingModuleVisit.id as string);
-            semesterMap = semesterMap.filter(mv => (mv.id != deletingModuleVisit.id));
-            this.setState({ semesterMap });
-            this.setState({ deletingModuleVisit: undefined })
+            semesterMap = semesterMap.filter(mv => (mv.id !== deletingModuleVisit.id));
+            this.setState({semesterMap});
+            this.setState({deletingModuleVisit: undefined})
         }
-    };
+    }
 
     private handleCancelDelete = () => {
-        this.setState({ deletingModuleVisit: undefined })
-    };
+        this.setState({deletingModuleVisit: undefined})
+    }
 
 
     private handleAddButtonClick = () => {
         // TODO: implement this
-    };
+    }
 
     public render() {
         const {classes} = this.props;
