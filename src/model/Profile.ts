@@ -6,3 +6,7 @@ export default interface Profile {
     modules: Module[];
     minima: number;
 }
+
+export interface ProfileDto extends Omit<Profile, 'modules'>{
+    modules: string[];
+}

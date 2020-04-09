@@ -41,7 +41,7 @@ class Login extends React.Component<LoginProps, LoginState> {
             this.props.authService.login({
                 email: email,
                 password: password
-            }).catch(error => this.setState({ error }));
+            }).catch(error => this.setState({ error: error.toString() }));
         }
         event.preventDefault();
     };

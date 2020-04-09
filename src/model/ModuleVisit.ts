@@ -11,5 +11,9 @@ export default interface ModuleVisit {
     weekday: number; // 0 = Monday
     timeStart: string; // example: 08:15; default 00:00
     timeEnd: string; // default: 01:00
+}
 
+export interface ModuleVisitDto extends Omit<ModuleVisit, 'student' | 'module'> {
+    student: string;
+    module: string;
 }

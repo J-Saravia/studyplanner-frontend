@@ -10,7 +10,8 @@
   2. Open the project in the editor and  go to the terminal
   `CTRL + ¨` in VS Code on ch-de keyboards.
   `ALT + F12` in WebStorm
-  3. 
+  3. Run the `npm install` command
+  4. Change the API endpoint in public/config/api.json if needed
 ### Scripts
 #### `npm start`
 

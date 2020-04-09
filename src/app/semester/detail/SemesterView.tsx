@@ -17,8 +17,7 @@ class SemesterView extends React.Component<SemesterViewProps, any> {
     }
 
     componentDidMount(): void {
-        let currentStudent = this.props.authService.getCurrentStudent();
-        this.props.moduleVisitService.list(currentStudent?.id as string).then(map => this.setState({visits: map[this.props.match.params.id]}));
+        this.props.moduleVisitService.list().then(map => this.setState({visits: map[this.props.match.params.id]}));
     }
 
     public render() {

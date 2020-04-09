@@ -5,7 +5,8 @@
       "title": "Abmelden",
       "content": "Sind Sie sich sicher, dass Sie sich abmelden wollen?",
       "confirm": "Abmelden"
-    }
+    },
+    "unauthorized": "Zugriff verweigert"
   },
   "languages": {
     "de": "Deutsch",

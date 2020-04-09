@@ -1,97 +1,64 @@
 import * as React from 'react';
-import * as uuid from 'uuid';
-import Module from '../model/Module';
-import ModuleVisit from '../model/ModuleVisit';
+import ModuleVisit, { ModuleVisitDto } from '../model/ModuleVisit';
+import HttpClient from './HttpClient';
 import StudentService from './StudentService';
 import ModuleService from './ModuleService';
+import Module from '../model/Module';
+import Student from '../model/Student';
+import AuthService from './AuthService';
 
 export default class ModuleVisitService {
 
     public static readonly INSTANCE = new ModuleVisitService();
 
-    private readonly moduleVisits: ModuleVisit[] = [];
+    private restClient = new HttpClient('modulevisits');
 
-    private constructor() {
-        const students = StudentService.INSTANCE.list();
-        const ms = ModuleService.INSTANCE.getModules();
-        students.forEach(student => {
-            let count = 0;
-            let totalCreditCount = 0;
-            let totalNegativeCreditCount = 0;
-            const studentSkill = Math.random() - 0.5;
-            const extraCredits = Math.random() >= 0.9 ? Math.floor(Math.random() * 21) : 0;
-            const startSemester = +student.semester;
-            const semesterCount = Math.ceil((2020 - startSemester) * 2 + (Math.random() >= 0.5 ? 0 : 1) + (Math.random() >= 0.9 ? 1 : 0));
-            const averageCreditsPerSemester = ((180 + extraCredits) / (Math.max(6, semesterCount)));
-            let cs = 0;
-            for (let i = 0; i < semesterCount; ++i) {
-                const semester = `${i % 2 === 0 || i === 0 ? 'hs' : 'fs'}${Math.floor(startSemester + cs)}`;
-                const isCurrentSemester = semester === 'fs2020';
-                const isFutureSemester = semester === 'hs2020' || (startSemester + cs >= 2021);
-                let creditCount = 0;
-                const addedModules: Module[] = [];
-                while (creditCount <= averageCreditsPerSemester && totalCreditCount < 180 + extraCredits) {
-                    let module = ms[Math.floor(Math.random() * ms.length)];
-                    while (addedModules.indexOf(module) !== -1 || creditCount + module.credits > 35) {
-                        module = ms[Math.floor(Math.random() * ms.length)];
-                    }
-                    addedModules.push(module);
-                    let grade = ((isCurrentSemester && Math.random() < 0.9) || isFutureSemester ? 0 : (1 + (Math.random() * 5)));
-                    if (grade > 0 && grade <= 4 && (Math.random() >= studentSkill || module.credits >= 6)) {
-                        grade += 2;
-                        if (grade <= 4 && module.credits >= 6) {
-                            grade += .5;
-                        }
-                    }
-                    if (grade > 0 && grade < 3.75 && totalNegativeCreditCount + module.credits >= 60) {
-                        grade = 4;
-                    }
-                    grade = +grade.toFixed(2);
-                    if (grade > 0 && grade < 3.75) {
-                        totalNegativeCreditCount += module.credits;
-                    }
-                    const state = grade > 0 ? grade < 3.75 ? 'failed' : 'passed' : isFutureSemester ? 'planned' : 'ongoing';
-                    const visit: ModuleVisit = {
-                        id: uuid.v4(),
-                        grade,
-                        student,
-                        module,
-                        semester,
-                        state,
-                        weekday: Math.floor(Math.random() * 7),
-                        timeStart: '08:00',
-                        timeEnd: '08:01'
-                    };
-                    this.moduleVisits.push(visit);
-                    ++count;
-                    creditCount += module.credits;
-                    totalCreditCount += module.credits;
-                }
-                cs += (i + 1) % 2;
-            }
-            console.log(`Created ${count} modules over ${semesterCount} semesters for ${student.email}`);
-        });
-    }
+    private constructor() {}
 
 
-    public async list(studentId: string): Promise<{ [key: string]: ModuleVisit[] }> {
-        const visits: ModuleVisit[] = (await Promise.resolve(this.moduleVisits).then(value => value)).filter(m => m.student.id === studentId);
+    public async list(): Promise<{ [key: string]: ModuleVisit[] }> {
+        const authService = AuthService.INSTANCE;
+        if (!authService.isLoggedIn()) {
+            throw new Error('Unauthorized');
+        }
+        const student = authService.getCurrentStudent() as Student;
+        const dtos = await this.restClient
+            .request()
+            .query({student: student.id})
+            .fetch<ModuleVisitDto[]>();
         const visitMap: { [key: string]: ModuleVisit[] } = {};
-        visits.forEach(v => {
-            if (!visitMap[v.semester]) {
-                visitMap[v.semester] = [];
+        for (const dto of dtos) {
+            const visit = await ModuleVisitService.convertDto(dto, student);
+            if (!visitMap[dto.semester]) {
+                visitMap[dto.semester] = [];
             }
-            visitMap[v.semester].push(v);
-        });
+            visitMap[dto.semester].push(visit);
+        }
         Object.keys(visitMap).forEach(key => {
             visitMap[key] = visitMap[key].sort((a, b) => ModuleVisitService.compareModuleVisits(a, b));
         });
         return visitMap;
     }
 
+    public async findById(id: string): Promise<ModuleVisit> {
+        return ModuleVisitService.convertDto(await this.restClient.getOne(id));
+    }
+
+    public async create(moduleVisit: ModuleVisit): Promise<ModuleVisit> {
+        return ModuleVisitService.convertDto(await this.restClient.post(moduleVisit));
+    }
+
+    public async update(id: string, moduleVisit: ModuleVisit): Promise<ModuleVisit> {
+        return ModuleVisitService.convertDto(await this.restClient.put(id, moduleVisit));
+    }
+
+    public async delete(id: string) {
+        return await this.restClient.delete(id);
+    }
+
     private static compareModuleVisits(a: ModuleVisit, b: ModuleVisit) {
-        let va = ModuleVisitService.stateValue(a) - a.grade;
-        let vb = ModuleVisitService.stateValue(b) - b.grade;
+        const va = ModuleVisitService.stateValue(a) - a.grade;
+        const vb = ModuleVisitService.stateValue(b) - b.grade;
         return va - vb;
     }
 
@@ -108,23 +75,12 @@ export default class ModuleVisitService {
         }
     }
 
-    public find(id: string) {
-        return Promise.resolve(this.moduleVisits.find(s => s.id === id));
-    }
-
-    public create(moduleVisit: ModuleVisit) {
-
-    }
-
-    public update(id: string, moduleVisit: ModuleVisit) {
-
-    }
-
-    public delete(id: string) {
-        const index = this.moduleVisits.findIndex(mv => mv.id === id);
-        if (index >= 0) {
-            this.moduleVisits.splice(index, 1);
-        }
+    private static async convertDto(dto: ModuleVisitDto, student?: Student, module?: Module): Promise<ModuleVisit> {
+        return {
+            ...dto,
+            student: student || await StudentService.INSTANCE.findById(dto.student),
+            module: module || await ModuleService.INSTANCE.findById(dto.module)
+        };
     }
 }
 

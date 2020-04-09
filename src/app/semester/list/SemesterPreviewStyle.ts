@@ -20,9 +20,7 @@ const SemesterPreviewStyle = (theme: Theme) => createStyles({
         display: 'flex',
         alignItems: 'center',
         cursor: 'pointer',
-        '&:hover': {
-            textDecoration: 'none',
-        }
+        textDecoration: 'none',
     },
     title: {
         flexShrink: 1,
