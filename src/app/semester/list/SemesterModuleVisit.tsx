@@ -63,6 +63,7 @@ class SemesterModuleVisit extends React.Component<SemesterModuleProps, any> {
         const labelView = <div>
             <div className={classes.label}>{moduleVisit.module.code} </div>
             <div className={classes.label}>{moduleVisit.module.credits} ETCS</div>
+            {moduleVisit.module.msp !== 'NONE'? <div className={classes.label}>msp</div>: ''}
             <div className={classes.label}>{moduleVisit.grade ? `(${moduleVisit.grade})` : ''}</div>
         </div>;
 
