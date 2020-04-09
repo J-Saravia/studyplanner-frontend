@@ -25,12 +25,49 @@ class SemesterStatistics extends React.Component<SemesterStatisticsProps, any> {
         return total.toString();
     }
 
+    private getTotalMsps() {
+        const {moduleVisits} = this.props;
+        let total =  moduleVisits.map(m => m.module.msp).filter(ms => ms !== 'NONE').length;
+        return total.toString();
+    }
+
+    private getTotalGrade() {
+        const {moduleVisits} = this.props;
+        let weighedGradeSum = 0;
+        let totalEtc = 0;
+        let gradedModules =  moduleVisits.filter(m => m.state !== 'planned' && m.state !== 'ongoing');
+        gradedModules.forEach(m => {
+            const etc = m.module.credits;
+            totalEtc += etc;
+            weighedGradeSum += (etc * m.grade);
+        })
+        let total = weighedGradeSum / totalEtc;
+        return total.toString();
+    }
+
+    private getTotalPositive() {
+        const {moduleVisits} = this.props;
+        let total =  moduleVisits.filter(m => m.state === 'passed').map(m => m.module.credits).reduce(function(a, b){ return a + b; });
+        return total.toString();
+    }
+
+    private getTotalNegative() {
+        const {moduleVisits} = this.props;
+        let total =  moduleVisits.filter(m => m.state === 'failed').map(m => m.module.credits).reduce(function(a, b){ return a + b; });
+        return total.toString();
+    }
+
     public render() {
         const {classes} = this.props;
 
         return (
             <div>
-                {this.getChip(classes, 'ETCS', this.getTotalEtcs())}
+                {this.getChip(classes, 'Gesamt', this.getTotalEtcs())}
+                {this.getChip(classes, 'Bestanden', this.getTotalPositive())}
+                {this.getChip(classes, 'Ungenügend', this.getTotalNegative())}
+                {this.getChip(classes, 'MSPs', this.getTotalMsps())}
+                {this.getChip(classes, 'Ø Grade', this.getTotalGrade())}
+
             </div>
         )
     }
@@ -48,8 +85,8 @@ class SemesterStatistics extends React.Component<SemesterStatisticsProps, any> {
                 label: classes.label
             }}
             style={{
-                width: '120px',
-                height: '80px'
+                width: '100px',
+                height: '60px'
             }}
         />;
     }
