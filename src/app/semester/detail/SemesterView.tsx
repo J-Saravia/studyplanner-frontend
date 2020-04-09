@@ -14,6 +14,7 @@ import {ClassNameMap} from "@material-ui/core/styles/withStyles";
 import SemesterModuleVisit from "../list/SemesterModuleVisit";
 import {AddCircle} from "@material-ui/icons";
 import DeleteModuleVisitDialog from "../dialog/DeleteModuleVisitDialog";
+import SemesterStatistics from "./SemesterStatistics";
 
 interface SemesterViewProps extends RouteComponentProps<{ id: any }>, StyledComponentProps, ModuleVisitServiceProps, AuthServiceProps {
     classes: ClassNameMap;
@@ -76,22 +77,30 @@ class SemesterView extends React.Component<SemesterViewProps, SemesterViewState>
         return (
             <div className={classes.root}>
                 {this.getOverview(classes, semester, semesterMap)}
-                {SemesterView.getStatistic(classes)}
-
+                {SemesterView.getStatistic(classes, semesterMap)}
 
             </div>
         );
 
     }
 
-    private static getStatistic(classes: ClassNameMap) {
+    private static getStatistic(classes: ClassNameMap, semesterMap: ModuleVisit[] | undefined) {
         return <>
             <div className={classes.header}>
                 <Typography variant="h6" className={classes.title}>Semesterstatistik</Typography>
                 <hr className={classes.rule}/>
             </div>
-            Something
-            <p><br/></p>
+            <div className={classes.content}>
+
+                <div className={classes.modules}>
+                    {semesterMap &&
+                    <SemesterStatistics
+                        moduleVisits={semesterMap}>
+                    </SemesterStatistics>
+                    }
+                </div>
+            </div>
+
         </>;
     }
 
