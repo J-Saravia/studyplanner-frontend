@@ -8,12 +8,31 @@
     },
     "moduleVisit": {
       "delete": {
-        "title": "Delete Module Visit",
+        "title": "Delete",
         "text": "You are about to delete a module visit, are you sure you want to do this?",
         "confirm": "Delete"
       }
     },
-    "unauthorized": "Access denied"
+    "unauthorized": "Access denied",
+    "semesterStatistic": {
+      "title" : "Semester statistic",
+      "etcs": {
+        "total": "Total",
+        "passed": "Passed",
+        "failed": "Failed"
+      },
+      "grade": {
+        "title" : "Grades",
+        "avg": "Average",
+        "high": "Highest"
+
+      },
+      "msp": {
+        "total": "Total",
+        "written": "Written",
+        "oral": "Oral"
+      }
+    }
   },
   "languages": {
     "de": "German",

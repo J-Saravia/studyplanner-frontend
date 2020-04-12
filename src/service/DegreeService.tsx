@@ -24,14 +24,14 @@ export default class DegreeService extends CacheableService<Degree>{
             for(const id of dto.groups) {
                 groups.push(await ModuleGroupService.INSTANCE.findById(id));
             }
-            const profile = [];
-            for(const id of dto.profile) {
-                profile.push(await ProfileService.INSTANCE.findById(id));
+            const profiles = [];
+            for(const id of dto.profiles) {
+                profiles.push(await ProfileService.INSTANCE.findById(id));
             }
             data.push({
                 ...dto,
                 groups,
-                profile,
+                profiles,
             });
         }
         return data;
