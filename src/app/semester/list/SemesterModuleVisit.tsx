@@ -99,7 +99,7 @@ class SemesterModuleVisit extends React.Component<SemesterModuleProps, any> {
                     label: classes.label,
                 }}
                 style={{
-                    width: isDetailed ? '135px' : (isMobile ? '' : `${chipWidth}px`),
+                    width: isDetailed ? (!isMobile ? '135px' : '110px') : (isMobile ? '' : `${chipWidth}px`),
                     height: isDetailed ? '70px' : (!isMobile ? '' : `${chipWidth}px`)
                 }}
             />

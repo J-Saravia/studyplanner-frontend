@@ -7,6 +7,7 @@ const SemesterStatisticsStyle = (theme: Theme) => createStyles({
         [theme.breakpoints.down('sm')]: {
             flexGrow: 1,
             justifyContent: 'stretch',
+            maxWidth: '700px',
             flexDirection: 'column'
         }
 
