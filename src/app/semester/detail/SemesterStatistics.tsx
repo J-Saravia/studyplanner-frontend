@@ -57,32 +57,32 @@ class SemesterStatistics extends React.Component<SemesterStatisticsProps, any> {
     private getAvgGrade() {
         const {moduleVisits} = this.props;
 
-        let weighedGradeSum = 0;
+        let weightedGradeSum = 0;
         let totalEtc = 0;
-        let total = 0;
-        let gradedModules = moduleVisits.filter(m => m.state !== 'planned' && m.state !== 'ongoing');
+        let gradedModules = moduleVisits.filter(m => m.state !== 'planned' && m.state !== 'ongoing').filter(mv => mv.grade !== 0);
         if (gradedModules.length != 0) {
             gradedModules.forEach(m => {
                 const etc = m.module.credits;
                 totalEtc += etc;
-                weighedGradeSum += (etc * m.grade);
+                weightedGradeSum += (etc * m.grade);
             })
-            total = weighedGradeSum / totalEtc;
+            let total = (weightedGradeSum / totalEtc);
+            return total.toFixed(2).toString();
         }
-        return total.toString();
+        return 'N/D';
     }
 
 
     private getHighGrade() {
         const {moduleVisits} = this.props;
-        let gradedModule = moduleVisits.filter(m => m.state !== 'planned' && m.state !== 'ongoing');
-        let total = 0;
+        let gradedModule = moduleVisits.filter(m => m.state !== 'planned' && m.state !== 'ongoing').filter(mv => mv.grade !== 0);
         if (gradedModule.length != 0) {
-            total = gradedModule.map(mv => mv.grade).reduce(function (a, b) {
+            let total = gradedModule.map(mv => mv.grade).reduce(function (a, b) {
                 return (a > b) ? a : b;
             });
+            return total.toString();
         }
-        return total.toString();
+        return 'N/D';
     }
 
     private getTotalMsps() {
