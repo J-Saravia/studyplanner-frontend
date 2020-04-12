@@ -29,7 +29,7 @@ const SemesterViewStyle = (theme: Theme) => createStyles({
         display: 'flex',
         flexWrap: 'wrap',
         [theme.breakpoints.down('sm')]: {
-           justifyContent: 'center'
+            justifyContent: 'center'
         }
     },
     buttonSpace: {

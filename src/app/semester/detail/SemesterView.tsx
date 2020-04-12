@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {withRouter, RouteComponentProps} from 'react-router-dom';
 import {ModuleVisitServiceProps, withModuleVisitService} from '../../../service/ModuleVisitService';
-import {AuthServiceProps, withAuthService} from '../../../service/AuthService';
 import ModuleVisit from '../../../model/ModuleVisit';
 import {
     IconButton,
@@ -15,8 +14,9 @@ import SemesterModuleVisit from "../list/SemesterModuleVisit";
 import {AddCircle} from "@material-ui/icons";
 import DeleteModuleVisitDialog from "../dialog/DeleteModuleVisitDialog";
 import SemesterStatistics from "./SemesterStatistics";
+import {Trans, WithTranslation, withTranslation} from 'react-i18next';
 
-interface SemesterViewProps extends RouteComponentProps<{ id: any }>, StyledComponentProps, ModuleVisitServiceProps, AuthServiceProps {
+interface SemesterViewProps extends RouteComponentProps<{ id: any }>, StyledComponentProps, ModuleVisitServiceProps, WithTranslation {
     classes: ClassNameMap;
 }
 
@@ -35,7 +35,7 @@ class SemesterView extends React.Component<SemesterViewProps, SemesterViewState>
     }
 
     componentDidMount(): void {
-        this.props.moduleVisitService.list().then(map => this.setState({semesterMap: map[this.state.semester]}));
+        this.props.moduleVisitService.list().then(map => this.setState({semesterMap: map[this.state.semester] || []}));
     }
 
     private moduleVisitClickHandler = (selectedModuleVisit: ModuleVisit) => () => {
@@ -52,8 +52,7 @@ class SemesterView extends React.Component<SemesterViewProps, SemesterViewState>
         if (deletingModuleVisit && semesterMap) {
             this.props.moduleVisitService.delete(deletingModuleVisit.id as string);
             semesterMap = semesterMap.filter(mv => (mv.id !== deletingModuleVisit.id));
-            this.setState({semesterMap});
-            this.setState({deletingModuleVisit: undefined})
+            this.setState({semesterMap, deletingModuleVisit: undefined});
         }
     }
 
@@ -74,7 +73,6 @@ class SemesterView extends React.Component<SemesterViewProps, SemesterViewState>
             <div className={classes.root}>
                 {this.getOverview(classes, semester, semesterMap)}
                 {SemesterView.getStatistic(classes, semesterMap)}
-
             </div>
         );
 
@@ -83,7 +81,8 @@ class SemesterView extends React.Component<SemesterViewProps, SemesterViewState>
     private static getStatistic(classes: ClassNameMap, semesterMap: ModuleVisit[] | undefined) {
         return <>
             <div className={classes.header}>
-                <Typography variant="h6" className={classes.title}>Semesterstatistik</Typography>
+                <Typography variant="h6" className={classes.title}>
+                    <Trans>translation:messages.semesterStatistic.title</Trans></Typography>
                 <hr className={classes.rule}/>
             </div>
             <div className={classes.content}>
@@ -95,6 +94,9 @@ class SemesterView extends React.Component<SemesterViewProps, SemesterViewState>
                     </SemesterStatistics>
                     }
                 </div>
+            </div>
+            <div>
+                <br/>
             </div>
 
         </>;
@@ -132,4 +134,4 @@ class SemesterView extends React.Component<SemesterViewProps, SemesterViewState>
     }
 }
 
-export default withRouter(withAuthService(withModuleVisitService(withStyles(SemesterViewStyle)(SemesterView))));
+export default withRouter(withTranslation()(withModuleVisitService(withStyles(SemesterViewStyle)(SemesterView))));

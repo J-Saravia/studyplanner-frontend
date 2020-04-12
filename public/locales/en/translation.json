@@ -13,7 +13,26 @@
         "confirm": "Delete"
       }
     },
-    "unauthorized": "Access denied"
+    "unauthorized": "Access denied",
+    "semesterStatistic": {
+      "title" : "Semester statistic",
+      "etcs": {
+        "total": "Total",
+        "passed": "Passed",
+        "failed": "Failed"
+      },
+      "grade": {
+        "title" : "Grades",
+        "avg": "Average",
+        "high": "Highest"
+
+      },
+      "msp": {
+        "total": "Total",
+        "written": "Written",
+        "oral": "Oral"
+      }
+    }
   },
   "languages": {
     "de": "German",
