@@ -2,11 +2,10 @@ import * as React from 'react';
 import {Chip, StyledComponentProps, withStyles} from '@material-ui/core';
 import ModuleVisit from '../../../model/ModuleVisit';
 import {ClassNameMap} from '@material-ui/core/styles/withStyles';
-import {ModuleVisitServiceProps, withModuleVisitService} from '../../../service/ModuleVisitService';
-import {AuthServiceProps, withAuthService} from '../../../service/AuthService';
-import clsx from "clsx";
 import SemesterStatisticsStyle from "./SemesterStatisticsStyle";
-interface SemesterStatisticsProps extends ModuleVisitServiceProps, StyledComponentProps, AuthServiceProps {
+import {Trans, WithTranslation, withTranslation} from 'react-i18next';
+
+interface SemesterStatisticsProps extends StyledComponentProps, WithTranslation {
     classes: ClassNameMap;
     moduleVisits: ModuleVisit[];
 }
@@ -21,76 +20,137 @@ class SemesterStatistics extends React.Component<SemesterStatisticsProps, any> {
 
     private getTotalEtcs() {
         const {moduleVisits} = this.props;
-        let total =  moduleVisits.map(m => m.module.credits).reduce(function(a, b){ return a + b; });
-        return total.toString();
-    }
-
-    private getTotalMsps() {
-        const {moduleVisits} = this.props;
-        let total =  moduleVisits.map(m => m.module.msp).filter(ms => ms !== 'NONE').length;
-        return total.toString();
-    }
-
-    private getTotalGrade() {
-        const {moduleVisits} = this.props;
-        let weighedGradeSum = 0;
-        let totalEtc = 0;
-        let gradedModules =  moduleVisits.filter(m => m.state !== 'planned' && m.state !== 'ongoing');
-        gradedModules.forEach(m => {
-            const etc = m.module.credits;
-            totalEtc += etc;
-            weighedGradeSum += (etc * m.grade);
-        })
-        let total = weighedGradeSum / totalEtc;
+        let total = 0;
+        if (moduleVisits.length != 0) {
+            total = moduleVisits.map(m => m.module.credits).reduce(function (a, b) {
+                return a + b;
+            });
+        }
         return total.toString();
     }
 
     private getTotalPositive() {
         const {moduleVisits} = this.props;
-        let total =  moduleVisits.filter(m => m.state === 'passed').map(m => m.module.credits).reduce(function(a, b){ return a + b; });
+        let passedModule = moduleVisits.filter(m => m.state === 'passed');
+        let total = 0;
+        if (passedModule.length != 0) {
+            total = passedModule.map(m => m.module.credits).reduce(function (a, b) {
+                return a + b;
+            });
+        }
+
         return total.toString();
     }
 
     private getTotalNegative() {
         const {moduleVisits} = this.props;
-        let total =  moduleVisits.filter(m => m.state === 'failed').map(m => m.module.credits).reduce(function(a, b){ return a + b; });
+        let failedModule = moduleVisits.filter(m => m.state === 'failed');
+        let total = 0;
+        if (failedModule.length != 0) {
+            total = failedModule.map(m => m.module.credits).reduce(function (a, b) {
+                return a + b;
+            });
+        }
         return total.toString();
     }
+
+    private getAvgGrade() {
+        const {moduleVisits} = this.props;
+
+        let weighedGradeSum = 0;
+        let totalEtc = 0;
+        let total = 0;
+        let gradedModules = moduleVisits.filter(m => m.state !== 'planned' && m.state !== 'ongoing');
+        if (gradedModules.length != 0) {
+            gradedModules.forEach(m => {
+                const etc = m.module.credits;
+                totalEtc += etc;
+                weighedGradeSum += (etc * m.grade);
+            })
+            total = weighedGradeSum / totalEtc;
+        }
+        return total.toString();
+    }
+
+
+    private getHighGrade() {
+        const {moduleVisits} = this.props;
+        let gradedModule = moduleVisits.filter(m => m.state !== 'planned' && m.state !== 'ongoing');
+        let total = 0;
+        if (gradedModule.length != 0) {
+            total = gradedModule.map(mv => mv.grade).reduce(function (a, b) {
+                return (a > b) ? a : b;
+            });
+        }
+        return total.toString();
+    }
+
+    private getTotalMsps() {
+        const {moduleVisits} = this.props;
+        let total = moduleVisits.map(m => m.module.msp).filter(ms => ms !== 'NONE').length;
+        return total.toString();
+    }
+
+    private getOralMsps() {
+        const {moduleVisits} = this.props;
+        let total = moduleVisits.map(m => m.module.msp).filter(ms => ms === 'ORAL').length;
+        return total.toString();
+    }
+
+    private getWrittenMsps() {
+        const {moduleVisits} = this.props;
+        let total = moduleVisits.map(m => m.module.msp).filter(ms => ms === 'WRITTEN').length;
+        return total.toString();
+    }
+
 
     public render() {
         const {classes} = this.props;
 
         return (
-            <div>
-                {this.getChip(classes, 'Gesamt', this.getTotalEtcs())}
-                {this.getChip(classes, 'Bestanden', this.getTotalPositive())}
-                {this.getChip(classes, 'Ungenügend', this.getTotalNegative())}
-                {this.getChip(classes, 'MSPs', this.getTotalMsps())}
-                {this.getChip(classes, 'Ø Grade', this.getTotalGrade())}
+            <div className={classes.root}>
+                <div className={classes.group}>
+                    <div className={classes.groupTitle}>ETCS</div>
+                    {this.getChip('etcs.total', this.getTotalEtcs())}
+                    {this.getChip('etcs.passed', this.getTotalPositive())}
+                    {this.getChip('etcs.failed', this.getTotalNegative())}
 
+                </div>
+                <div className={classes.group}>
+                    <div className={classes.groupTitle}>
+                        <Trans>translation:messages.semesterStatistic.grade.title</Trans></div>
+                    {this.getChip('grade.avg', this.getAvgGrade())}
+                    {this.getChip('grade.high', this.getHighGrade())}
+                </div>
+                <div className={classes.group}>
+                    <div className={classes.groupTitle}>MSP</div>
+                    {this.getChip('msp.total', this.getTotalMsps())}
+                    {this.getChip('msp.written', this.getWrittenMsps())}
+                    {this.getChip('msp.oral', this.getOralMsps())}
+                </div>
             </div>
         )
     }
 
-    private getChip(classes: ClassNameMap, title: string, value: string) {
+    private getChip(label: string, value: string) {
+        const {classes} = this.props;
         return <Chip
             tabIndex={-1}
             label={<div>
-                <div className={classes.label}>{title}</div>
-                <div className={classes.label}>{value}</div>
+                <div className={classes.label}>
+                    <Trans>translation:messages.semesterStatistic.{label}</Trans>
+                </div>
+                <div className={classes.value}>{value}</div>
             </div>}
             color="primary"
             classes={{
-                root: clsx(classes.root),
-                label: classes.label
+                root: classes.elem
             }}
             style={{
-                width: '100px',
                 height: '60px'
             }}
         />;
     }
 }
 
-
-export default withAuthService(withModuleVisitService(withStyles(SemesterStatisticsStyle)(SemesterStatistics)));
+export default withTranslation()(withStyles(SemesterStatisticsStyle)(SemesterStatistics));
