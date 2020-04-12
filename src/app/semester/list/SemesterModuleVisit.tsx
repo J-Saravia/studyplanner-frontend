@@ -6,7 +6,7 @@ import {ClassNameMap} from '@material-ui/core/styles/withStyles';
 import ModuleVisit from '../../../model/ModuleVisit';
 import {Breakpoint} from '@material-ui/core/styles/createBreakpoints';
 
-interface SemesterModuleProps extends WithWidthProps, StyledComponentProps, WithWidthProps {
+interface SemesterModuleProps extends StyledComponentProps, WithWidthProps {
     moduleVisit: ModuleVisit;
     onClick?: () => void;
     onDelete?: () => void;
@@ -61,10 +61,15 @@ class SemesterModuleVisit extends React.Component<SemesterModuleProps, any> {
 
         const labelPreview = moduleVisit.module.code + (moduleVisit.grade ? ` (${moduleVisit.grade})` : '');
         const labelView = <div>
-            <div className={classes.label}>{moduleVisit.module.code} </div>
-            <div className={classes.label}>{moduleVisit.module.credits} ETCS</div>
-            {moduleVisit.module.msp !== 'NONE'? <div className={classes.label}>msp</div>: ''}
-            <div className={classes.label}>{moduleVisit.grade ? `(${moduleVisit.grade})` : ''}</div>
+            <div className={classes.moduleCode}>
+                {moduleVisit.module.code}
+            </div>
+            <div className={classes.label}>{moduleVisit.module.credits} ETCS
+                {moduleVisit.module.msp !== 'NONE' ? ', MSP' : ''}
+            </div>
+            <div className={classes.label}>
+                {moduleVisit.grade ? `(${moduleVisit.grade})` : ''}
+            </div>
         </div>;
 
         const isMobile = isWidthDown('sm', width);
@@ -94,8 +99,8 @@ class SemesterModuleVisit extends React.Component<SemesterModuleProps, any> {
                     label: classes.label,
                 }}
                 style={{
-                    width: isDetailed ? '120px' : (isMobile ? '' : `${chipWidth}px`),
-                    height: isDetailed ? '80px' : (!isMobile ? '' : `${chipWidth}px`)
+                    width: isDetailed ? '135px' : (isMobile ? '' : `${chipWidth}px`),
+                    height: isDetailed ? '70px' : (!isMobile ? '' : `${chipWidth}px`)
                 }}
             />
         )
