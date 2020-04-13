@@ -4,12 +4,9 @@ import { ModuleVisitServiceProps, withModuleVisitService } from '../../../servic
 import { AuthServiceProps, withAuthService } from '../../../service/AuthService';
 import ModuleVisit from '../../../model/ModuleVisit';
 
-interface SemesterViewProps extends RouteComponentProps<{id: any}>, ModuleVisitServiceProps, AuthServiceProps {
-
-}
+interface SemesterViewProps extends RouteComponentProps<{id: any}>, ModuleVisitServiceProps, AuthServiceProps {}
 
 class SemesterView extends React.Component<SemesterViewProps, any> {
-
 
     constructor(props: Readonly<SemesterViewProps>) {
         super(props);
@@ -17,7 +14,7 @@ class SemesterView extends React.Component<SemesterViewProps, any> {
     }
 
     componentDidMount(): void {
-        this.props.moduleVisitService.list().then(map => this.setState({visits: map[this.props.match.params.id]}));
+        this.props.moduleVisitService.mappedList().then(map => this.setState({visits: map[this.props.match.params.id]}));
     }
 
     public render() {
