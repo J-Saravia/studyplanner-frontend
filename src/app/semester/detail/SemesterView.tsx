@@ -35,7 +35,7 @@ class SemesterView extends React.Component<SemesterViewProps, SemesterViewState>
     }
 
     componentDidMount(): void {
-        this.props.moduleVisitService.list().then(map => this.setState({semesterMap: map[this.state.semester] || []}));
+        this.props.moduleVisitService.map().then(map => this.setState({semesterMap: map[this.state.semester] || []}));
     }
 
     private moduleVisitClickHandler = (selectedModuleVisit: ModuleVisit) => () => {
