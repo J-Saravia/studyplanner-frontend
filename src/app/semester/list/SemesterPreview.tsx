@@ -14,41 +14,86 @@ import SemesterModuleVisit from './SemesterModuleVisit';
 import { Breakpoint } from '@material-ui/core/styles/createBreakpoints';
 import ModuleVisit from '../../../model/ModuleVisit';
 import { Link } from 'react-router-dom';
+import ModuleVisitDialog from '../dialog/ModuleVisitDialog';
+import DeleteModuleVisitDialog from '../dialog/DeleteModuleVisitDialog';
+import { ModuleVisitServiceProps, withModuleVisitService } from '../../../service/ModuleVisitService';
 
 
-interface SemesterPreviewProps extends StyledComponentProps, WithWidthProps {
+interface SemesterPreviewProps extends StyledComponentProps, WithWidthProps, ModuleVisitServiceProps {
     classes: ClassNameMap;
     semester: string;
     moduleVisits: ModuleVisit[];
     width: Breakpoint;
-    onDeleteModuleVisit?: (moduleVisit: ModuleVisit) => void;
 }
 
 interface SemesterPreviewState {
     selectedModuleVisit?: ModuleVisit;
-    deletingModuleVisit?: ModuleVisit;
-    selectedSemster?: string;
+    moduleVisitToDelete?: ModuleVisit;
+    createModuleVisit?: boolean;
+    moduleVisits: ModuleVisit[];
 }
 
 class SemesterPreview extends React.Component<SemesterPreviewProps, SemesterPreviewState> {
 
-    constructor(props: Readonly<any>) {
+    constructor(props: Readonly<SemesterPreviewProps>) {
         super(props);
-        this.state = {};
+        this.state = {
+            moduleVisits: props.moduleVisits
+        };
     }
 
     private moduleVisitClickHandler = (selectedModuleVisit: ModuleVisit) => () => {
         this.setState({ selectedModuleVisit })
     };
 
-    private moduleVisitDeleteHandler = (deletingModuleVisit: ModuleVisit) => () => {
-        if (this.props.onDeleteModuleVisit) {
-            this.props.onDeleteModuleVisit(deletingModuleVisit);
+    private moduleVisitDeleteHandler = (moduleVisitToDelete: ModuleVisit) => () => {
+        this.setState({moduleVisitToDelete});
+    };
+
+
+    private handleConfirmDelete = () => {
+        const { moduleVisitToDelete } = this.state;
+        if (moduleVisitToDelete) {
+            this.props.moduleVisitService.delete(moduleVisitToDelete.id as string).then(_ => {
+                const moduleVisits = this.state.moduleVisits;
+                const index = moduleVisits.indexOf(moduleVisitToDelete);
+                moduleVisits.splice(index, 1);
+                this.setState({ moduleVisitToDelete: undefined, moduleVisits });
+            }).catch(error => {
+                this.setState({ moduleVisitToDelete: undefined });
+                console.log(error);
+            });
         }
     };
 
     private handleAddButtonClick = () => {
-        // TODO: implement this
+        this.setState({createModuleVisit: true});
+    };
+
+    private handleFinishCreateModuleVisit = (visit: ModuleVisit) => {
+        const {moduleVisits, createModuleVisit} = this.state;
+        if (createModuleVisit) {
+            moduleVisits.push(visit);
+            this.setState({
+                createModuleVisit: false,
+                moduleVisits: this.props.moduleVisitService.sortList(moduleVisits)
+            });
+        } else {
+            const index = moduleVisits.findIndex(v => v.id === visit.id);
+            moduleVisits.splice(index, 1, visit);
+            this.setState({
+                selectedModuleVisit: undefined,
+                moduleVisits: this.props.moduleVisitService.sortList(moduleVisits)
+            });
+        }
+    };
+
+    private handleCancelDelete = () => {
+        this.setState({moduleVisitToDelete: undefined});
+    };
+
+    private handleCancelModuleVisitDialog = () => {
+        this.setState({createModuleVisit: false, selectedModuleVisit: undefined});
     };
 
     public render() {
@@ -74,7 +119,7 @@ class SemesterPreview extends React.Component<SemesterPreviewProps, SemesterPrev
                     <div className={classes.modules}>
                         {moduleVisits && moduleVisits.map(mv => (
                             <SemesterModuleVisit
-                                key={mv.id}
+                                key={`semesterPreview-moduleVisit-${mv.id}`}
                                 moduleVisit={mv}
                                 onClick={this.moduleVisitClickHandler(mv)}
                                 onDelete={this.moduleVisitDeleteHandler(mv)}
@@ -92,9 +137,21 @@ class SemesterPreview extends React.Component<SemesterPreviewProps, SemesterPrev
                         {currentCredits} / {maxCredits}
                     </div>}
                 </div>
+                <DeleteModuleVisitDialog
+                    open={!!this.state.moduleVisitToDelete}
+                    onCancel={this.handleCancelDelete}
+                    onConfirm={this.handleConfirmDelete}
+                />
+                <ModuleVisitDialog
+                    semester={semester}
+                    open={this.state.createModuleVisit || !!this.state.selectedModuleVisit}
+                    edit={this.state.selectedModuleVisit}
+                    onFinished={this.handleFinishCreateModuleVisit}
+                    onCancel={this.handleCancelModuleVisitDialog}
+                />
             </div>
         );
     }
 }
 
-export default withWidth()(withStyles(SemesterPreviewStyle)(SemesterPreview));
+export default withWidth()(withModuleVisitService(withStyles(SemesterPreviewStyle)(SemesterPreview)));
