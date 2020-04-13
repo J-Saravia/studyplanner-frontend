@@ -32,7 +32,7 @@ export default class ModuleVisitService {
         return visits;
     }
 
-    public async mappedList(): Promise<{ [key: string]: ModuleVisit[] }> {
+    public async map(): Promise<{ [key: string]: ModuleVisit[] }> {
         const authService = AuthService.INSTANCE;
         if (!authService.isLoggedIn()) {
             throw new Error('Unauthorized');
