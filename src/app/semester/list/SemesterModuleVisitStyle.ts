@@ -11,13 +11,17 @@ const SemesterModuleVisitStyle = (theme: Theme) => createStyles({
         },
         border: '1px solid black',
         textAlign: 'left',
+        minWidth: '110px'
     },
     planned: {
-        backgroundColor: '#c4d3ff',
+        backgroundColor: '#DEE7FF',
         color: '#3366ff',
         borderColor: '#3366ff',
         '&:hover': {
             backgroundColor: '#c4d3ff'
+        },
+        '&:focus': {
+            backgroundColor: '#DEE7FF'
         },
     },
     ongoing: {
@@ -27,6 +31,9 @@ const SemesterModuleVisitStyle = (theme: Theme) => createStyles({
         '&:hover': {
             backgroundColor: '#ffffc4'
         },
+        '&:focus': {
+            backgroundColor: '#ffffe0'
+        },
     },
     passed: {
         backgroundColor: '#eeffdd',
@@ -34,6 +41,9 @@ const SemesterModuleVisitStyle = (theme: Theme) => createStyles({
         borderColor: '#99ff33',
         '&:hover': {
             backgroundColor: '#e0ffc2'
+        },
+        '&:focus': {
+            backgroundColor: '#eeffdd'
         },
     },
     failed: {
@@ -43,6 +53,9 @@ const SemesterModuleVisitStyle = (theme: Theme) => createStyles({
         '&:hover': {
             backgroundColor: '#ffc2c2'
         },
+        '&:focus': {
+            backgroundColor: '#ffdddd'
+        },
     },
     mobile: {
         flexGrow: 1,
@@ -50,6 +63,13 @@ const SemesterModuleVisitStyle = (theme: Theme) => createStyles({
     },
     label: {
         color: theme.palette.common.black,
+        textAlign: 'center'
+    },
+
+    moduleCode: {
+        color: theme.palette.common.black,
+        fontWeight: theme.typography.fontWeightBold,
+        textAlign: 'center'
     },
     button: {
         position: 'absolute',

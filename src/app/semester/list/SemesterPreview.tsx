@@ -123,14 +123,13 @@ class SemesterPreview extends React.Component<SemesterPreviewProps, SemesterPrev
                                 moduleVisit={mv}
                                 onClick={this.moduleVisitClickHandler(mv)}
                                 onDelete={this.moduleVisitDeleteHandler(mv)}
+                                isDetailed={false}
                             />
                         ))}
                     </div>
                     <IconButton color="primary" size="medium" onClick={this.handleAddButtonClick}>
                         <AddCircle
-                            classes={{
-                                root: classes.button
-                            }}
+                            className={classes.button}
                         />
                     </IconButton>
                     {!isMobile && <div className={classes.summary}>

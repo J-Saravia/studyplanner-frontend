@@ -50,6 +50,29 @@
           "module": "Modul",
           "state": "Status"
         }
+      },
+      "delete": {
+        "title": "Löschen",
+        "text": "Sie sind dabei einen Modulbesuch zu löschen, sind Sie sich sicher?",
+        "confirm": "Löschen"
+      }
+    },
+    "semesterStatistic": {
+      "title": "Semesterstatistik",
+      "etcs": {
+        "total": "Gesamt",
+        "passed": "Bestanden",
+        "failed": "Ungenügend"
+      },
+      "grade": {
+        "title": "Noten",
+        "avg": "Durchschnitt",
+        "high": "Höchste"
+      },
+      "msp": {
+        "total": "Gesamt",
+        "written": "Schriftlich",
+        "oral": "Mündlich"
       }
     },
     "unauthorized": "Zugriff verweigert"
