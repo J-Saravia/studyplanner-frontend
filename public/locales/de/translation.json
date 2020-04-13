@@ -1,10 +1,56 @@
 {
   "language": "Deutsch",
   "messages": {
+    "yes": "Ja",
+    "no": "Nein",
     "logout": {
       "title": "Abmelden",
       "content": "Sind Sie sich sicher, dass Sie sich abmelden wollen?",
       "confirm": "Abmelden"
+    },
+    "module": {
+      "selection": {
+        "loading": "Module werden geladen...",
+        "empty": "Keine Module gefunden",
+        "search": "Module durchsuchen",
+        "select": "Modul auswählen",
+        "code": "Kürzel",
+        "credits": "ECTS",
+        "semester": "Semester",
+        "msp": {
+          "none": "Keine",
+          "written": "Schriftlich",
+          "oral": "Mündlich"
+        },
+        "state": {
+          "blocked": "Gesperrt",
+          "failed": "Ungenügend",
+          "passed": "Bestanden",
+          "ongoing": "Angemeldet",
+          "planned": "Geplant",
+          "none": ""
+        },
+        "requirements": {
+          "title": "Vormodule",
+          "none": "Keine Vordmodule",
+          "fulfilled": "Alle Vormodule bestanden"
+        }
+      }
+    },
+    "moduleVisit": {
+      "dialog": {
+        "title": "Modulbesuch",
+        "save": "Bestätigen",
+        "field": {
+          "grade": "Note",
+          "semester": "Semester",
+          "timeStart": "Beginn",
+          "timeEnd": "Ende",
+          "weekday": "Wochentag",
+          "module": "Modul",
+          "state": "Status"
+        }
+      }
     },
     "unauthorized": "Zugriff verweigert"
   },

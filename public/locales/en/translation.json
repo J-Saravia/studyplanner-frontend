@@ -6,11 +6,52 @@
       "content": "Are you sure you want to log out?",
       "confirm": "Logout"
     },
+    "module": {
+      "selection": {
+        "loading": "Loading modules...",
+        "empty": "No modules found",
+        "search": "Search modules",
+        "select": "Select module",
+        "code": "Code",
+        "credits": "ECTS",
+        "semester": "Semester",
+        "msp": {
+          "none": "None",
+          "written": "Written",
+          "oral": "Oral"
+        },
+        "state": {
+          "blocked": "Blocked",
+          "failed": "Failed",
+          "passed": "Passed",
+          "ongoing": "Ongoing",
+          "planned": "Planned",
+          "none": ""
+        },
+        "requirements": {
+          "title": "Preceding modules",
+          "none": "No preceding modules",
+          "fulfilled": "Fulfilled all preceding modules"
+        }
+      }
+    },
     "moduleVisit": {
       "delete": {
         "title": "Delete Module Visit",
         "text": "You are about to delete a module visit, are you sure you want to do this?",
         "confirm": "Delete"
+      },
+      "create": {
+        "save": "Save",
+        "field": {
+          "grade": "Grade",
+          "semester": "Semester",
+          "timeStart": "Start",
+          "timeEnd": "End",
+          "weekday": "Day of the week",
+          "module": "Module",
+          "state": "State"
+        }
       }
     },
     "unauthorized": "Access denied"
