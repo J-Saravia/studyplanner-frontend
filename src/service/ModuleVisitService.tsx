@@ -15,8 +15,24 @@ export default class ModuleVisitService {
 
     private constructor() {}
 
+    public async list(): Promise<ModuleVisit[]> {
+        const authService = AuthService.INSTANCE;
+        if (!authService.isLoggedIn()) {
+            throw new Error('Unauthorized');
+        }
+        const student = authService.getCurrentStudent() as Student;
+        const dtos = await this.restClient
+            .request()
+            .query({student: student.id})
+            .fetch<ModuleVisitDto[]>();
+        const visits = [];
+        for(const dto of dtos) {
+            visits.push(await ModuleVisitService.convertToModel(dto, student));
+        }
+        return visits;
+    }
 
-    public async list(): Promise<{ [key: string]: ModuleVisit[] }> {
+    public async mappedList(): Promise<{ [key: string]: ModuleVisit[] }> {
         const authService = AuthService.INSTANCE;
         if (!authService.isLoggedIn()) {
             throw new Error('Unauthorized');
@@ -28,28 +44,34 @@ export default class ModuleVisitService {
             .fetch<ModuleVisitDto[]>();
         const visitMap: { [key: string]: ModuleVisit[] } = {};
         for (const dto of dtos) {
-            const visit = await ModuleVisitService.convertDto(dto, student);
+            const visit = await ModuleVisitService.convertToModel(dto, student);
             if (!visitMap[dto.semester]) {
                 visitMap[dto.semester] = [];
             }
             visitMap[dto.semester].push(visit);
         }
         Object.keys(visitMap).forEach(key => {
-            visitMap[key] = visitMap[key].sort((a, b) => ModuleVisitService.compareModuleVisits(a, b));
+            visitMap[key] = this.sortList(visitMap[key]);
         });
         return visitMap;
     }
 
+    public sortList(list: ModuleVisit[]) {
+        return list.sort((a, b) => ModuleVisitService.compareModuleVisits(a, b));
+    }
+
     public async findById(id: string): Promise<ModuleVisit> {
-        return ModuleVisitService.convertDto(await this.restClient.getOne(id));
+        return ModuleVisitService.convertToModel(await this.restClient.getOne(id));
     }
 
     public async create(moduleVisit: ModuleVisit): Promise<ModuleVisit> {
-        return ModuleVisitService.convertDto(await this.restClient.post(moduleVisit));
+        const dto = await ModuleVisitService.convertToDto(moduleVisit);
+        return ModuleVisitService.convertToModel(await this.restClient.post(dto), moduleVisit.student, moduleVisit.module);
     }
 
     public async update(id: string, moduleVisit: ModuleVisit): Promise<ModuleVisit> {
-        return ModuleVisitService.convertDto(await this.restClient.put(id, moduleVisit));
+        const dto = await ModuleVisitService.convertToDto(moduleVisit);
+        return ModuleVisitService.convertToModel(await this.restClient.put(id, dto), moduleVisit.student, moduleVisit.module);
     }
 
     public async delete(id: string) {
@@ -75,11 +97,20 @@ export default class ModuleVisitService {
         }
     }
 
-    private static async convertDto(dto: ModuleVisitDto, student?: Student, module?: Module): Promise<ModuleVisit> {
+    private static async convertToModel(dto: ModuleVisitDto, student?: Student, module?: Module): Promise<ModuleVisit> {
         return {
             ...dto,
             student: student || await StudentService.INSTANCE.findById(dto.student),
             module: module || await ModuleService.INSTANCE.findById(dto.module)
+        };
+    }
+
+    private static async convertToDto(model: ModuleVisit): Promise<ModuleVisitDto> {
+        return {
+            ...model,
+            grade: +model.grade,
+            student: model.student.id as string,
+            module: model.module.id as string
         };
     }
 }
