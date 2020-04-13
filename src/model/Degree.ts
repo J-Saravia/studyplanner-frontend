@@ -5,10 +5,10 @@ export default interface Degree {
     id: string;
     name: string;
     groups: ModuleGroup[];
-    profile: Profile[];
+    profiles: Profile[];
 }
 
-export interface DegreeDto extends Omit<Degree, 'groups' | 'profile'> {
+export interface DegreeDto extends Omit<Degree, 'groups' | 'profiles'> {
     groups: string[];
-    profile: string[];
+    profiles: string[];
 }
