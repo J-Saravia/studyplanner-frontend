@@ -6,4 +6,5 @@ export default interface ModuleInfo {
     state: 'failed' | 'blocked' | 'passed' | 'ongoing' | 'planned' | 'none';
     passedRequirements: boolean;
     searchString: string;
+    semesters: string[];
 }
