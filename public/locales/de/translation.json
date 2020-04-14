@@ -8,6 +8,14 @@
       "content": "Sind Sie sich sicher, dass Sie sich abmelden wollen?",
       "confirm": "Abmelden"
     },
+    "semester": {
+      "create": "Semester Hinzufügen",
+      "label": "Semestername",
+      "help": "Der Semestername besteht aus dem kürzel hs bzw. fs für Herbs- bzw. Frühlingssemester und der Jahreszahl. (Beispiel: hs17)",
+      "cancel": "Abbrechen",
+      "invalid": "Dies ist ein ungültiges Semester.",
+      "backToList": "Zur Semesterliste"
+    },
     "module": {
       "selection": {
         "loading": "Module werden geladen...",
@@ -41,14 +49,50 @@
       "dialog": {
         "title": "Modulbesuch",
         "save": "Bestätigen",
+        "delete": "Löschen",
         "field": {
-          "grade": "Note",
-          "semester": "Semester",
-          "timeStart": "Beginn",
-          "timeEnd": "Ende",
-          "weekday": "Wochentag",
-          "module": "Modul",
-          "state": "Status"
+          "grade": {
+            "title": "Note",
+            "help": "0 Falls das Modul noch keine Note hat oder nur ein Testatmodul ist, 1-6 in anderen Fällen."
+          },
+          "semester": {
+            "title": "Semester",
+            "help": ""
+          },
+          "timeStart": {
+            "title": "Start",
+            "help": "Uhrzeit um welche das Modul startet, im Format HH:MM."
+          },
+          "timeEnd": {
+            "title": "Ende",
+            "help": "Uhrzeit um welche das Modul endet, im Format HH:MM."
+          },
+          "weekday": {
+            "title": "Wochentag",
+            "0": "Montag",
+            "1": "Dienstag",
+            "2": "Mittwoch",
+            "3": "Donnerstag",
+            "4": "Freitag",
+            "5": "Samstag"
+          },
+          "module": {
+            "title": "Modul",
+            "select": "Modul auswählen",
+            "error": {
+              "empty": "Kein Modul ausgewählt.",
+              "blocked": "Modul kann nicht mehr als zweimal gewählt werden.",
+              "passed": "Modul wurde bereits bestanden.",
+              "alreadyInSemester": "Modul wurde bereits in diesem Semester gewählt."
+            }
+          },
+          "state": {
+            "title": "Status",
+            "planned": "Geplant",
+            "ongoing": "Wird besucht",
+            "passed": "Bestanden",
+            "failed": "Ungenügend"
+          }
         }
       },
       "delete": {
