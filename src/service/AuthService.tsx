@@ -22,7 +22,8 @@ export default class AuthService {
     private authStateSubject = new Rx.Subject<boolean>();
     private currentStudent?: Student;
 
-    private constructor() {}
+    private constructor() {
+    }
 
 
     /**
@@ -124,21 +125,27 @@ export default class AuthService {
      * This function will notify all listeners of studentSubject, if and when the login was successful.
      */
     public async createAuthorizationHeader(): Promise<HeadersInit | undefined> {
-        let isRefreshRequired = !this.token?.isValid() && this.refreshToken?.isValid();
-        if (isRefreshRequired) {
-            await this.refresh();
+        try {
+            let isRefreshRequired = !this.token?.isValid() && this.refreshToken?.isValid();
+            if (isRefreshRequired) {
+                await this.refresh();
+            }
+            if (!this.isLoggedIn()) {
+                this.logout();
+                return undefined;
+            }
+            return { 'Authorization': `Bearer ${this.token?.tokenString}` };
+        } catch (e) {
+            this.logout();
+            throw e;
         }
-        if (!this.isLoggedIn()) {
-            return undefined;
-        }
-        return { 'Authorization': `Bearer ${this.token?.tokenString}` };
     }
 
     private async refresh(): Promise<AuthResponse> {
         const authResponse = await this.restClient
             .request('POST')
             .url('refresh')
-            .body({refreshToken: this.refreshToken?.tokenString})
+            .body({ refreshToken: this.refreshToken?.tokenString })
             .noAuthHeader()
             .fetch<AuthResponse>();
         this.handleAuthResponse(authResponse);
