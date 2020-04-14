@@ -43,7 +43,7 @@ class SemesterPreview extends React.Component<SemesterPreviewProps, SemesterPrev
     }
 
     private moduleVisitClickHandler = (selectedModuleVisit: ModuleVisit) => () => {
-        this.setState({ selectedModuleVisit })
+        this.setState({ selectedModuleVisit });
     };
 
     private moduleVisitDeleteHandler = (moduleVisitToDelete: ModuleVisit) => () => {
@@ -54,16 +54,29 @@ class SemesterPreview extends React.Component<SemesterPreviewProps, SemesterPrev
     private handleConfirmDelete = () => {
         const { moduleVisitToDelete } = this.state;
         if (moduleVisitToDelete) {
-            this.props.moduleVisitService.delete(moduleVisitToDelete.id as string).then(_ => {
-                const moduleVisits = this.state.moduleVisits;
-                const index = moduleVisits.indexOf(moduleVisitToDelete);
-                moduleVisits.splice(index, 1);
-                this.setState({ moduleVisitToDelete: undefined, moduleVisits });
+            const id = moduleVisitToDelete.id as string;
+            this.props.moduleVisitService.delete(id).then(_ => {
+                this.removeModule(id);
+                this.setState({ moduleVisitToDelete: undefined });
             }).catch(error => {
                 this.setState({ moduleVisitToDelete: undefined });
                 console.log(error);
             });
         }
+    };
+
+    private removeModule = (id: string) => {
+        const moduleVisits = this.state.moduleVisits;
+        if (moduleVisits) {
+            const index = moduleVisits.findIndex(visit => visit.id === id);
+            moduleVisits.splice(index, 1);
+            this.setState({ moduleVisits });
+        }
+    };
+
+    private handleDeleted = (id: string) => {
+        this.removeModule(id);
+        this.handleCancelModuleVisitDialog();
     };
 
     private handleAddButtonClick = () => {
@@ -88,12 +101,12 @@ class SemesterPreview extends React.Component<SemesterPreviewProps, SemesterPrev
         }
     };
 
-    private handleCancelDelete = () => {
-        this.setState({moduleVisitToDelete: undefined});
-    };
-
     private handleCancelModuleVisitDialog = () => {
         this.setState({createModuleVisit: false, selectedModuleVisit: undefined});
+    };
+
+    private handleCancelDelete = () => {
+        this.setState({moduleVisitToDelete: undefined});
     };
 
     public render() {
@@ -147,6 +160,7 @@ class SemesterPreview extends React.Component<SemesterPreviewProps, SemesterPrev
                     edit={this.state.selectedModuleVisit}
                     onFinished={this.handleFinishCreateModuleVisit}
                     onCancel={this.handleCancelModuleVisitDialog}
+                    onDeleted={this.handleDeleted}
                 />
             </div>
         );

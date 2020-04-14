@@ -1,15 +1,18 @@
 import * as React from 'react';
 import SemesterPreview from './SemesterPreview';
-import { StyledComponentProps, withStyles } from '@material-ui/core';
+import { Button, StyledComponentProps, withStyles } from '@material-ui/core';
 import SemesterListStyle from './SemesterListStyle';
 import ModuleVisit from '../../../model/ModuleVisit';
 import { StudentServiceProps, withStudentService } from '../../../service/StudentService';
 import { ClassNameMap } from '@material-ui/core/styles/withStyles';
 import { ModuleVisitServiceProps, withModuleVisitService } from '../../../service/ModuleVisitService';
 import { AuthServiceProps, withAuthService } from '../../../service/AuthService';
+import { Trans } from 'react-i18next';
+import CreateSemesterDialog from '../dialog/CreateSemesterDialog';
 
 interface SemesterListState {
     semesterModuleMap?: { [key: string]: ModuleVisit[] };
+    createSemester?: boolean;
 }
 
 interface SemesterListProps extends StudentServiceProps, ModuleVisitServiceProps, StyledComponentProps, AuthServiceProps {
@@ -29,9 +32,17 @@ class SemesterList extends React.Component<SemesterListProps, SemesterListState>
         );
     }
 
+    private handleCreateSemester = () => {
+        this.setState({ createSemester: true });
+    };
+
+    private handleCreateSemesterCancel = () => {
+        this.setState({ createSemester: false });
+    };
+
     public render() {
         const { classes } = this.props;
-        const { semesterModuleMap } = this.state;
+        const { semesterModuleMap, createSemester } = this.state;
         let totalCredits = 0;
         let currentCredits = 0;
         let currentNegativeCredits = 0;
@@ -61,6 +72,14 @@ class SemesterList extends React.Component<SemesterListProps, SemesterListState>
 
         return (
             <div className={classes.root}>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    className={classes.addSemesterButton}
+                    onClick={this.handleCreateSemester}
+                >
+                    <Trans>translation:messages.semester.create</Trans>
+                </Button>
                 <div className={classes.list}>
                     {semesterModuleMap && Object.keys(semesterModuleMap).map(key => (
                         <SemesterPreview
@@ -73,6 +92,7 @@ class SemesterList extends React.Component<SemesterListProps, SemesterListState>
                 <div>{currentCredits} / {totalCredits}</div>
                 <div>{currentNegativeCredits} / 60</div>
                 <div>Grade: {averageGrade}</div>
+                <CreateSemesterDialog open={createSemester} onCancel={this.handleCreateSemesterCancel}/>
             </div>
         );
     }
