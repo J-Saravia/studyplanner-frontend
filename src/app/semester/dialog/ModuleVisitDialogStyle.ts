@@ -10,10 +10,18 @@ const ModuleVisitDialogStyle = (theme: Theme) => createStyles({
             margin: theme.spacing(1),
         }
     },
+    title: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    grow: {
+      flexGrow: 1
+    },
     stateIndicator: {
         borderRadius: '50%',
-        height: 24,
-        width: 24,
+        height: 16,
+        width: 16,
         display: 'inline-block',
         border: '1px solid',
         marginRight: theme.spacing(1),
@@ -36,13 +44,14 @@ const ModuleVisitDialogStyle = (theme: Theme) => createStyles({
     },
     stateSelection: {
         display: 'flex',
-        alignItems: 'center'
+        alignItems: 'center',
+        padding: theme.spacing(1.5, 0, 0, 0)
     },
     stateSelectionSelect: {
         flexGrow: 1
     },
     module: {
-        borderBottom: '1p solid black'
+        padding: theme.spacing(2, 0, 0, 0)
     },
     moduleButton: {
         color: theme.palette.primary.main,

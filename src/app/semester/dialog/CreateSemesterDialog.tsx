@@ -25,7 +25,7 @@ class CreateSemesterDialog extends React.Component<CreateSemesterDialogProps, Cr
       const { history } = this.props;
       const { semester } = this.state;
       event.preventDefault();
-      if (semester && semester.match(/^(fs|hs)[0-9]{1,2}/)) {
+      if (semester && /^(?:fs|hs)[0-9]{1,2}$/.test(semester)) {
           history.push(`/semester/${semester}`);
       } else {
           this.setState({ error: true })

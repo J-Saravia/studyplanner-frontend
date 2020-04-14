@@ -45,7 +45,7 @@ class SelectModuleDialog extends React.Component<SelectModuleDialogProps, Select
 
     componentDidUpdate(prevProps: Readonly<SelectModuleDialogProps>, prevState: Readonly<SelectModuleDialogState>, snapshot?: any): void {
         if (!prevProps.open && this.props.open) {
-            this.setState({infos: undefined});
+            this.setState({infos: undefined, selected: undefined, filter: undefined});
             this.loadModuleInfoList();
         }
     }
@@ -92,10 +92,18 @@ class SelectModuleDialog extends React.Component<SelectModuleDialogProps, Select
         );
     }
 
-    private static renderStateMessage(state: string) {
-        // TODO: Add colors
+    private renderStateMessage(state: string) {
+        const { classes } = this.props;
         return (
-            <span>
+            <span
+                className={clsx({
+                    [classes.plannedState]: state === 'planned',
+                    [classes.ongoingState]: state === 'ongoing',
+                    [classes.passedState]: state === 'passed',
+                    [classes.failedState]: state === 'failed',
+                    [classes.blockedState]: state === 'blocked',
+                })}
+            >
                 <Trans>translation:messages.module.selection.state.{state}</Trans>
             </span>
         );
@@ -118,14 +126,14 @@ class SelectModuleDialog extends React.Component<SelectModuleDialogProps, Select
                     key={module.id}
                     onClick={_ => this.setState({selected: info})}
                 >
-                    <div className={classes.modleTitle}>{module.name}</div>
+                    <div className={classes.moduleTitle}>{module.name}</div>
                     <div className={classes.row} >
                         <div><Trans>translation:messages.module.selection.code</Trans>: {module.code}</div>
                         <div><Trans>translation:messages.module.selection.credits</Trans>: {module.credits}</div>
                     </div>
                     <div className={classes.row}>
                         <div>MSP: <Trans>translation:messages.module.selection.msp.{module.msp.toLowerCase()}</Trans></div>
-                        {SelectModuleDialog.renderStateMessage(state)}
+                        {this.renderStateMessage(state)}
                     </div>
                     <div className={classes.row}>
                         <div>
@@ -162,7 +170,7 @@ class SelectModuleDialog extends React.Component<SelectModuleDialogProps, Select
                 onClose={this.handleClose}
             >
                 <DialogTitle><Trans>translation:messages.module.selection.select</Trans></DialogTitle>
-                <DialogContent style={{display: 'flex'}}>
+                <DialogContent className={classes.root}>
                     <HiddenJs smDown>
                         <div className={classes.info}>
                             {this.renderInfo()}
@@ -172,7 +180,7 @@ class SelectModuleDialog extends React.Component<SelectModuleDialogProps, Select
                         <TextField
                             autoFocus
                             onChange={event => this.setState({filter: event.currentTarget.value})}
-                            style={{marginBottom: '8px'}}
+                            className={classes.search}
                             InputProps={{endAdornment: <InputAdornment position="end"><Search /></InputAdornment>}}
                             placeholder={t('translation:messages.module.selection.search')}
                             fullWidth />

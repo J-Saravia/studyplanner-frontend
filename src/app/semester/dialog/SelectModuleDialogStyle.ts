@@ -2,7 +2,7 @@ import { createStyles, Theme } from '@material-ui/core';
 
 const SelectModuleDialogStyle = (theme: Theme) => createStyles({
     root: {
-
+        display: 'flex'
     },
     info: {
         width: 256,
@@ -42,11 +42,13 @@ const SelectModuleDialogStyle = (theme: Theme) => createStyles({
         padding: theme.spacing(0.5),
         border: '1px solid black',
         borderRadius: 2,
-        [theme.breakpoints.down(1215)]: {
+        [theme.breakpoints.between(680, 1215)]: {
             width: `calc(50% - ${theme.spacing(2)}px)`,
         },
         [theme.breakpoints.down(680)]: {
-            flexGrow: 1
+            flexGrow: 1,
+            minWidth: 200,
+            fontSize: theme.typography.fontSize - 2
         }
     },
     passed: {
@@ -56,6 +58,21 @@ const SelectModuleDialogStyle = (theme: Theme) => createStyles({
     selected: {
         backgroundColor: '#8fcc7a',
         borderColor: '#54cc29'
+    },
+    plannedState: {
+        color: '#3366ff'
+    },
+    ongoingState: {
+        color: '#ffff33'
+    },
+    passedState: {
+        color: '#99ff33'
+    },
+    failedState: {
+        color: '#ff3333'
+    },
+    blockedState: {
+        color: '#af2929'
     },
     moduleTitle: {
         fontWeight: theme.typography.fontWeightBold,
@@ -68,8 +85,8 @@ const SelectModuleDialogStyle = (theme: Theme) => createStyles({
         display: 'flex',
         justifyContent: 'space-between'
     },
-    fullWidth: {
-        width: 'calc(100% - 64px)'
+    search: {
+        marginBottom: '8px'
     },
     fullHeight: {
         height: 'calc(100% - 64px)'
