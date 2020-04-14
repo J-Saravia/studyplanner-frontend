@@ -9,8 +9,9 @@ import Login from './login/Login';
 import { Switch, Route } from 'react-router-dom';
 import SemesterView from '../semester/detail/SemesterView';
 import Protected from './Protected';
+import { WithTranslation, withTranslation } from 'react-i18next';
 
-interface PageProps extends AuthServiceProps, StyledComponentProps {
+interface PageProps extends AuthServiceProps, StyledComponentProps, WithTranslation {
     classes: ClassNameMap;
 }
 
@@ -63,4 +64,4 @@ class Page extends React.Component<PageProps, PageState> {
     }
 }
 
-export default withAuthService(withStyles(PageStyle)(Page));
+export default withTranslation()(withAuthService(withStyles(PageStyle)(Page)));
