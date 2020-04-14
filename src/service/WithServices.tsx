@@ -17,7 +17,7 @@ export interface WithServicesProps extends AuthServiceProps,
 {
 }
 
-const withServices = <P extends Omit<P, keyof WithServicesProps>>(Component: React.ComponentType<WithServicesProps>): React.FC<P> =>
+const withServices = <P extends WithServicesProps>(Component: React.ComponentType<P>): React.FC<Omit<P, keyof WithServicesProps>> =>
     withAuthService(
         withStudentService(
             withModuleService(
@@ -30,6 +30,6 @@ const withServices = <P extends Omit<P, keyof WithServicesProps>>(Component: Rea
                 )
             )
         )
-    );
+    ) as React.FC<Omit<P, keyof WithServicesProps>>;
 
 export default withServices;

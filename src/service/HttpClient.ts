@@ -5,7 +5,7 @@ export default class HttpClient {
 
     private static readonly config: Promise<{endpoint: string}> =
         fetch(`${process.env.PUBLIC_URL}/config/api.json`)
-        .then(HttpClient.handleResponse);
+        .then(response => response.json());
 
     constructor(private relativeUrl: string) {}
 
@@ -41,12 +41,6 @@ export default class HttpClient {
         return new Request(this).method(method);
     }
 
-    public static async handleResponse(response: Response) {
-        if (!response.ok) {
-            throw new Error(response.statusText);
-        }
-        return await response.json();
-    }
 }
 
 export class Request {
@@ -102,7 +96,7 @@ export class Request {
                 ...await this.generateHeaders(),
             },
         };
-        return fetch(await this.client.generateUrl(this._url, this._queryString), realInit).then(HttpClient.handleResponse);
+        return fetch(await this.client.generateUrl(this._url, this._queryString), realInit).then(Request.handleResponse);
     }
 
     private async generateHeaders(): Promise<HeadersInit> {
@@ -114,6 +108,15 @@ export class Request {
             ...payloadHeader,
             ...authHeader,
             'Accept': 'application/json',
+        }
+    }
+
+    public static async handleResponse(response: Response) {
+        if (!response.ok) {
+            throw new Error(response.statusText);
+        }
+        if (response.status !== 204) {
+            return await response.json();
         }
     }
 

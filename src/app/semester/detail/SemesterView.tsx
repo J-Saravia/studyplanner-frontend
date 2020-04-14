@@ -1,6 +1,6 @@
 import * as React from 'react';
-import {withRouter, RouteComponentProps} from 'react-router-dom';
-import {ModuleVisitServiceProps, withModuleVisitService} from '../../../service/ModuleVisitService';
+import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
+import { ModuleVisitServiceProps, withModuleVisitService } from '../../../service/ModuleVisitService';
 import ModuleVisit from '../../../model/ModuleVisit';
 import {
     IconButton,
@@ -9,76 +9,136 @@ import {
     withStyles
 } from "@material-ui/core";
 import SemesterViewStyle from './SemesterViewStyle';
-import {ClassNameMap} from "@material-ui/core/styles/withStyles";
+import { ClassNameMap } from "@material-ui/core/styles/withStyles";
 import SemesterModuleVisit from "../list/SemesterModuleVisit";
-import {AddCircle} from "@material-ui/icons";
+import { AddCircle } from "@material-ui/icons";
 import DeleteModuleVisitDialog from "../dialog/DeleteModuleVisitDialog";
 import SemesterStatistics from "./SemesterStatistics";
-import {Trans, WithTranslation, withTranslation} from 'react-i18next';
+import { Trans, WithTranslation, withTranslation } from 'react-i18next';
+import ModuleVisitDialog from '../dialog/ModuleVisitDialog';
 
 interface SemesterViewProps extends RouteComponentProps<{ id: any }>, StyledComponentProps, ModuleVisitServiceProps, WithTranslation {
     classes: ClassNameMap;
 }
 
 interface SemesterViewState {
-    semesterMap?: ModuleVisit[];
-    semester: string;
+    moduleVisits?: ModuleVisit[];
     selectedModuleVisit?: ModuleVisit;
-    deletingModuleVisit?: ModuleVisit;
+    moduleVisitToDelete?: ModuleVisit;
+    createModuleVisit?: boolean;
 }
 
 class SemesterView extends React.Component<SemesterViewProps, SemesterViewState> {
 
+    private readonly semester: string;
+
     constructor(props: Readonly<SemesterViewProps>) {
         super(props);
-        this.state = {semester: this.props.match.params.id};
+        this.state = {};
+        this.semester = props.match.params.id;
     }
 
-    componentDidMount(): void {
-        this.props.moduleVisitService.list().then(map => this.setState({semesterMap: map[this.state.semester] || []}));
-    }
-
-    private moduleVisitClickHandler = (selectedModuleVisit: ModuleVisit) => () => {
-        // TODO: implement this
-    }
-
-    private moduleVisitDeleteHandler = (deletingModuleVisit: ModuleVisit) => () => {
-        this.setState({deletingModuleVisit})
-    }
-
-    private handleConfirmDelete = () => {
-        const {deletingModuleVisit} = this.state;
-        let {semesterMap} = this.state;
-        if (deletingModuleVisit && semesterMap) {
-            this.props.moduleVisitService.delete(deletingModuleVisit.id as string);
-            semesterMap = semesterMap.filter(mv => (mv.id !== deletingModuleVisit.id));
-            this.setState({semesterMap, deletingModuleVisit: undefined});
+    componentDidMount() {
+        if (/^(?:fs|hs)[0-9]{1,2}$/.test(this.semester)) {
+            this.props.moduleVisitService
+                .map()
+                .then(map => this.setState({ moduleVisits: map[this.semester] || [] }));
         }
     }
 
+    private moduleVisitClickHandler = (selectedModuleVisit: ModuleVisit) => () => {
+        this.setState({ selectedModuleVisit });
+    };
+
+    private moduleVisitDeleteHandler = (moduleVisitToDelete: ModuleVisit) => () => {
+        this.setState({ moduleVisitToDelete })
+    };
+
+    private handleConfirmDelete = () => {
+        const { moduleVisitToDelete } = this.state;
+        if (moduleVisitToDelete) {
+            const id = moduleVisitToDelete.id as string;
+            this.props.moduleVisitService.delete(id).then(_ => {
+                this.removeModule(id);
+                this.setState({ moduleVisitToDelete: undefined });
+            }).catch(error => {
+                this.setState({ moduleVisitToDelete: undefined });
+                console.log(error);
+            });
+        }
+    };
+
+    private removeModule = (id: string) => {
+        const moduleVisits = this.state.moduleVisits;
+        if (moduleVisits) {
+            const index = moduleVisits.findIndex(visit => visit.id === id);
+            moduleVisits.splice(index, 1);
+            this.setState({ moduleVisits });
+        }
+    };
+
+    private handleDeleted = (id: string) => {
+        this.removeModule(id);
+        this.handleCancelModuleVisitDialog();
+    };
+
     private handleCancelDelete = () => {
-        this.setState({deletingModuleVisit: undefined})
-    }
+        this.setState({ moduleVisitToDelete: undefined })
+    };
 
 
     private handleAddButtonClick = () => {
-        // TODO: implement this
-    }
+        this.setState({ createModuleVisit: true });
+    };
+
+    private handleFinishCreateModuleVisit = (visit: ModuleVisit) => {
+        const { moduleVisits, createModuleVisit } = this.state;
+        if (!moduleVisits) return;
+        if (createModuleVisit) {
+            moduleVisits.push(visit);
+            this.setState({
+                createModuleVisit: false,
+                moduleVisits: this.props.moduleVisitService.sortList(moduleVisits)
+            });
+        } else {
+            const index = moduleVisits.findIndex(v => v.id === visit.id);
+            moduleVisits.splice(index, 1, visit);
+            this.setState({
+                selectedModuleVisit: undefined,
+                moduleVisits: this.props.moduleVisitService.sortList(moduleVisits)
+            });
+        }
+    };
+
+    private handleCancelModuleVisitDialog = () => {
+        this.setState({ createModuleVisit: false, selectedModuleVisit: undefined });
+    };
 
     public render() {
-        const {classes} = this.props;
-        const {semester, semesterMap} = this.state;
+        const { classes } = this.props;
+
+        if (!/^(?:fs|hs)[0-9]{1,2}$/.test(this.semester)) {
+            return (
+                <div>
+                    <div><Trans>translation:messages.semester.invalid</Trans></div>
+                    <div><Link to="/"><Trans>translation:messages.semester.backToList</Trans></Link></div>
+                </div>
+            );
+        }
 
         return (
             <div className={classes.root}>
-                {this.getOverview(classes, semester, semesterMap)}
-                {SemesterView.getStatistic(classes, semesterMap)}
+                {this.getOverview()}
+                {this.getStatistic()}
             </div>
         );
 
     }
 
-    private static getStatistic(classes: ClassNameMap, semesterMap: ModuleVisit[] | undefined) {
+    private getStatistic() {
+        const { classes } = this.props;
+        const { moduleVisits } = this.state;
+
         return <>
             <div className={classes.header}>
                 <Typography variant="h6" className={classes.title}>
@@ -88,9 +148,9 @@ class SemesterView extends React.Component<SemesterViewProps, SemesterViewState>
             <div className={classes.content}>
 
                 <div className={classes.modules}>
-                    {semesterMap &&
+                    {moduleVisits &&
                     <SemesterStatistics
-                        moduleVisits={semesterMap}>
+                        moduleVisits={moduleVisits}>
                     </SemesterStatistics>
                     }
                 </div>
@@ -102,15 +162,18 @@ class SemesterView extends React.Component<SemesterViewProps, SemesterViewState>
         </>;
     }
 
-    private getOverview(classes: ClassNameMap, semester: string, semesterMap: ModuleVisit[] | undefined) {
+    private getOverview() {
+        const { classes } = this.props;
+        const { moduleVisits } = this.state;
+
         return <>
             <div className={classes.header}>
-                <Typography variant="h6" className={classes.title}>{semester}</Typography>
+                <Typography variant="h6" className={classes.title}>{this.semester}</Typography>
                 <hr className={classes.rule}/>
             </div>
             <div className={classes.content}>
                 <div className={classes.modules}>
-                    {semesterMap && semesterMap.map(mv => (
+                    {moduleVisits && moduleVisits.map(mv => (
                         <SemesterModuleVisit
                             key={mv.id}
                             moduleVisit={mv}
@@ -128,8 +191,19 @@ class SemesterView extends React.Component<SemesterViewProps, SemesterViewState>
                     </IconButton>
                 </div>
             </div>
-            <DeleteModuleVisitDialog open={!!this.state.deletingModuleVisit} onCancel={this.handleCancelDelete}
-                                     onConfirm={this.handleConfirmDelete}/>
+            <DeleteModuleVisitDialog
+                open={!!this.state.moduleVisitToDelete}
+                onCancel={this.handleCancelDelete}
+                onConfirm={this.handleConfirmDelete}
+            />
+            <ModuleVisitDialog
+                semester={this.semester}
+                open={this.state.createModuleVisit || !!this.state.selectedModuleVisit}
+                edit={this.state.selectedModuleVisit}
+                onFinished={this.handleFinishCreateModuleVisit}
+                onCancel={this.handleCancelModuleVisitDialog}
+                onDeleted={this.handleDeleted}
+            />
         </>;
     }
 }

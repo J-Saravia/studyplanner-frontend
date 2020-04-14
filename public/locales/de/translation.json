@@ -1,19 +1,106 @@
 {
   "language": "Deutsch",
   "messages": {
+    "yes": "Ja",
+    "no": "Nein",
     "logout": {
       "title": "Abmelden",
       "content": "Sind Sie sich sicher, dass Sie sich abmelden wollen?",
       "confirm": "Abmelden"
     },
+    "semester": {
+      "create": "Semester Hinzufügen",
+      "label": "Semestername",
+      "help": "Der Semestername besteht aus dem kürzel hs bzw. fs für Herbs- bzw. Frühlingssemester und der Jahreszahl. (Beispiel: hs17)",
+      "cancel": "Abbrechen",
+      "invalid": "Dies ist ein ungültiges Semester.",
+      "backToList": "Zur Semesterliste"
+    },
+    "module": {
+      "selection": {
+        "loading": "Module werden geladen...",
+        "empty": "Keine Module gefunden",
+        "search": "Module durchsuchen",
+        "select": "Modul auswählen",
+        "code": "Kürzel",
+        "credits": "ECTS",
+        "semester": "Semester",
+        "msp": {
+          "none": "Keine",
+          "written": "Schriftlich",
+          "oral": "Mündlich"
+        },
+        "state": {
+          "blocked": "Gesperrt",
+          "failed": "Ungenügend",
+          "passed": "Bestanden",
+          "ongoing": "Angemeldet",
+          "planned": "Geplant",
+          "none": ""
+        },
+        "requirements": {
+          "title": "Vormodule",
+          "none": "Keine Vordmodule",
+          "fulfilled": "Alle Vormodule bestanden"
+        }
+      }
+    },
     "moduleVisit": {
+      "dialog": {
+        "title": "Modulbesuch",
+        "save": "Bestätigen",
+        "delete": "Löschen",
+        "field": {
+          "grade": {
+            "title": "Note",
+            "help": "0 Falls das Modul noch keine Note hat oder nur ein Testatmodul ist, 1-6 in anderen Fällen."
+          },
+          "semester": {
+            "title": "Semester",
+            "help": ""
+          },
+          "timeStart": {
+            "title": "Start",
+            "help": "Uhrzeit um welche das Modul startet, im Format HH:MM."
+          },
+          "timeEnd": {
+            "title": "Ende",
+            "help": "Uhrzeit um welche das Modul endet, im Format HH:MM."
+          },
+          "weekday": {
+            "title": "Wochentag",
+            "0": "Montag",
+            "1": "Dienstag",
+            "2": "Mittwoch",
+            "3": "Donnerstag",
+            "4": "Freitag",
+            "5": "Samstag"
+          },
+          "module": {
+            "title": "Modul",
+            "select": "Modul auswählen",
+            "error": {
+              "empty": "Kein Modul ausgewählt.",
+              "blocked": "Modul kann nicht mehr als zweimal gewählt werden.",
+              "passed": "Modul wurde bereits bestanden.",
+              "alreadyInSemester": "Modul wurde bereits in diesem Semester gewählt."
+            }
+          },
+          "state": {
+            "title": "Status",
+            "planned": "Geplant",
+            "ongoing": "Wird besucht",
+            "passed": "Bestanden",
+            "failed": "Ungenügend"
+          }
+        }
+      },
       "delete": {
         "title": "Löschen",
         "text": "Sie sind dabei einen Modulbesuch zu löschen, sind Sie sich sicher?",
         "confirm": "Löschen"
       }
     },
-    "unauthorized": "Zugriff verweigert",
     "semesterStatistic": {
       "title": "Semesterstatistik",
       "etcs": {
@@ -31,7 +118,8 @@
         "written": "Schriftlich",
         "oral": "Mündlich"
       }
-    }
+    },
+    "unauthorized": "Zugriff verweigert"
   },
   "languages": {
     "de": "Deutsch",
