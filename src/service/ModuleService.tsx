@@ -26,6 +26,7 @@ export default class ModuleService extends CacheableService<Module> {
                 state: 'none',
                 passedRequirements: false,
                 searchString: (module.name + module.code).toLowerCase(),
+                semesters: []
             } as ModuleInfo;
             for(const visit of visits) {
                 if (visit.module.id === module.id) {
@@ -34,6 +35,7 @@ export default class ModuleService extends CacheableService<Module> {
                     } else {
                         info.state = visit.state;
                     }
+                    info.semesters.push(visit.semester);
                 }
             }
             infos.push(info);
