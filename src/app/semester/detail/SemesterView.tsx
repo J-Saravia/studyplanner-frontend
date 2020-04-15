@@ -21,7 +21,7 @@ interface SemesterViewProps extends RouteComponentProps<{ id: any }>, StyledComp
 }
 
 interface SemesterViewState {
-    semesterMap?: ModuleVisit[];
+    semesterList?: ModuleVisit[];
     semester: string;
     selectedModuleVisit?: ModuleVisit;
     deletingModuleVisit?: ModuleVisit;
@@ -35,7 +35,7 @@ class SemesterView extends React.Component<SemesterViewProps, SemesterViewState>
     }
 
     componentDidMount(): void {
-        this.props.moduleVisitService.list().then(map => this.setState({semesterMap: map[this.state.semester] || []}));
+        this.props.moduleVisitService.list().then(map => this.setState({semesterList: map[this.state.semester] || []}));
     }
 
     private moduleVisitClickHandler = (selectedModuleVisit: ModuleVisit) => () => {
@@ -48,11 +48,11 @@ class SemesterView extends React.Component<SemesterViewProps, SemesterViewState>
 
     private handleConfirmDelete = () => {
         const {deletingModuleVisit} = this.state;
-        let {semesterMap} = this.state;
-        if (deletingModuleVisit && semesterMap) {
+        let {semesterList} = this.state;
+        if (deletingModuleVisit && semesterList) {
             this.props.moduleVisitService.delete(deletingModuleVisit.id as string);
-            semesterMap = semesterMap.filter(mv => (mv.id !== deletingModuleVisit.id));
-            this.setState({semesterMap, deletingModuleVisit: undefined});
+            semesterList = semesterList.filter(mv => (mv.id !== deletingModuleVisit.id));
+            this.setState({semesterList, deletingModuleVisit: undefined});
         }
     }
 
@@ -67,18 +67,18 @@ class SemesterView extends React.Component<SemesterViewProps, SemesterViewState>
 
     public render() {
         const {classes} = this.props;
-        const {semester, semesterMap} = this.state;
+        const {semester, semesterList} = this.state;
 
         return (
             <div className={classes.root}>
-                {this.getOverview(classes, semester, semesterMap)}
-                {SemesterView.getStatistic(classes, semesterMap)}
+                {this.getOverview(classes, semester, semesterList)}
+                {this.getStatistic(classes, semesterList)}
             </div>
         );
 
     }
 
-    private static getStatistic(classes: ClassNameMap, semesterMap: ModuleVisit[] | undefined) {
+    private getStatistic(classes: ClassNameMap, semesterMap: ModuleVisit[] | undefined) {
         return <>
             <div className={classes.header}>
                 <Typography variant="h6" className={classes.title}>
