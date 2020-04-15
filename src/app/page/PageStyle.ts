@@ -11,6 +11,7 @@ const PageStyle = (theme: Theme) => createStyles({
         height: '100%',
         overflow: 'auto',
         padding: theme.spacing(1),
+        borderRadius: 0
     },
     toolbar: {
         display: 'flex',

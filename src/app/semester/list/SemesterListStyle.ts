@@ -1,10 +1,19 @@
 import { createStyles, Theme } from '@material-ui/core';
 
 const SemesterListStyle = (theme: Theme) => createStyles({
-    root: {},
+    root: {
+        display: 'flex',
+        flexDirection: 'column'
+    },
     list: {
         margin: theme.spacing(1),
         padding: theme.spacing(1),
+    },
+    addSemesterButton: {
+        alignSelf: 'baseline',
+        [theme.breakpoints.down('sm')]: {
+            alignSelf: 'stretch'
+        }
     }
 });
 

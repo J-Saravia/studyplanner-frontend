@@ -1,19 +1,106 @@
 {
   "language": "English",
   "messages": {
+    "yes": "Yes",
+    "no": "No",
     "logout": {
       "title": "Logout",
       "content": "Are you sure you want to log out?",
       "confirm": "Logout"
     },
+    "semester": {
+      "create": "Add semester",
+      "label": "Semester",
+      "help": "The name of the semester consist of two letters (hs/fs) and the year .(example: hs17)",
+      "cancel": "Cancel",
+      "invalid": "This semester is invalid",
+      "backToList": "Back to the semester list"
+    },
+    "module": {
+      "selection": {
+        "loading": "Loading modules...",
+        "empty": "No modules found",
+        "search": "Search modules",
+        "select": "Select module",
+        "code": "Code",
+        "credits": "ECTS",
+        "semester": "Semester",
+        "msp": {
+          "none": "None",
+          "written": "Written",
+          "oral": "Oral"
+        },
+        "state": {
+          "blocked": "Blocked",
+          "failed": "Failed",
+          "passed": "Passed",
+          "ongoing": "Ongoing",
+          "planned": "Planned",
+          "none": ""
+        },
+        "requirements": {
+          "title": "Preceding modules",
+          "none": "No preceding modules",
+          "fulfilled": "Fulfilled all preceding modules"
+        }
+      }
+    },
     "moduleVisit": {
+      "dialog": {
+        "title": "Modulevisit",
+        "save": "Confirm",
+        "delete": "Delete",
+        "field": {
+          "grade": {
+            "title": "Grade",
+            "help": "0 if no grade is present, 1-6 otherwise."
+          },
+          "semester": {
+            "title": "Semester",
+            "help": ""
+          },
+          "timeStart": {
+            "title": "Start",
+            "help": "Time at which the module starts (or something else if unknown), format: HH:MM."
+          },
+          "timeEnd": {
+            "title": "End",
+            "help": "Time at which the module ends (or something else if unknown), format: HH:MM."
+          },
+          "weekday": {
+            "title": "Day of the week",
+            "0": "Monday",
+            "1": "Tuesday",
+            "2": "Wednesday",
+            "3": "Thursday",
+            "4": "Friday",
+            "5": "Saturday"
+          },
+          "module": {
+            "title": "Module",
+            "select": "Select module",
+            "error": {
+              "empty": "No module selected.",
+              "blocked": "You may not take a module more than twice.",
+              "passed": "You have already passed this module.",
+              "alreadyInSemester": "You have already added this module to the current semester."
+            }
+          },
+          "state": {
+            "title": "Status",
+            "planned": "Planned",
+            "ongoing": "Ongoing",
+            "passed": "Passed",
+            "failed": "Failed"
+          }
+        }
+      },
       "delete": {
         "title": "Delete",
         "text": "You are about to delete a module visit, are you sure you want to do this?",
         "confirm": "Delete"
       }
     },
-    "unauthorized": "Access denied",
     "semesterStatistic": {
       "title" : "Semester statistic",
       "etcs": {
@@ -32,7 +119,8 @@
         "written": "Written",
         "oral": "Oral"
       }
-    }
+    },
+    "unauthorized": "Access denied"
   },
   "languages": {
     "de": "German",

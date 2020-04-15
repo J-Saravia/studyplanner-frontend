@@ -25,7 +25,9 @@ const SemesterPreviewStyle = (theme: Theme) => createStyles({
     title: {
         flexShrink: 1,
         marginRight: theme.spacing(2),
-        userSelect: 'text'
+        userSelect: 'text',
+        color: theme.palette.primary.main,
+        textDecoration: 'underline',
     },
     rule: {
         flexGrow: 1,
@@ -36,7 +38,8 @@ const SemesterPreviewStyle = (theme: Theme) => createStyles({
         display: 'flex',
         alignItems: 'center',
         [theme.breakpoints.down('sm')]: {
-            flexDirection: 'column'
+            flexDirection: 'column',
+            alignItems: 'stretch',
         }
     },
     modules: {

@@ -2,6 +2,8 @@ import * as React from 'react';
 import Module, { ModuleDto } from '../model/Module';
 import HttpClient from './HttpClient';
 import CacheableService from './CacheableService';
+import ModuleInfo from '../model/ModuleInfo';
+import ModuleVisitService from './ModuleVisitService';
 
 export default class ModuleService extends CacheableService<Module> {
 
@@ -11,6 +13,46 @@ export default class ModuleService extends CacheableService<Module> {
 
     private constructor() {
         super();
+    }
+
+    public async generateModuleInfoList(): Promise<ModuleInfo[]> {
+        const modules = await this.list();
+        const visits = await ModuleVisitService.INSTANCE.list();
+        const infos: ModuleInfo[] = [];
+        for(const module of modules) {
+            const info = {
+                id: module.id,
+                module,
+                state: 'none',
+                passedRequirements: false,
+                searchString: (module.name + module.code).toLowerCase(),
+                semesters: []
+            } as ModuleInfo;
+            for(const visit of visits) {
+                if (visit.module.id === module.id) {
+                    if (visit.state === info.state) {
+                        info.state = 'blocked';
+                    } else {
+                        info.state = visit.state;
+                    }
+                    info.semesters.push(visit.semester);
+                }
+            }
+            infos.push(info);
+        }
+        infos.forEach(info => {
+            let passedRequirements = true;
+
+            for (const requirement of info.module.requirements) {
+                const requirementInfo = infos.find(i => i.module.id === requirement.id);
+                if (requirementInfo) {
+                    passedRequirements = passedRequirements && requirementInfo.state === 'passed';
+                }
+            }
+
+            info.passedRequirements = passedRequirements;
+        });
+        return infos;
     }
 
     protected async loadData(): Promise<Module[]> {
