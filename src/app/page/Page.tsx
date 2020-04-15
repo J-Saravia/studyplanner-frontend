@@ -9,6 +9,7 @@ import Login from './login/Login';
 import { Switch, Route } from 'react-router-dom';
 import SemesterView from '../semester/detail/SemesterView';
 import Protected from './Protected';
+import Register from './register/Register';
 
 interface PageProps extends AuthServiceProps, StyledComponentProps {
     classes: ClassNameMap;
@@ -46,6 +47,9 @@ class Page extends React.Component<PageProps, PageState> {
                 <Paper className={classes.content}>
                     <div className={classes.toolbar}/>
                     <Switch>
+                        <Route path={ "/register" }>
+                            <Register/>
+                        </Route>
                         <Route path="/semester/:id">
                             <Protected fallback={<Login />}>
                                 <SemesterView/>

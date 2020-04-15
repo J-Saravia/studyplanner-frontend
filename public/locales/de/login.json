@@ -1,8 +1,13 @@
 {
   "title": "Anmelden",
-  "email": "Email Adresse",
+  "email": "E-Mail-Adresse",
   "password": "Passwort",
   "signIn": "Anmelden",
   "resetPassword": "Passwort vergessen?",
-  "signUp": "Noch kein Account? Registrieren."
+  "signUp": "Noch kein Account? Registrieren.",
+  "register": "Registrieren",
+  "confirm": "Passwort bestätigen",
+  "degree": "Abschluss",
+  "science": "Informatik",
+  "length": "Passwort muss mindestens 10 Zeichen lang sein."
 }
