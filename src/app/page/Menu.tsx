@@ -26,6 +26,7 @@ import ConfirmationDialog from '../dialog/ConfirmationDialog';
 import { Trans, WithTranslation, withTranslation } from 'react-i18next';
 import LanguageSelector from '../dialog/LanguageSelectionDialog';
 import Protected from './Protected';
+import { Link } from 'react-router-dom';
 
 interface MenuProps extends WithWidthProps, StyledComponentProps, AuthServiceProps, WithTranslation {
     classes: ClassNameMap;
@@ -111,11 +112,13 @@ class Menu extends React.Component<MenuProps, MenuState> {
                     </div>
                     <Divider/>
                     <List className={classes.list}>
-                        <Protected silent>
-                            <ListItem button>
-                                <ListItemIcon><Icons.Home/></ListItemIcon>
-                                <ListItemText primary={'Home'}/>
-                            </ListItem>
+                        <Protected>
+                            <Link to="/" className={classes.link}>
+                                <ListItem button>
+                                    <ListItemIcon><Icons.Home/></ListItemIcon>
+                                    <ListItemText primary={'Home'}/>
+                                </ListItem>
+                            </Link>
                         </Protected>
                         <div className={classes.grow}/>
                         <LanguageSelector>
@@ -124,7 +127,7 @@ class Menu extends React.Component<MenuProps, MenuState> {
                                 <ListItemText primary={<Trans>translation:language</Trans>}/>
                             </ListItem>
                         </LanguageSelector>
-                        <Protected silent>
+                        <Protected>
                             <ListItem button onClick={this.handleLogout}>
                                 <ListItemIcon><Icons.ExitToApp/></ListItemIcon>
                                 <ListItemText primary={<Trans>translation:messages.logout.title</Trans>}/>
