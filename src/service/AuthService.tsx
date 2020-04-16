@@ -43,7 +43,8 @@ export default class AuthService {
     /**
      * This function tries to load the token from the localStorage and checks if it is still valid.
      * If the token is valid, it will load the current Student object from the backend and return it.
-     * If the token is invalid or absent, the function will try to retrieve a new token using the refresh token if available and then returns the current Student object.
+     * If the token is invalid or absent, the function will try to retrieve a new token using the refresh token
+     * if available and then returns the current Student object.
      * If all this fails, the function will just return undefined, thus indicating a failed auth from cache.
      * This function will notify all listeners of studentSubject, if and when the login was successful.
      */
