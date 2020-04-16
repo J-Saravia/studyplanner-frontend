@@ -1,6 +1,7 @@
 {
   "language": "Deutsch",
   "messages": {
+    "initialising": "Die Seite wird gerade initialisiert, dies kann bis zu einigen Sekunden dauern, basierend auf die Geschwindigkeit der aktuellen Verbindung.",
     "yes": "Ja",
     "no": "Nein",
     "logout": {
@@ -13,6 +14,12 @@
       "label": "Semestername",
       "help": "Der Semestername besteht aus dem kürzel hs bzw. fs für Herbs- bzw. Frühlingssemester und der Jahreszahl. (Beispiel: hs17)",
       "cancel": "Abbrechen",
+      "delete": {
+        "error": "Entfernen fehlgeschlagen"
+      },
+      "load": {
+        "error": "Laden der Modulbesuche fehlgeschlagen"
+      },
       "invalid": "Dies ist ein ungültiges Semester.",
       "backToList": "Zur Semesterliste"
     },
@@ -50,6 +57,7 @@
         "title": "Modulbesuch",
         "save": "Bestätigen",
         "delete": "Löschen",
+        "error": "Aktion fehlgeschlagen",
         "field": {
           "grade": {
             "title": "Note",
