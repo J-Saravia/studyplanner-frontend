@@ -17,6 +17,9 @@ const LoginStyle = (theme: Theme) => createStyles({
     form: {
         width: '100%', // Fix IE 11 issue.
         marginTop: theme.spacing(1),
+        '& > *': {
+            margin: theme.spacing(1, 0),
+        }
     },
     submit: {
         margin: theme.spacing(3, 0, 2),
