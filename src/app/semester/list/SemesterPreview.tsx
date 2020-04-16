@@ -17,6 +17,8 @@ import { Link } from 'react-router-dom';
 import ModuleVisitDialog from '../dialog/ModuleVisitDialog';
 import DeleteModuleVisitDialog from '../dialog/DeleteModuleVisitDialog';
 import { ModuleVisitServiceProps, withModuleVisitService } from '../../../service/ModuleVisitService';
+import { Alert } from '@material-ui/lab';
+import { Trans } from 'react-i18next';
 
 
 interface SemesterPreviewProps extends StyledComponentProps, WithWidthProps, ModuleVisitServiceProps {
@@ -31,6 +33,7 @@ interface SemesterPreviewState {
     moduleVisitToDelete?: ModuleVisit;
     createModuleVisit?: boolean;
     moduleVisits: ModuleVisit[];
+    error?: string;
 }
 
 class SemesterPreview extends React.Component<SemesterPreviewProps, SemesterPreviewState> {
@@ -57,10 +60,9 @@ class SemesterPreview extends React.Component<SemesterPreviewProps, SemesterPrev
             const id = moduleVisitToDelete.id as string;
             this.props.moduleVisitService.delete(id).then(_ => {
                 this.removeModule(id);
-                this.setState({ moduleVisitToDelete: undefined });
+                this.setState({ moduleVisitToDelete: undefined, error: undefined });
             }).catch(error => {
-                this.setState({ moduleVisitToDelete: undefined });
-                console.log(error);
+                this.setState({ moduleVisitToDelete: undefined, error: error.toString() });
             });
         }
     };
@@ -111,6 +113,7 @@ class SemesterPreview extends React.Component<SemesterPreviewProps, SemesterPrev
 
     public render() {
         const { classes, moduleVisits, semester, width } = this.props;
+        const { error } = this.state;
         const isMobile = isWidthDown('sm', width);
         let maxCredits = 0;
         let currentCredits = 0;
@@ -149,6 +152,7 @@ class SemesterPreview extends React.Component<SemesterPreviewProps, SemesterPrev
                         {currentCredits} / {maxCredits}
                     </div>}
                 </div>
+                {error && <Alert color="error"><Trans>translation:semester.delete.error</Trans></Alert>}
                 <DeleteModuleVisitDialog
                     open={!!this.state.moduleVisitToDelete}
                     onCancel={this.handleCancelDelete}

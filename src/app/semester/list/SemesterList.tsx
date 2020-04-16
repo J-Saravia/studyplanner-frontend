@@ -9,10 +9,12 @@ import { ModuleVisitServiceProps, withModuleVisitService } from '../../../servic
 import { AuthServiceProps, withAuthService } from '../../../service/AuthService';
 import { Trans } from 'react-i18next';
 import CreateSemesterDialog from '../dialog/CreateSemesterDialog';
+import { Alert } from '@material-ui/lab';
 
 interface SemesterListState {
     semesterModuleMap?: { [key: string]: ModuleVisit[] };
     createSemester?: boolean;
+    error?: string;
 }
 
 interface SemesterListProps extends StudentServiceProps, ModuleVisitServiceProps, StyledComponentProps, AuthServiceProps {
@@ -29,7 +31,7 @@ class SemesterList extends React.Component<SemesterListProps, SemesterListState>
     public componentDidMount() {
         this.props.moduleVisitService.map().then(
             (semesterModuleMap: { [key: string]: ModuleVisit[] }) => this.setState({ semesterModuleMap })
-        );
+        ).catch(error => this.setState({error: error.toString()}));
     }
 
     private handleCreateSemester = () => {
@@ -42,7 +44,7 @@ class SemesterList extends React.Component<SemesterListProps, SemesterListState>
 
     public render() {
         const { classes } = this.props;
-        const { semesterModuleMap, createSemester } = this.state;
+        const { semesterModuleMap, createSemester, error } = this.state;
         let totalCredits = 0;
         let currentCredits = 0;
         let currentNegativeCredits = 0;
@@ -92,6 +94,7 @@ class SemesterList extends React.Component<SemesterListProps, SemesterListState>
                 <div>{currentCredits} / {totalCredits}</div>
                 <div>{currentNegativeCredits} / 60</div>
                 <div>Grade: {averageGrade}</div>
+                {error && <Alert color="error"><Trans>translation:messages.semester.load.error</Trans></Alert>}
                 <CreateSemesterDialog open={createSemester} onCancel={this.handleCreateSemesterCancel}/>
             </div>
         );
