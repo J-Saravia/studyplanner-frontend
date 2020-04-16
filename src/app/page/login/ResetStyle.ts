@@ -1,6 +1,6 @@
 import { createStyles, Theme } from '@material-ui/core';
 
-const LoginStyle = (theme: Theme) => createStyles({
+const ResetStyle = (theme: Theme) => createStyles({
     paper: {
         marginTop: theme.spacing(8),
         display: 'flex',
@@ -18,7 +18,7 @@ const LoginStyle = (theme: Theme) => createStyles({
         width: '100%', // Fix IE 11 issue.
         marginTop: theme.spacing(1),
         '& > *': {
-            margin: theme.spacing(1, 0),
+            margin: theme.spacing(0.5, 0),
         }
     },
     submit: {
@@ -26,4 +26,4 @@ const LoginStyle = (theme: Theme) => createStyles({
     },
 });
 
-export default LoginStyle;
+export default ResetStyle;

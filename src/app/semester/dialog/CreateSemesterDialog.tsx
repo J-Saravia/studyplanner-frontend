@@ -22,14 +22,14 @@ class CreateSemesterDialog extends React.Component<CreateSemesterDialogProps, Cr
     }
 
     private handleCreate = (event: React.BaseSyntheticEvent) => {
-      const { history } = this.props;
-      const { semester } = this.state;
-      event.preventDefault();
-      if (semester && /^(?:fs|hs)[0-9]{1,2}$/.test(semester)) {
-          history.push(`/semester/${semester}`);
-      } else {
-          this.setState({ error: true })
-      }
+        const { history } = this.props;
+        const { semester } = this.state;
+        event.preventDefault();
+        if (semester && /^(?:fs|hs)[0-9]{1,2}$/.test(semester)) {
+            history.push(`/semester/${semester}`);
+        } else {
+            this.setState({ error: true })
+        }
     };
 
     private handleChange = (event: React.ChangeEvent<{value?: unknown}>) => {

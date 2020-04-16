@@ -37,7 +37,10 @@ export default class ModuleVisitService {
         if (!authService.isLoggedIn()) {
             throw new Error('Unauthorized');
         }
-        const student = authService.getCurrentStudent() as Student;
+        const student = authService.getCurrentStudent();
+        if (!student) {
+            throw new Error('Invalid state: Student not defined while logged in');
+        }
         const dtos = await this.restClient
             .request()
             .query({student: student.id})
