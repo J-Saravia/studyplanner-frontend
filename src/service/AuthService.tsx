@@ -40,6 +40,10 @@ export default class AuthService {
         return this.currentStudent;
     }
 
+    public updateCurrentUser(student: Student) {
+        this.studentSubject.next(this.currentStudent = student);
+    }
+
     /**
      * This function tries to load the token from the localStorage and checks if it is still valid.
      * If the token is valid, it will load the current Student object from the backend and return it.
