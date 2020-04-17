@@ -3,7 +3,7 @@ import * as Rx from 'rxjs';
 import { AuthServiceProps, withAuthService } from '../../service/AuthService';
 import { Trans } from 'react-i18next';
 
-interface ProtectedProps extends AuthServiceProps{
+interface ProtectedProps extends AuthServiceProps {
     fallback?: React.ReactNode;
     silent?: boolean;
 }
@@ -29,17 +29,17 @@ class Protected extends React.Component<ProtectedProps, ProtectedState> {
 
     public componentDidMount() {
         this.subscription = this.props.authService
-            .addAuthStateListener(isLoggedIn => this.setState({isLoggedIn}));
+            .addAuthStateListener(isLoggedIn => this.setState({ isLoggedIn }));
     }
 
-    public componentWillUnmount(){
+    public componentWillUnmount() {
         if (this.subscription) {
             this.subscription.unsubscribe();
         }
     }
 
     public render() {
-        const { silent, fallback, children} = this.props;
+        const { silent, fallback, children } = this.props;
         const { isLoggedIn } = this.state;
         if (isLoggedIn) {
             return children;
