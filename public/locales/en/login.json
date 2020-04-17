@@ -6,9 +6,6 @@
   "resetPassword": "Forgot password?",
   "signUp": "Don't have an account? Sign Up",
   "register": "Sign Up",
-  "confirm": "Confirm password",
-  "degree": "Degree",
-  "length" : "Password must be at least 10 characters long.",
   "account": "Already created an account? Log In. ",
   "registered": "Registration was successful. You can now login with your new account.",
   "registerFail": "Registration failed"
