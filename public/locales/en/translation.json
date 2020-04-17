@@ -37,7 +37,6 @@
           "written": "Written",
           "oral": "Oral"
         },
-        "studyStatistic": "Study statistics",
         "state": {
           "blocked": "Blocked",
           "failed": "Failed",
@@ -128,6 +127,7 @@
         "oral": "Oral"
       }
     },
+    "studyStatistic": "Study statistics",
     "unauthorized": "Access denied"
   },
   "languages": {
