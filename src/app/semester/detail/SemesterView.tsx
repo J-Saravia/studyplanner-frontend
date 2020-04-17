@@ -23,7 +23,7 @@ interface SemesterViewProps extends RouteComponentProps<{ id: any }>, StyledComp
 }
 
 interface SemesterViewState {
-    moduleVisits?: ModuleVisit[];
+    moduleList?: ModuleVisit[];
     selectedModuleVisit?: ModuleVisit;
     moduleVisitToDelete?: ModuleVisit;
     createModuleVisit?: boolean;
@@ -45,7 +45,7 @@ class SemesterView extends React.Component<SemesterViewProps, SemesterViewState>
         if (/^(?:fs|hs)[0-9]{1,2}$/.test(this.semester)) {
             this.props.moduleVisitService
                 .map()
-                .then(map => this.setState({ moduleVisits: map[this.semester] || [] }))
+                .then(map => this.setState({ moduleList: map[this.semester] || [] }))
                 .catch(error => this.setState({ loadError: error.toString() }));
         }
     }
@@ -72,11 +72,11 @@ class SemesterView extends React.Component<SemesterViewProps, SemesterViewState>
     };
 
     private removeModule = (id: string) => {
-        const moduleVisits = this.state.moduleVisits;
-        if (moduleVisits) {
-            const index = moduleVisits.findIndex(visit => visit.id === id);
-            moduleVisits.splice(index, 1);
-            this.setState({ moduleVisits });
+        const moduleList = this.state.moduleList;
+        if (moduleList) {
+            const index = moduleList.findIndex(visit => visit.id === id);
+            moduleList.splice(index, 1);
+            this.setState({ moduleList });
         }
     };
 
@@ -95,20 +95,20 @@ class SemesterView extends React.Component<SemesterViewProps, SemesterViewState>
     };
 
     private handleFinishCreateModuleVisit = (visit: ModuleVisit) => {
-        const { moduleVisits, createModuleVisit } = this.state;
-        if (!moduleVisits) return;
+        const { moduleList, createModuleVisit } = this.state;
+        if (!moduleList) return;
         if (createModuleVisit) {
-            moduleVisits.push(visit);
+            moduleList.push(visit);
             this.setState({
                 createModuleVisit: false,
-                moduleVisits: this.props.moduleVisitService.sortList(moduleVisits)
+                moduleList: this.props.moduleVisitService.sortList(moduleList)
             });
         } else {
-            const index = moduleVisits.findIndex(v => v.id === visit.id);
-            moduleVisits.splice(index, 1, visit);
+            const index = moduleList.findIndex(v => v.id === visit.id);
+            moduleList.splice(index, 1, visit);
             this.setState({
                 selectedModuleVisit: undefined,
-                moduleVisits: this.props.moduleVisitService.sortList(moduleVisits)
+                moduleList: this.props.moduleVisitService.sortList(moduleList)
             });
         }
     };
@@ -144,7 +144,7 @@ class SemesterView extends React.Component<SemesterViewProps, SemesterViewState>
 
     private getStatistic() {
         const { classes } = this.props;
-        const { moduleVisits } = this.state;
+        const { moduleList } = this.state;
 
         return <>
             <div className={classes.header}>
@@ -155,9 +155,9 @@ class SemesterView extends React.Component<SemesterViewProps, SemesterViewState>
             <div className={classes.content}>
 
                 <div className={classes.modules}>
-                    {moduleVisits &&
+                    {moduleList &&
                     <SemesterStatistics
-                        moduleVisits={moduleVisits}>
+                        moduleVisits={moduleList}>
                     </SemesterStatistics>
                     }
                 </div>
@@ -171,7 +171,7 @@ class SemesterView extends React.Component<SemesterViewProps, SemesterViewState>
 
     private getOverview() {
         const { classes } = this.props;
-        const { moduleVisits } = this.state;
+        const { moduleList } = this.state;
 
         return <>
             <div className={classes.header}>
@@ -180,7 +180,7 @@ class SemesterView extends React.Component<SemesterViewProps, SemesterViewState>
             </div>
             <div className={classes.content}>
                 <div className={classes.modules}>
-                    {moduleVisits && moduleVisits.map(mv => (
+                    {moduleList && moduleList.map(mv => (
                         <SemesterModuleVisit
                             key={mv.id}
                             moduleVisit={mv}

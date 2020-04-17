@@ -21,7 +21,7 @@ class SemesterStatistics extends React.Component<SemesterStatisticsProps, any> {
     private getTotalEtcs() {
         const {moduleVisits} = this.props;
         let total = 0;
-        if (moduleVisits.length != 0) {
+        if (moduleVisits.length !== 0) {
             total = moduleVisits.map(m => m.module.credits).reduce(function (a, b) {
                 return a + b;
             });
@@ -33,7 +33,7 @@ class SemesterStatistics extends React.Component<SemesterStatisticsProps, any> {
         const {moduleVisits} = this.props;
         let passedModule = moduleVisits.filter(m => m.state === 'passed');
         let total = 0;
-        if (passedModule.length != 0) {
+        if (passedModule.length !== 0) {
             total = passedModule.map(m => m.module.credits).reduce(function (a, b) {
                 return a + b;
             });
@@ -46,7 +46,7 @@ class SemesterStatistics extends React.Component<SemesterStatisticsProps, any> {
         const {moduleVisits} = this.props;
         let failedModule = moduleVisits.filter(m => m.state === 'failed');
         let total = 0;
-        if (failedModule.length != 0) {
+        if (failedModule.length !== 0) {
             total = failedModule.map(m => m.module.credits).reduce(function (a, b) {
                 return a + b;
             });
@@ -60,14 +60,18 @@ class SemesterStatistics extends React.Component<SemesterStatisticsProps, any> {
         let weightedGradeSum = 0;
         let totalEtc = 0;
         let gradedModules = moduleVisits.filter(m => m.state !== 'planned' && m.state !== 'ongoing').filter(mv => mv.grade !== 0);
-        if (gradedModules.length != 0) {
+        if (gradedModules.length !== 0) {
             gradedModules.forEach(m => {
                 const etc = m.module.credits;
                 totalEtc += etc;
                 weightedGradeSum += (etc * m.grade);
             })
             let total = (weightedGradeSum / totalEtc);
-            return total.toFixed(2).toString();
+            if(Number.isInteger(total)){
+                return total.toString();
+            } else {
+                return total.toFixed(2);
+            }
         }
         return 'N/D';
     }
@@ -76,7 +80,7 @@ class SemesterStatistics extends React.Component<SemesterStatisticsProps, any> {
     private getHighGrade() {
         const {moduleVisits} = this.props;
         let gradedModule = moduleVisits.filter(m => m.state !== 'planned' && m.state !== 'ongoing').filter(mv => mv.grade !== 0);
-        if (gradedModule.length != 0) {
+        if (gradedModule.length !== 0) {
             let total = gradedModule.map(mv => mv.grade).reduce(function (a, b) {
                 return (a > b) ? a : b;
             });

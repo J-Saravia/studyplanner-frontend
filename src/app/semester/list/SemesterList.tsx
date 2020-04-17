@@ -1,6 +1,6 @@
 import * as React from 'react';
 import SemesterPreview from './SemesterPreview';
-import { Button, StyledComponentProps, withStyles } from '@material-ui/core';
+import {Button, StyledComponentProps, Typography, withStyles} from '@material-ui/core';
 import SemesterListStyle from './SemesterListStyle';
 import ModuleVisit from '../../../model/ModuleVisit';
 import { StudentServiceProps, withStudentService } from '../../../service/StudentService';
@@ -9,9 +9,11 @@ import { ModuleVisitServiceProps, withModuleVisitService } from '../../../servic
 import { AuthServiceProps, withAuthService } from '../../../service/AuthService';
 import { Trans } from 'react-i18next';
 import CreateSemesterDialog from '../dialog/CreateSemesterDialog';
+import StudyStatistics from "./StudyStatistics";
 import { Alert } from '@material-ui/lab';
 
 interface SemesterListState {
+    semesterModuleMapReadonly?: { [key: string]: ModuleVisit[] };
     semesterModuleMap?: { [key: string]: ModuleVisit[] };
     createSemester?: boolean;
     error?: string;
@@ -30,7 +32,7 @@ class SemesterList extends React.Component<SemesterListProps, SemesterListState>
 
     public componentDidMount() {
         this.props.moduleVisitService.map().then(
-            (semesterModuleMap: { [key: string]: ModuleVisit[] }) => this.setState({ semesterModuleMap })
+            (semesterModuleMap: { [key: string]: ModuleVisit[] }) => this.setState({ semesterModuleMap, semesterModuleMapReadonly: semesterModuleMap })
         ).catch(error => this.setState({error: error.toString()}));
     }
 
@@ -42,35 +44,16 @@ class SemesterList extends React.Component<SemesterListProps, SemesterListState>
         this.setState({ createSemester: false });
     };
 
+    private changeHandler = (semester: string) => (moduleVisits: ModuleVisit[]) => {
+        const { semesterModuleMap } = this.state;
+        if (!semesterModuleMap) return;
+        semesterModuleMap[semester] = moduleVisits;
+        this.setState({semesterModuleMap});
+    };
+
     public render() {
         const { classes } = this.props;
-        const { semesterModuleMap, createSemester, error } = this.state;
-        let totalCredits = 0;
-        let currentCredits = 0;
-        let currentNegativeCredits = 0;
-        let weightedGradeSum = 0;
-        let divider = 0;
-        if (semesterModuleMap) {
-            const keys = Object.keys(semesterModuleMap);
-            keys.forEach(key => {
-                semesterModuleMap[key].forEach(mv => {
-                    const credits = mv.module.credits;
-                    totalCredits += credits;
-                    if (mv.state === 'passed') {
-                        currentCredits += credits;
-                        if (mv.grade) {
-                            weightedGradeSum += mv.module.credits * mv.grade;
-                            divider += mv.module.credits;
-                        }
-                    } else if (mv.state === 'failed') {
-                        currentNegativeCredits += credits;
-                        weightedGradeSum += mv.module.credits * mv.grade;
-                        divider += mv.module.credits;
-                    }
-                });
-            });
-        }
-        let averageGrade = (weightedGradeSum / divider).toFixed(2);
+        const { semesterModuleMapReadonly, createSemester, error } = this.state;
 
         return (
             <div className={classes.root}>
@@ -83,21 +66,44 @@ class SemesterList extends React.Component<SemesterListProps, SemesterListState>
                     <Trans>translation:messages.semester.create</Trans>
                 </Button>
                 <div className={classes.list}>
-                    {semesterModuleMap && Object.keys(semesterModuleMap).map(key => (
+                    {semesterModuleMapReadonly && Object.keys(semesterModuleMapReadonly).map(key => (
                         <SemesterPreview
                             key={key}
                             semester={key}
-                            moduleVisits={semesterModuleMap[key]}
+                            moduleVisits={semesterModuleMapReadonly[key]}
+                            onChange={this.changeHandler(key)}
                         />
                     ))}
+
                 </div>
-                <div>{currentCredits} / {totalCredits}</div>
-                <div>{currentNegativeCredits} / 60</div>
-                <div>Grade: {averageGrade}</div>
+                {!error && this.getStatistic()}
                 {error && <Alert color="error"><Trans>translation:messages.semester.load.error</Trans></Alert>}
                 <CreateSemesterDialog open={createSemester} onCancel={this.handleCreateSemesterCancel}/>
             </div>
         );
+    }
+
+    private getStatistic() {
+        const { classes } = this.props;
+        const { semesterModuleMap } = this.state;
+
+        return <>
+            <div className={classes.header}>
+                <Typography variant="h6" className={classes.title}>
+                    <Trans>translation:messages.studyStatistic</Trans></Typography>
+                <hr className={classes.rule}/>
+            </div>
+            <div className={classes.content}>
+
+                <div className={classes.modules}>
+                    {semesterModuleMap &&
+                    <StudyStatistics
+                        semesterModuleMap={semesterModuleMap}>
+                    </StudyStatistics>
+                    }
+                </div>
+            </div>
+        </>;
     }
 
 }

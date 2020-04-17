@@ -9,7 +9,7 @@ export default abstract class CacheableService<T extends {id?: K}, K = string> {
         this.maxCacheAge = maxCacheAge;
     }
 
-    protected async clearCache() {
+    public async clearCache(): Promise<void> {
         if (this.loadingCache) {
             await this.loadingCache;
         }
@@ -24,11 +24,14 @@ export default abstract class CacheableService<T extends {id?: K}, K = string> {
     protected async loadCache(): Promise<T[]> {
         if (this.lastCacheUpdate + this.maxCacheAge < Date.now()) {
             if (!this.loadingCache) {
-                await (this.loadingCache = new Promise(async resolve => {
-                    this.cache = await this.loadData();
-                    this.lastCacheUpdate = Date.now();
-                    this.loadingCache = undefined;
-                    resolve();
+                await (this.loadingCache = new Promise(async (resolve, reject) => {
+                    try {
+                        this.cache = await this.loadData();
+                        this.lastCacheUpdate = Date.now();
+                    } finally {
+                        this.loadingCache = undefined;
+                        resolve();
+                    }
                 }));
             } else {
                 await this.loadingCache;

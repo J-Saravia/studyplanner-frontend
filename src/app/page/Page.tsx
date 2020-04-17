@@ -9,6 +9,7 @@ import Login from './login/Login';
 import { Switch, Route } from 'react-router-dom';
 import SemesterView from '../semester/detail/SemesterView';
 import Protected from './Protected';
+import Register from './register/Register';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import Forgot from './login/Forgot';
 import Reset from './login/Reset';
@@ -50,6 +51,9 @@ class Page extends React.Component<PageProps, PageState> {
                 <Paper className={classes.content}>
                     <div className={classes.toolbar}/>
                     <Switch>
+                        <Route path="/register">
+                            <Register/>
+                        </Route>
                         <Route path="/reset">
                             <Reset />
                         </Route>

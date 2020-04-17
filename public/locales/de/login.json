@@ -1,6 +1,6 @@
 {
   "title": "Anmelden",
-  "email": "Email Adresse",
+  "email": "E-Mail-Adresse",
   "password": "Passwort",
   "signIn": "Anmelden",
   "forgotPassword": "Passwort vergessen?",
@@ -40,5 +40,12 @@
     "submit": "Zurücksetzen",
     "back": "Zurück zum Login",
     "success": "Ihr Passwort wurde erfolgreich zurückgesetzt. Sie können sich nun mit Ihrem neuen Passwort anmelden."
-  }
+  },
+  "register": "Registrieren",
+  "confirm": "Passwort bestätigen",
+  "degree": "Abschluss",
+  "length": "Passwort muss mindestens 10 Zeichen lang sein.",
+  "account": "Schon einen Account erstellt? Anmelden.",
+  "registered": "Registration war erfolgreich. Sie können sich jetzt mit Ihrem neuen Account anmelden.",
+  "registerFail": "Registrieren fehlgeschlagen"
 }

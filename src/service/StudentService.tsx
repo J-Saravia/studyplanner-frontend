@@ -15,12 +15,12 @@ export default class StudentService {
         return this.restClient.getOne<StudentDto>(id).then(this.convertDto);
     }
 
-    public create(student: Student): Promise<Student> {
-        return this.restClient.post<StudentDto>(student).then(this.convertDto);
+    public create(student: Student): Promise<StudentDto> {
+        return this.restClient.post<StudentDto>(this.convertModel(student));
     }
 
     public update(id: string, student: Student): Promise<Student> {
-        return this.restClient.put<StudentDto>(id, student).then(this.convertDto);
+        return this.restClient.put<StudentDto>(id, this.convertModel(student)).then(this.convertDto);
     }
 
     public delete(id: string): Promise<void> {
@@ -31,6 +31,13 @@ export default class StudentService {
         return {
             ...dto,
             degree: await DegreeService.INSTANCE.findById(dto.degree)
+        };
+    }
+
+    private convertModel(model: Student): StudentDto {
+        return {
+            ...model,
+            degree: model.degree.id
         };
     }
 
