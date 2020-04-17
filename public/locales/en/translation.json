@@ -102,17 +102,16 @@
       }
     },
     "semesterStatistic": {
-      "title" : "Semester statistic",
+      "title": "Semester statistic",
       "etcs": {
         "total": "Total",
         "passed": "Passed",
         "failed": "Failed"
       },
       "grade": {
-        "title" : "Grades",
+        "title": "Grades",
         "avg": "Average",
         "high": "Highest"
-
       },
       "msp": {
         "total": "Total",
@@ -158,10 +157,7 @@
           }
         }
       },
-    "unauthorized": "Access denied"
-  },
-  "languages": {
-    "de": "German",
-    "en": "English"
+      "unauthorized": "Access denied"
+    }
   }
 }
