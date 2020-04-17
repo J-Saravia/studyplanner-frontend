@@ -84,11 +84,11 @@ class SelectionDialog extends React.Component<SelectionDialogProps, SelectionDia
                             {children}
                         </Select>
                     </FormControl>
-                    {error &&
+                    {error && (
                         <Alert severity="error">
                             {error}
                         </Alert>
-                    }
+                    )}
                     {status}
                 </DialogContent>
                 <DialogActions>
