@@ -109,7 +109,7 @@ class ModuleVisitDialog extends React.Component<CreateModuleVisitDialogProps, Cr
         this.setState({ moduleVisit });
     };
 
-    private renderInput = (name: keyof ModuleVisit, extraProps?: TextFieldProps) => {
+    private renderInput = <P extends TextFieldProps>(name: keyof ModuleVisit, extraProps?: P) => {
         const { t } = this.props;
         const { error } = this.state;
         return (
@@ -122,6 +122,7 @@ class ModuleVisitDialog extends React.Component<CreateModuleVisitDialogProps, Cr
                 onChange={this.inputChangeHandler(name)}
                 fullWidth
                 required
+                variant="outlined"
                 {...extraProps}
             />
         )
@@ -283,8 +284,9 @@ class ModuleVisitDialog extends React.Component<CreateModuleVisitDialogProps, Cr
                             {this.renderInput('semester', { disabled: true })}
                             {this.renderInput('grade', { type: 'number' })}
                             <FormControl required>
-                                <InputLabel
-                                    shrink><Trans>translation:messages.moduleVisit.dialog.field.weekday.title</Trans></InputLabel>
+                                <InputLabel shrink>
+                                    <Trans>translation:messages.moduleVisit.dialog.field.weekday.title</Trans>
+                                </InputLabel>
                                 <Select
                                     onChange={this.inputChangeHandler('weekday')}
                                     value={moduleVisit.weekday}
@@ -313,8 +315,9 @@ class ModuleVisitDialog extends React.Component<CreateModuleVisitDialogProps, Cr
                             {this.renderInput('timeEnd')}
 
                             <FormControl required className={classes.stateControl}>
-                                <InputLabel
-                                    shrink><Trans>translation:messages.moduleVisit.dialog.field.state.title</Trans></InputLabel>
+                                <InputLabel shrink>
+                                    <Trans>translation:messages.moduleVisit.dialog.field.state.title</Trans>
+                                </InputLabel>
                                 <div className={classes.stateSelection}>
                                     {this.renderModuleStateIndicator()}
                                     <Select className={classes.stateSelectionSelect}
@@ -335,9 +338,9 @@ class ModuleVisitDialog extends React.Component<CreateModuleVisitDialogProps, Cr
                                     </Select>
                                 </div>
                             </FormControl>
-                            {submissionError &&
-                            <Alert color="error"><Trans>translation:messages.moduleVisit.dialog.error</Trans></Alert>
-                            }
+                            {submissionError && (
+                                <Alert color="error"><Trans>translation:messages.moduleVisit.dialog.error</Trans></Alert>
+                            )}
                             <input type="submit" hidden/>
                         </form>
                     </DialogContent>

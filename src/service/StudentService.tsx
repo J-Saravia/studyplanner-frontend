@@ -15,26 +15,26 @@ export default class StudentService {
         return this.restClient.getOne<StudentDto>(id).then(this.convertDto);
     }
 
-    public create(student: Student): Promise<StudentDto> {
-        return this.restClient.post<StudentDto>(this.convertModel(student));
+    public create(student: StudentDto): Promise<StudentDto> {
+        return this.restClient.post<StudentDto>(student);
     }
 
-    public update(id: string, student: Student): Promise<Student> {
-        return this.restClient.put<StudentDto>(id, this.convertModel(student)).then(this.convertDto);
+    public update(id: string, student: StudentDto): Promise<Student> {
+        return this.restClient.put<StudentDto>(id, student).then(this.convertDto);
     }
 
     public delete(id: string): Promise<void> {
         return this.restClient.delete(id);
     }
 
-    private async convertDto(dto: StudentDto): Promise<Student> {
+    public async convertDto(dto: StudentDto): Promise<Student> {
         return {
             ...dto,
             degree: await DegreeService.INSTANCE.findById(dto.degree)
         };
     }
 
-    private convertModel(model: Student): StudentDto {
+    public convertModel(model: Student): StudentDto {
         return {
             ...model,
             degree: model.degree.id

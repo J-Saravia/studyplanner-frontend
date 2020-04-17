@@ -1,10 +1,10 @@
 import * as React from 'react';
-import {Chip, isWidthDown, StyledComponentProps, withStyles, withWidth, WithWidthProps} from '@material-ui/core';
+import { Chip, isWidthDown, StyledComponentProps, withStyles, withWidth, WithWidthProps } from '@material-ui/core';
 import SemesterModuleVisitStyle from './SemesterModuleVisitStyle';
 import clsx from 'clsx';
-import {ClassNameMap} from '@material-ui/core/styles/withStyles';
+import { ClassNameMap } from '@material-ui/core/styles/withStyles';
 import ModuleVisit from '../../../model/ModuleVisit';
-import {Breakpoint} from '@material-ui/core/styles/createBreakpoints';
+import { Breakpoint } from '@material-ui/core/styles/createBreakpoints';
 
 interface SemesterModuleProps extends StyledComponentProps, WithWidthProps {
     moduleVisit: ModuleVisit;
@@ -23,18 +23,18 @@ class SemesterModuleVisit extends React.Component<SemesterModuleProps, any> {
     }
 
     private onMouseEnter = () => {
-        this.setState({isMouseOver: true});
+        this.setState({ isMouseOver: true });
     };
 
     private onMouseLeave = () => {
-        this.setState({isMouseOver: false});
+        this.setState({ isMouseOver: false });
     };
 
     private onClick = (event: React.MouseEvent<HTMLDivElement>) => {
         event.currentTarget.blur();
         event.preventDefault();
         event.stopPropagation();
-        const {onClick} = this.props;
+        const { onClick } = this.props;
         if (onClick) {
             onClick();
         }
@@ -44,15 +44,15 @@ class SemesterModuleVisit extends React.Component<SemesterModuleProps, any> {
         event.currentTarget.blur();
         event.preventDefault();
         event.stopPropagation();
-        const {onDelete} = this.props;
+        const { onDelete } = this.props;
         if (onDelete) {
             onDelete();
         }
     };
 
     public render() {
-        const {isMouseOver} = this.state;
-        const {classes, onClick, onDelete, width, moduleVisit, isDetailed} = this.props;
+        const { isMouseOver } = this.state;
+        const { classes, onClick, onDelete, width, moduleVisit, isDetailed } = this.props;
 
         const planned = moduleVisit.state === 'planned';
         const active = moduleVisit.state === 'ongoing';

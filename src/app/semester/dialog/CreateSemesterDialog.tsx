@@ -32,8 +32,8 @@ class CreateSemesterDialog extends React.Component<CreateSemesterDialogProps, Cr
         }
     };
 
-    private handleChange = (event: React.ChangeEvent<{value?: unknown}>) => {
-        this.setState({semester: event.target.value as string});
+    private handleChange = (event: React.ChangeEvent<{ value?: unknown }>) => {
+        this.setState({ semester: event.target.value as string });
     };
 
     private handleCancel = () => {

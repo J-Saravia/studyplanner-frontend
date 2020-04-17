@@ -14,6 +14,7 @@ import { WithTranslation, withTranslation } from 'react-i18next';
 import Forgot from './login/Forgot';
 import Reset from './login/Reset';
 import LoadingPage from './LoadingPage';
+import Student from '../student/StudentView';
 
 interface PageProps extends AuthServiceProps, StyledComponentProps, WithTranslation {
     classes: ClassNameMap;
@@ -35,8 +36,8 @@ class Page extends React.Component<PageProps, PageState> {
 
     componentDidMount() {
         this.props.authService.tryAuthFromCache()
-            .then(_ => this.setState({isInitialising: false}))
-            .catch(_ => this.setState({isInitialising: false}));
+            .then(_ => this.setState({ isInitialising: false }))
+            .catch(_ => this.setState({ isInitialising: false }));
     }
 
     public render() {
@@ -60,13 +61,18 @@ class Page extends React.Component<PageProps, PageState> {
                         <Route path="/forgot">
                             <Forgot />
                         </Route>
+                        <Route path="/student">
+                            <Protected fallback={<Login/>}>
+                                <Student/>
+                            </Protected>
+                        </Route>
                         <Route path="/semester/:id">
-                            <Protected fallback={<Login />} showMessage>
+                            <Protected fallback={<Login/>} showMessage>
                                 <SemesterView/>
                             </Protected>
                         </Route>
                         <Route>
-                            <Protected fallback={<Login />} showMessage>
+                            <Protected fallback={<Login/>} showMessage>
                                 <SemesterList/>
                             </Protected>
                         </Route>

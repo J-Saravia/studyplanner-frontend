@@ -1,4 +1,4 @@
-import {createStyles, Theme} from '@material-ui/core';
+import { createStyles, Theme } from '@material-ui/core';
 
 const SemesterStatisticsStyle = (theme: Theme) => createStyles({
     root: {

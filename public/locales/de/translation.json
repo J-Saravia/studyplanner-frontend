@@ -127,11 +127,46 @@
         "oral": "Mündlich"
       }
     },
+    "student": {
+      "title": "Benutzer",
+      "delete": {
+        "title": "Benutzer löschen",
+        "confirmation": "Sind Sie sich sicher, dass Sie Ihren Benutzer löschen wollen? Alle Ihre Daten gehen dadurch verloren."
+      },
+      "error": "Aktion fehlgeschlagen",
+      "successful": "Benutzer aktualisiert",
+      "form": {
+        "error": "Daten konnten nicht geladen werden",
+        "submit": "Absenden",
+        "field": {
+          "id": {
+            "title": "Benutzerid",
+            "help": ""
+          },
+          "email": {
+            "title": "E-Mail-Addresse",
+            "help": ""
+          },
+          "password": {
+            "title": "Passwort",
+            "help": "Passwort muss mindestens 10 Zeichen lang sein"
+          },
+          "confirmPassword": {
+            "title": "Passwort bestätigen",
+            "help": ""
+          },
+          "semester": {
+            "title": "Semester",
+            "help": ""
+          },
+          "degree": {
+            "title": "Abschluss",
+            "help": ""
+          }
+        }
+      }
+    },
     "studyStatistic": "Studiumstatistik",
     "unauthorized": "Zugriff verweigert"
-  },
-  "languages": {
-    "de": "Deutsch",
-    "en": "Englisch"
   }
 }

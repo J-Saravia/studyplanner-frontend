@@ -64,7 +64,7 @@ class Menu extends React.Component<MenuProps, MenuState> {
     };
 
     public render = () => {
-        const { classes, width, theme } = this.props;
+        const { classes, width, theme, t } = this.props;
         const { open, hasUserRequestedLogout } = this.state;
         const isMobile = isWidthDown('sm', width);
         return (
@@ -121,6 +121,14 @@ class Menu extends React.Component<MenuProps, MenuState> {
                             </Link>
                         </Protected>
                         <div className={classes.grow}/>
+                        <Protected>
+                            <Link to="/student" className={classes.link}>
+                                <ListItem button>
+                                    <ListItemIcon><Icons.AccountBox/></ListItemIcon>
+                                    <ListItemText primary={t('translation:messages.student.title')}/>
+                                </ListItem>
+                            </Link>
+                        </Protected>
                         <LanguageSelector>
                             <ListItem button>
                                 <ListItemIcon><Icons.Language/></ListItemIcon>

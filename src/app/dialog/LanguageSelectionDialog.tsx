@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { MenuItem } from '@material-ui/core';
+import { CircularProgress, MenuItem } from '@material-ui/core';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import SelectionDialog from './SelectionDialog';
 
@@ -32,23 +32,15 @@ class LanguageSelectionDialog extends React.Component<LanguageSelectorProps, Lan
         const { i18n } = this.props;
         const { selectedLanguage } = this.state;
         if (selectedLanguage && selectedLanguage !== i18n.language) {
-            this.setState({isLoading: true});
+            this.setState({ isLoading: true });
             i18n.changeLanguage(selectedLanguage)
                 .then(_ => this.setState({ open: false, isLoading: false, error: undefined }))
-                .catch(reason => this.setState({isLoading: false, error: reason}));
+                .catch(reason => this.setState({ isLoading: false, error: reason }));
         }
     };
 
     private handleCancel = () => {
         this.setState({ open: false });
-    };
-
-    private renderLoading = () => {
-        return (
-            <div>
-
-            </div>
-        );
     };
 
     public render() {
@@ -66,7 +58,7 @@ class LanguageSelectionDialog extends React.Component<LanguageSelectorProps, Lan
                     onSelect={this.handleSelect}
                     defaultValue={i18n.language}
                     error={error}
-                    status={isLoading && this.renderLoading()}
+                    status={isLoading && <CircularProgress />}
                 >
                     <MenuItem value="de">Deutsch</MenuItem>
                     <MenuItem value="en">English</MenuItem>

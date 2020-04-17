@@ -16,7 +16,7 @@ const ModuleVisitDialogStyle = (theme: Theme) => createStyles({
         alignItems: 'center'
     },
     grow: {
-      flexGrow: 1
+        flexGrow: 1
     },
     stateIndicator: {
         borderRadius: '50%',

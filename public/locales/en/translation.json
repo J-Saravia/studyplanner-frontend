@@ -127,11 +127,46 @@
         "oral": "Oral"
       }
     },
-    "studyStatistic": "Study statistics",
-    "unauthorized": "Access denied"
-  },
-  "languages": {
-    "de": "German",
-    "en": "English"
+    "student": {
+      "title": "Account",
+      "delete": {
+        "title": "Delete account",
+        "confirmation": "Are you sure you want to delete your account? This will irreversibly delete your data."
+      },
+      "error": "Action failed",
+      "successful": "Account has been updated",
+      "form": {
+        "error": "Unable to load data",
+        "submit": "Submit",
+        "field": {
+          "id": {
+            "title": "Id",
+            "help": ""
+          },
+          "email": {
+            "title": "E-Mail address",
+            "help": ""
+          },
+          "password": {
+            "title": "Password",
+            "help": "Password must be at least 10 digits long"
+          },
+          "confirmPassword": {
+            "title": "Confirm password",
+            "help": ""
+          },
+          "semester": {
+            "title": "Semester",
+            "help": ""
+          },
+          "degree": {
+            "title": "Degree",
+            "help": ""
+          }
+        }
+      },
+      "studyStatistic": "Study statistics",
+      "unauthorized": "Access denied"
+    }
   }
 }

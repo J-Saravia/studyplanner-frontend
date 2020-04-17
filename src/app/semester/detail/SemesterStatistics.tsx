@@ -1,9 +1,9 @@
 import * as React from 'react';
-import {Chip, StyledComponentProps, withStyles} from '@material-ui/core';
+import { Chip, StyledComponentProps, withStyles } from '@material-ui/core';
 import ModuleVisit from '../../../model/ModuleVisit';
-import {ClassNameMap} from '@material-ui/core/styles/withStyles';
+import { ClassNameMap } from '@material-ui/core/styles/withStyles';
 import SemesterStatisticsStyle from "./SemesterStatisticsStyle";
-import {Trans, WithTranslation, withTranslation} from 'react-i18next';
+import { Trans, WithTranslation, withTranslation } from 'react-i18next';
 
 interface SemesterStatisticsProps extends StyledComponentProps, WithTranslation {
     classes: ClassNameMap;
@@ -19,7 +19,7 @@ class SemesterStatistics extends React.Component<SemesterStatisticsProps, any> {
     }
 
     private getTotalEtcs() {
-        const {moduleVisits} = this.props;
+        const { moduleVisits } = this.props;
         let total = 0;
         if (moduleVisits.length !== 0) {
             total = moduleVisits.map(m => m.module.credits).reduce(function (a, b) {
@@ -30,7 +30,7 @@ class SemesterStatistics extends React.Component<SemesterStatisticsProps, any> {
     }
 
     private getTotalPositive() {
-        const {moduleVisits} = this.props;
+        const { moduleVisits } = this.props;
         let passedModule = moduleVisits.filter(m => m.state === 'passed');
         let total = 0;
         if (passedModule.length !== 0) {
@@ -43,7 +43,7 @@ class SemesterStatistics extends React.Component<SemesterStatisticsProps, any> {
     }
 
     private getTotalNegative() {
-        const {moduleVisits} = this.props;
+        const { moduleVisits } = this.props;
         let failedModule = moduleVisits.filter(m => m.state === 'failed');
         let total = 0;
         if (failedModule.length !== 0) {
@@ -55,7 +55,7 @@ class SemesterStatistics extends React.Component<SemesterStatisticsProps, any> {
     }
 
     private getAvgGrade() {
-        const {moduleVisits} = this.props;
+        const { moduleVisits } = this.props;
 
         let weightedGradeSum = 0;
         let totalEtc = 0;
@@ -65,9 +65,9 @@ class SemesterStatistics extends React.Component<SemesterStatisticsProps, any> {
                 const etc = m.module.credits;
                 totalEtc += etc;
                 weightedGradeSum += (etc * m.grade);
-            })
+            });
             let total = (weightedGradeSum / totalEtc);
-            if(Number.isInteger(total)){
+            if (Number.isInteger(total)) {
                 return total.toString();
             } else {
                 return total.toFixed(2);
@@ -78,7 +78,7 @@ class SemesterStatistics extends React.Component<SemesterStatisticsProps, any> {
 
 
     private getHighGrade() {
-        const {moduleVisits} = this.props;
+        const { moduleVisits } = this.props;
         let gradedModule = moduleVisits.filter(m => m.state !== 'planned' && m.state !== 'ongoing').filter(mv => mv.grade !== 0);
         if (gradedModule.length !== 0) {
             let total = gradedModule.map(mv => mv.grade).reduce(function (a, b) {
@@ -90,26 +90,26 @@ class SemesterStatistics extends React.Component<SemesterStatisticsProps, any> {
     }
 
     private getTotalMsps() {
-        const {moduleVisits} = this.props;
+        const { moduleVisits } = this.props;
         let total = moduleVisits.map(m => m.module.msp).filter(ms => ms !== 'NONE').length;
         return total.toString();
     }
 
     private getOralMsps() {
-        const {moduleVisits} = this.props;
+        const { moduleVisits } = this.props;
         let total = moduleVisits.map(m => m.module.msp).filter(ms => ms === 'ORAL').length;
         return total.toString();
     }
 
     private getWrittenMsps() {
-        const {moduleVisits} = this.props;
+        const { moduleVisits } = this.props;
         let total = moduleVisits.map(m => m.module.msp).filter(ms => ms === 'WRITTEN').length;
         return total.toString();
     }
 
 
     public render() {
-        const {classes} = this.props;
+        const { classes } = this.props;
 
         return (
             <div className={classes.root}>
@@ -137,15 +137,17 @@ class SemesterStatistics extends React.Component<SemesterStatisticsProps, any> {
     }
 
     private getChip(label: string, value: string) {
-        const {classes} = this.props;
+        const { classes } = this.props;
         return <Chip
             tabIndex={-1}
-            label={<div>
-                <div className={classes.label}>
-                    <Trans>translation:messages.semesterStatistic.{label}</Trans>
+            label={(
+                <div>
+                    <div className={classes.label}>
+                        <Trans>translation:messages.semesterStatistic.{label}</Trans>
+                    </div>
+                    <div className={classes.value}>{value}</div>
                 </div>
-                <div className={classes.value}>{value}</div>
-            </div>}
+            )}
             color="primary"
             classes={{
                 root: classes.elem
