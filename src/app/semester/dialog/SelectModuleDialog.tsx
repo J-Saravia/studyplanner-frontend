@@ -45,7 +45,7 @@ class SelectModuleDialog extends React.Component<SelectModuleDialogProps, Select
 
     componentDidUpdate(prevProps: Readonly<SelectModuleDialogProps>, prevState: Readonly<SelectModuleDialogState>, snapshot?: any): void {
         if (!prevProps.open && this.props.open) {
-            this.setState({infos: undefined, selected: undefined, filter: undefined});
+            this.setState({ infos: undefined, selected: undefined, filter: undefined });
             this.loadModuleInfoList();
         }
     }
@@ -55,7 +55,7 @@ class SelectModuleDialog extends React.Component<SelectModuleDialogProps, Select
             infos = infos.sort((a, b) => this.getInfoValue(a) - this.getInfoValue(b));
             const selected = this.props.defaultSelected
                 && infos.find(info => info.id === this.props.defaultSelected?.id);
-            this.setState({infos, selected});
+            this.setState({ infos, selected });
         });
     };
 
@@ -63,7 +63,7 @@ class SelectModuleDialog extends React.Component<SelectModuleDialogProps, Select
         let value = 0;
         if (info.state === 'failed') {
             value -= 100;
-        }else if (info.state === 'passed' || info.state === 'blocked') {
+        } else if (info.state === 'passed' || info.state === 'blocked') {
             value += 100;
         }
         return value;
@@ -84,10 +84,10 @@ class SelectModuleDialog extends React.Component<SelectModuleDialogProps, Select
                 <div><Trans>translation:messages.module.selection.credits</Trans>: {module.credits}</div>
                 <div><Trans>translation:messages.module.selection.semester</Trans>: {semesterAvailability}</div>
                 <Trans>translation:messages.module.selection.requirements.title</Trans>: {module.requirements.length ? module.requirements.map(module => (
-                    <div key={`requirement-${module.id}`} className={classes.requirement}>
-                        - {module.name}
-                    </div>
-                )) : <Trans>translation:messages.module.selection.requirements.none</Trans>}
+                <div key={`requirement-${module.id}`} className={classes.requirement}>
+                    - {module.name}
+                </div>
+            )) : <Trans>translation:messages.module.selection.requirements.none</Trans>}
             </>
         );
     }
@@ -124,15 +124,16 @@ class SelectModuleDialog extends React.Component<SelectModuleDialogProps, Select
                         [classes.unselectable]: state === 'passed',
                     })}
                     key={module.id}
-                    onClick={_ => this.setState({selected: info})}
+                    onClick={_ => this.setState({ selected: info })}
                 >
                     <div className={classes.moduleTitle}>{module.name}</div>
-                    <div className={classes.row} >
+                    <div className={classes.row}>
                         <div><Trans>translation:messages.module.selection.code</Trans>: {module.code}</div>
                         <div><Trans>translation:messages.module.selection.credits</Trans>: {module.credits}</div>
                     </div>
                     <div className={classes.row}>
-                        <div>MSP: <Trans>translation:messages.module.selection.msp.{module.msp.toLowerCase()}</Trans></div>
+                        <div>MSP: <Trans>translation:messages.module.selection.msp.{module.msp.toLowerCase()}</Trans>
+                        </div>
                         {this.renderStateMessage(state)}
                     </div>
                     <div className={classes.row}>
@@ -163,7 +164,7 @@ class SelectModuleDialog extends React.Component<SelectModuleDialogProps, Select
         const { selected } = this.state;
         return (
             <Dialog
-                classes={{paperFullWidth: clsx(classes.fullHeight)}}
+                classes={{ paperFullWidth: clsx(classes.fullHeight) }}
                 maxWidth={false}
                 fullWidth
                 open={!!this.props.open}
@@ -179,11 +180,11 @@ class SelectModuleDialog extends React.Component<SelectModuleDialogProps, Select
                     <div className={classes.content}>
                         <TextField
                             autoFocus
-                            onChange={event => this.setState({filter: event.currentTarget.value})}
+                            onChange={event => this.setState({ filter: event.currentTarget.value })}
                             className={classes.search}
-                            InputProps={{endAdornment: <InputAdornment position="end"><Search /></InputAdornment>}}
+                            InputProps={{ endAdornment: <InputAdornment position="end"><Search/></InputAdornment> }}
                             placeholder={t('translation:messages.module.selection.search')}
-                            fullWidth />
+                            fullWidth/>
                         <div className={classes.modules}>
                             {this.renderModules()}
                         </div>
