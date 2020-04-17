@@ -47,7 +47,7 @@ class SemesterPreview extends React.Component<SemesterPreviewProps, SemesterPrev
     };
 
     private moduleVisitDeleteHandler = (moduleVisitToDelete: ModuleVisit) => () => {
-        this.setState({moduleVisitToDelete});
+        this.setState({ moduleVisitToDelete });
     };
 
 
@@ -80,11 +80,11 @@ class SemesterPreview extends React.Component<SemesterPreviewProps, SemesterPrev
     };
 
     private handleAddButtonClick = () => {
-        this.setState({createModuleVisit: true});
+        this.setState({ createModuleVisit: true });
     };
 
     private handleFinishCreateModuleVisit = (visit: ModuleVisit) => {
-        const {moduleVisits, createModuleVisit} = this.state;
+        const { moduleVisits, createModuleVisit } = this.state;
         if (createModuleVisit) {
             moduleVisits.push(visit);
             this.setState({
@@ -102,11 +102,11 @@ class SemesterPreview extends React.Component<SemesterPreviewProps, SemesterPrev
     };
 
     private handleCancelModuleVisitDialog = () => {
-        this.setState({createModuleVisit: false, selectedModuleVisit: undefined});
+        this.setState({ createModuleVisit: false, selectedModuleVisit: undefined });
     };
 
     private handleCancelDelete = () => {
-        this.setState({moduleVisitToDelete: undefined});
+        this.setState({ moduleVisitToDelete: undefined });
     };
 
     public render() {
