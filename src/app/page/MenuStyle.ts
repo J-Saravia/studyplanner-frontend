@@ -62,6 +62,10 @@ const MenuStyle = (theme: Theme) => createStyles({
         height: '100%',
         display: 'flex',
         flexDirection: 'column'
+    },
+    link: {
+        color: theme.palette.text.primary,
+        textDecoration: 'none'
     }
 });
 

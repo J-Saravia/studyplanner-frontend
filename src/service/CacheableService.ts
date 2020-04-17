@@ -21,7 +21,7 @@ export default abstract class CacheableService<T extends {id?: K}, K = string> {
         }));
     }
 
-    public async loadCache(): Promise<T[]> {
+    protected async loadCache(): Promise<T[]> {
         if (this.lastCacheUpdate + this.maxCacheAge < Date.now()) {
             if (!this.loadingCache) {
                 await (this.loadingCache = new Promise(async (resolve, reject) => {

@@ -3,8 +3,44 @@
   "email": "Email Address",
   "password": "Password",
   "signIn": "Sign In",
-  "resetPassword": "Forgot password?",
+  "forgotPassword": "Forgot password?",
   "signUp": "Don't have an account? Sign Up",
+  "error": "Login has failed",
+  "forgot": {
+    "title": "Request password reset",
+    "help": "Enter you Email Address and we will send you a reset token with which you can reset your password if needed.",
+    "error": "Request failed",
+    "email": {
+      "title": "Email Address",
+      "help": ""
+    },
+    "submit": "Request password reset",
+    "back": "Back to the login"
+  },
+  "reset": {
+    "title": "Reset password",
+    "help": "Enter your email, the received key and your new password to complete the reset.",
+    "error": "Reset failed",
+    "email": {
+      "title": "Email Address",
+      "help": ""
+    },
+    "forgotToken": {
+      "title": "Reset key",
+      "help": "The reset key you received from us."
+    },
+    "password": {
+      "title": "Password",
+      "help": "The password must be at least 10 characters long"
+    },
+    "confirmPassword": {
+      "title": "Confirm password",
+      "help": ""
+    },
+    "submit": "Reset",
+    "back": "Back to the login",
+    "success": "Your password has been successfully changed, you may login with your new password."
+  },
   "register": "Sign Up",
   "confirm": "Confirm password",
   "degree": "Degree",

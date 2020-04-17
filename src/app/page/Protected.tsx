@@ -5,7 +5,8 @@ import { Trans } from 'react-i18next';
 
 interface ProtectedProps extends AuthServiceProps{
     fallback?: React.ReactNode;
-    silent?: boolean;
+    showMessage?: boolean;
+    redirectToLogin?: boolean;
 }
 
 interface ProtectedState {
@@ -32,18 +33,18 @@ class Protected extends React.Component<ProtectedProps, ProtectedState> {
             .addAuthStateListener(isLoggedIn => this.setState({isLoggedIn}));
     }
 
-    public componentWillUnmount(){
+    public componentWillUnmount() {
         if (this.subscription) {
             this.subscription.unsubscribe();
         }
     }
 
     public render() {
-        const { silent, fallback, children} = this.props;
+        const { showMessage, fallback, children } = this.props;
         const { isLoggedIn } = this.state;
         if (isLoggedIn) {
             return children;
-        } else if (!silent) {
+        } else if (showMessage) {
             return fallback || (<Trans>translation:messages.unauthorized</Trans>);
         }
         return null;

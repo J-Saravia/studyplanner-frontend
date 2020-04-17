@@ -10,10 +10,12 @@ import { AuthServiceProps, withAuthService } from '../../../service/AuthService'
 import { Trans } from 'react-i18next';
 import CreateSemesterDialog from '../dialog/CreateSemesterDialog';
 import StudyStatistics from "./StudyStatistics";
+import { Alert } from '@material-ui/lab';
 
 interface SemesterListState {
     semesterModuleMap?: { [key: string]: ModuleVisit[] };
     createSemester?: boolean;
+    error?: string;
 }
 
 interface SemesterListProps extends StudentServiceProps, ModuleVisitServiceProps, StyledComponentProps, AuthServiceProps {
@@ -30,7 +32,7 @@ class SemesterList extends React.Component<SemesterListProps, SemesterListState>
     public componentDidMount() {
         this.props.moduleVisitService.map().then(
             (semesterModuleMap: { [key: string]: ModuleVisit[] }) => this.setState({ semesterModuleMap })
-        );
+        ).catch(error => this.setState({error: error.toString()}));
     }
 
     private handleCreateSemester = () => {
@@ -43,7 +45,7 @@ class SemesterList extends React.Component<SemesterListProps, SemesterListState>
 
     public render() {
         const { classes } = this.props;
-        const { semesterModuleMap, createSemester } = this.state;
+        const { semesterModuleMap, createSemester, error } = this.state;
 
         return (
             <div className={classes.root}>
@@ -63,8 +65,10 @@ class SemesterList extends React.Component<SemesterListProps, SemesterListState>
                             moduleVisits={semesterModuleMap[key]}
                         />
                     ))}
-                    {this.getStatistic()}
+
                 </div>
+                {this.getStatistic()}
+                {error && <Alert color="error"><Trans>translation:messages.semester.load.error</Trans></Alert>}
                 <CreateSemesterDialog open={createSemester} onCancel={this.handleCreateSemesterCancel}/>
             </div>
         );

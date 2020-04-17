@@ -11,13 +11,13 @@ import {
 } from '@material-ui/core';
 import * as Icons from '@material-ui/icons';
 import LoginStyle from './LoginStyle';
-import { Link } from 'react-router-dom';
+import { Link, withRouter, RouteComponentProps } from 'react-router-dom';
 import { AuthServiceProps, withAuthService } from '../../../service/AuthService';
 import { ClassNameMap } from '@material-ui/core/styles/withStyles';
 import { Alert } from '@material-ui/lab';
 import { Trans, WithTranslation, withTranslation } from 'react-i18next';
 
-interface LoginProps extends StyledComponentProps, AuthServiceProps, WithTranslation {
+interface LoginProps extends StyledComponentProps, AuthServiceProps, WithTranslation, RouteComponentProps {
     classes: ClassNameMap;
 }
 
@@ -28,7 +28,6 @@ interface LoginState {
 }
 
 class Login extends React.Component<LoginProps, LoginState> {
-
 
     constructor(props: Readonly<LoginProps>) {
         super(props);
@@ -51,10 +50,13 @@ class Login extends React.Component<LoginProps, LoginState> {
     };
 
     public render() {
-        const { classes, t } = this.props;
+        const { classes, t, location } = this.props;
         const { error } = this.state;
+
+        const message = new URLSearchParams(location.search).get('message');
+
         return (
-            <Container component="main" maxWidth="sm">
+            <Container maxWidth="sm">
                 <div className={classes.paper}>
                     <Avatar className={classes.avatar}>
                         <Icons.LockOutlined/>
@@ -90,9 +92,14 @@ class Login extends React.Component<LoginProps, LoginState> {
                             error={!!error}
                         />
                         {error &&
-                        <Alert severity="error">
-                            {error}
-                        </Alert>
+                            <Alert severity="error">
+                              <Trans>login:error</Trans>
+                            </Alert>
+                        }
+                        {message &&
+                            <Alert severity="info">
+                              <Trans>{message}</Trans>
+                            </Alert>
                         }
                         <Button
                             type="submit"
@@ -105,8 +112,8 @@ class Login extends React.Component<LoginProps, LoginState> {
                         </Button>
                         <Grid container>
                             <Grid item xs>
-                                <Link to="/resetpassword">
-                                    <Trans>login:resetPassword</Trans>
+                                <Link to="/forgot">
+                                    <Trans>login:forgotPassword</Trans>
                                 </Link>
                             </Grid>
                             <Grid item>
@@ -122,4 +129,4 @@ class Login extends React.Component<LoginProps, LoginState> {
     }
 }
 
-export default withTranslation()(withAuthService(withStyles(LoginStyle)(Login)));
+export default withRouter(withTranslation()(withAuthService(withStyles(LoginStyle)(Login))));

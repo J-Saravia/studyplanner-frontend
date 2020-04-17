@@ -11,6 +11,9 @@ import SemesterView from '../semester/detail/SemesterView';
 import Protected from './Protected';
 import Register from './register/Register';
 import { WithTranslation, withTranslation } from 'react-i18next';
+import Forgot from './login/Forgot';
+import Reset from './login/Reset';
+import LoadingPage from './LoadingPage';
 
 interface PageProps extends AuthServiceProps, StyledComponentProps, WithTranslation {
     classes: ClassNameMap;
@@ -40,7 +43,7 @@ class Page extends React.Component<PageProps, PageState> {
         const { classes } = this.props;
         const { isInitialising } = this.state;
         if (isInitialising) {
-            return 'loading...';
+            return <LoadingPage />;
         }
         return (
             <div className={classes.root}>
@@ -48,16 +51,22 @@ class Page extends React.Component<PageProps, PageState> {
                 <Paper className={classes.content}>
                     <div className={classes.toolbar}/>
                     <Switch>
-                        <Route path={ "/register" }>
+                        <Route path="/register">
                             <Register/>
                         </Route>
+                        <Route path="/reset">
+                            <Reset />
+                        </Route>
+                        <Route path="/forgot">
+                            <Forgot />
+                        </Route>
                         <Route path="/semester/:id">
-                            <Protected fallback={<Login />}>
+                            <Protected fallback={<Login />} showMessage>
                                 <SemesterView/>
                             </Protected>
                         </Route>
                         <Route>
-                            <Protected fallback={<Login />}>
+                            <Protected fallback={<Login />} showMessage>
                                 <SemesterList/>
                             </Protected>
                         </Route>
