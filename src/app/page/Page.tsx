@@ -11,6 +11,7 @@ import SemesterView from '../semester/detail/SemesterView';
 import Protected from './Protected';
 import Register from './register/Register';
 import { WithTranslation, withTranslation } from 'react-i18next';
+import Student from '../student/StudentView';
 
 interface PageProps extends AuthServiceProps, StyledComponentProps, WithTranslation {
     classes: ClassNameMap;
@@ -32,8 +33,8 @@ class Page extends React.Component<PageProps, PageState> {
 
     componentDidMount() {
         this.props.authService.tryAuthFromCache()
-            .then(_ => this.setState({isInitialising: false}))
-            .catch(_ => this.setState({isInitialising: false}));
+            .then(_ => this.setState({ isInitialising: false }))
+            .catch(_ => this.setState({ isInitialising: false }));
     }
 
     public render() {
@@ -48,16 +49,21 @@ class Page extends React.Component<PageProps, PageState> {
                 <Paper className={classes.content}>
                     <div className={classes.toolbar}/>
                     <Switch>
-                        <Route path={ "/register" }>
+                        <Route path={"/register"}>
                             <Register/>
                         </Route>
+                        <Route path="/student">
+                            <Protected fallback={<Login/>}>
+                                <Student/>
+                            </Protected>
+                        </Route>
                         <Route path="/semester/:id">
-                            <Protected fallback={<Login />}>
+                            <Protected fallback={<Login/>}>
                                 <SemesterView/>
                             </Protected>
                         </Route>
                         <Route>
-                            <Protected fallback={<Login />}>
+                            <Protected fallback={<Login/>}>
                                 <SemesterList/>
                             </Protected>
                         </Route>

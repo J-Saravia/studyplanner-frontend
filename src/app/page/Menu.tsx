@@ -26,6 +26,7 @@ import ConfirmationDialog from '../dialog/ConfirmationDialog';
 import { Trans, WithTranslation, withTranslation } from 'react-i18next';
 import LanguageSelector from '../dialog/LanguageSelectionDialog';
 import Protected from './Protected';
+import { Link } from 'react-router-dom';
 
 interface MenuProps extends WithWidthProps, StyledComponentProps, AuthServiceProps, WithTranslation {
     classes: ClassNameMap;
@@ -63,7 +64,7 @@ class Menu extends React.Component<MenuProps, MenuState> {
     };
 
     public render = () => {
-        const { classes, width, theme } = this.props;
+        const { classes, width, theme, t } = this.props;
         const { open, hasUserRequestedLogout } = this.state;
         const isMobile = isWidthDown('sm', width);
         return (
@@ -124,6 +125,14 @@ class Menu extends React.Component<MenuProps, MenuState> {
                                 <ListItemText primary={<Trans>translation:language</Trans>}/>
                             </ListItem>
                         </LanguageSelector>
+                        <Protected silent>
+                            <Link to="/student" className={classes.link}>
+                                <ListItem button>
+                                    <ListItemIcon><Icons.AccountBox/></ListItemIcon>
+                                    <ListItemText primary={t('translation:student.title')}/>
+                                </ListItem>
+                            </Link>
+                        </Protected>
                         <Protected silent>
                             <ListItem button onClick={this.handleLogout}>
                                 <ListItemIcon><Icons.ExitToApp/></ListItemIcon>
