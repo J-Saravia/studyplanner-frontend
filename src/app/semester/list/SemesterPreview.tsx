@@ -8,17 +8,17 @@ import {
     WithWidthProps
 } from '@material-ui/core';
 import SemesterPreviewStyle from './SemesterPreviewStyle';
-import { AddCircle } from '@material-ui/icons';
-import { ClassNameMap } from '@material-ui/core/styles/withStyles';
+import {AddCircle} from '@material-ui/icons';
+import {ClassNameMap} from '@material-ui/core/styles/withStyles';
 import SemesterModuleVisit from './SemesterModuleVisit';
-import { Breakpoint } from '@material-ui/core/styles/createBreakpoints';
+import {Breakpoint} from '@material-ui/core/styles/createBreakpoints';
 import ModuleVisit from '../../../model/ModuleVisit';
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import ModuleVisitDialog from '../dialog/ModuleVisitDialog';
 import DeleteModuleVisitDialog from '../dialog/DeleteModuleVisitDialog';
-import { ModuleVisitServiceProps, withModuleVisitService } from '../../../service/ModuleVisitService';
-import { Alert } from '@material-ui/lab';
-import { Trans } from 'react-i18next';
+import {ModuleVisitServiceProps, withModuleVisitService} from '../../../service/ModuleVisitService';
+import {Alert} from '@material-ui/lab';
+import {Trans} from 'react-i18next';
 
 
 interface SemesterPreviewProps extends StyledComponentProps, WithWidthProps, ModuleVisitServiceProps {
@@ -26,6 +26,7 @@ interface SemesterPreviewProps extends StyledComponentProps, WithWidthProps, Mod
     semester: string;
     moduleVisits: ModuleVisit[];
     width: Breakpoint;
+    onChange: (moduleVisits: ModuleVisit[]) => void;
 }
 
 interface SemesterPreviewState {
@@ -46,7 +47,7 @@ class SemesterPreview extends React.Component<SemesterPreviewProps, SemesterPrev
     }
 
     private moduleVisitClickHandler = (selectedModuleVisit: ModuleVisit) => () => {
-        this.setState({ selectedModuleVisit });
+        this.setState({selectedModuleVisit});
     };
 
     private moduleVisitDeleteHandler = (moduleVisitToDelete: ModuleVisit) => () => {
@@ -55,14 +56,14 @@ class SemesterPreview extends React.Component<SemesterPreviewProps, SemesterPrev
 
 
     private handleConfirmDelete = () => {
-        const { moduleVisitToDelete } = this.state;
+        const {moduleVisitToDelete} = this.state;
         if (moduleVisitToDelete) {
             const id = moduleVisitToDelete.id as string;
             this.props.moduleVisitService.delete(id).then(_ => {
                 this.removeModule(id);
-                this.setState({ moduleVisitToDelete: undefined, error: undefined });
+                this.setState({moduleVisitToDelete: undefined, error: undefined});
             }).catch(error => {
-                this.setState({ moduleVisitToDelete: undefined, error: error.toString() });
+                this.setState({moduleVisitToDelete: undefined, error: error.toString()});
             });
         }
     };
@@ -72,7 +73,8 @@ class SemesterPreview extends React.Component<SemesterPreviewProps, SemesterPrev
         if (moduleVisits) {
             const index = moduleVisits.findIndex(visit => visit.id === id);
             moduleVisits.splice(index, 1);
-            this.setState({ moduleVisits });
+            this.setState({moduleVisits});
+            this.props.onChange(moduleVisits);
         }
     };
 
@@ -85,7 +87,7 @@ class SemesterPreview extends React.Component<SemesterPreviewProps, SemesterPrev
         this.setState({createModuleVisit: true});
     };
 
-    private handleFinishCreateModuleVisit = (visit: ModuleVisit) => {
+    private handleFinishModuleVisit = (visit: ModuleVisit) => {
         const {moduleVisits, createModuleVisit} = this.state;
         if (createModuleVisit) {
             moduleVisits.push(visit);
@@ -93,6 +95,7 @@ class SemesterPreview extends React.Component<SemesterPreviewProps, SemesterPrev
                 createModuleVisit: false,
                 moduleVisits: this.props.moduleVisitService.sortList(moduleVisits)
             });
+            this.props.onChange(moduleVisits);
         } else {
             const index = moduleVisits.findIndex(v => v.id === visit.id);
             moduleVisits.splice(index, 1, visit);
@@ -100,6 +103,7 @@ class SemesterPreview extends React.Component<SemesterPreviewProps, SemesterPrev
                 selectedModuleVisit: undefined,
                 moduleVisits: this.props.moduleVisitService.sortList(moduleVisits)
             });
+            this.props.onChange(moduleVisits);
         }
     };
 
@@ -112,13 +116,13 @@ class SemesterPreview extends React.Component<SemesterPreviewProps, SemesterPrev
     };
 
     public render() {
-        const { classes, moduleVisits, semester, width } = this.props;
-        const { error } = this.state;
+        const {classes, moduleVisits, semester, width} = this.props;
+        const {error} = this.state;
         const isMobile = isWidthDown('sm', width);
         let maxCredits = 0;
         let currentCredits = 0;
         moduleVisits.forEach(mv => {
-            const { credits } = mv.module;
+            const {credits} = mv.module;
             maxCredits += credits;
             if (mv.state === 'passed') {
                 currentCredits += credits;
@@ -162,7 +166,7 @@ class SemesterPreview extends React.Component<SemesterPreviewProps, SemesterPrev
                     semester={semester}
                     open={this.state.createModuleVisit || !!this.state.selectedModuleVisit}
                     edit={this.state.selectedModuleVisit}
-                    onFinished={this.handleFinishCreateModuleVisit}
+                    onFinished={this.handleFinishModuleVisit}
                     onCancel={this.handleCancelModuleVisitDialog}
                     onDeleted={this.handleDeleted}
                 />

@@ -13,6 +13,7 @@ import StudyStatistics from "./StudyStatistics";
 import { Alert } from '@material-ui/lab';
 
 interface SemesterListState {
+    semesterModuleMapReadonly?: { [key: string]: ModuleVisit[] };
     semesterModuleMap?: { [key: string]: ModuleVisit[] };
     createSemester?: boolean;
     error?: string;
@@ -31,7 +32,7 @@ class SemesterList extends React.Component<SemesterListProps, SemesterListState>
 
     public componentDidMount() {
         this.props.moduleVisitService.map().then(
-            (semesterModuleMap: { [key: string]: ModuleVisit[] }) => this.setState({ semesterModuleMap })
+            (semesterModuleMap: { [key: string]: ModuleVisit[] }) => this.setState({ semesterModuleMap, semesterModuleMapReadonly: semesterModuleMap })
         ).catch(error => this.setState({error: error.toString()}));
     }
 
@@ -43,9 +44,16 @@ class SemesterList extends React.Component<SemesterListProps, SemesterListState>
         this.setState({ createSemester: false });
     };
 
+    private changeHandler = (semester: string) => (moduleVisits: ModuleVisit[]) => {
+        const { semesterModuleMap } = this.state;
+        if (!semesterModuleMap) return;
+        semesterModuleMap[semester] = moduleVisits;
+        this.setState({semesterModuleMap});
+    };
+
     public render() {
         const { classes } = this.props;
-        const { semesterModuleMap, createSemester, error } = this.state;
+        const { semesterModuleMapReadonly, createSemester, error } = this.state;
 
         return (
             <div className={classes.root}>
@@ -58,16 +66,17 @@ class SemesterList extends React.Component<SemesterListProps, SemesterListState>
                     <Trans>translation:messages.semester.create</Trans>
                 </Button>
                 <div className={classes.list}>
-                    {semesterModuleMap && Object.keys(semesterModuleMap).map(key => (
+                    {semesterModuleMapReadonly && Object.keys(semesterModuleMapReadonly).map(key => (
                         <SemesterPreview
                             key={key}
                             semester={key}
-                            moduleVisits={semesterModuleMap[key]}
+                            moduleVisits={semesterModuleMapReadonly[key]}
+                            onChange={this.changeHandler(key)}
                         />
                     ))}
 
                 </div>
-                {this.getStatistic()}
+                {!error && this.getStatistic()}
                 {error && <Alert color="error"><Trans>translation:messages.semester.load.error</Trans></Alert>}
                 <CreateSemesterDialog open={createSemester} onCancel={this.handleCreateSemesterCancel}/>
             </div>

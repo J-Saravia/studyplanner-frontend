@@ -2,7 +2,7 @@ import * as React from 'react';
 import {Chip, StyledComponentProps, withStyles} from '@material-ui/core';
 import ModuleVisit from '../../../model/ModuleVisit';
 import {ClassNameMap} from '@material-ui/core/styles/withStyles';
-import SemesterStatisticsStyle from "../detail/SemesterStatisticsStyle";
+import StudyStatisticsStyle from "./StudyStatisticsStyle";
 import {Trans, WithTranslation, withTranslation} from 'react-i18next';
 
 interface StudyStatisticsProps extends StyledComponentProps, WithTranslation {
@@ -135,4 +135,4 @@ class StudyStatistics extends React.Component<StudyStatisticsProps, any> {
     }
 }
 
-export default withTranslation()(withStyles(SemesterStatisticsStyle)(StudyStatistics));
+export default withTranslation()(withStyles(StudyStatisticsStyle)(StudyStatistics));
