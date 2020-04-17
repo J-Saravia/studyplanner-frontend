@@ -121,6 +121,7 @@
       }
     },
     "student": {
+      "title": "Account",
       "delete": {
         "title": "Delete account",
         "confirmation": "Are you sure you want to delete your account? This will irreversibly delete your data."

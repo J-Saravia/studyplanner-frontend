@@ -120,6 +120,7 @@
       }
     },
     "student": {
+      "title": "Benutzer",
       "delete": {
         "title": "Benutzer löschen",
         "confirmation": "Sind Sie sich sicher, dass Sie Ihren Benutzer löschen wollen? Alle Ihre Daten gehen dadurch verloren."
