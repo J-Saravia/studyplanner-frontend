@@ -165,7 +165,6 @@ class ModuleVisitDialog extends React.Component<CreateModuleVisitDialogProps, Cr
     private validate = () => {
         const { error, moduleVisit, selectedModuleInfo } = this.state;
         const { semester } = this.props;
-        console.log(moduleVisit);
         let hasErrors = false;
 
         if (!moduleVisit.module) {
@@ -210,6 +209,7 @@ class ModuleVisitDialog extends React.Component<CreateModuleVisitDialogProps, Cr
         if (this.props.onFinished) {
             this.props.onFinished(result);
         }
+        this.setState({ submitting: false });
     };
 
     private handleDelete = () => {
@@ -222,24 +222,28 @@ class ModuleVisitDialog extends React.Component<CreateModuleVisitDialogProps, Cr
 
     private handleDeleteConfirm = () => {
         const id = this.props.edit?.id as string;
-        this.props.moduleVisitService.delete(id).then(_ => {
-            if (this.props.onDeleted) {
-                this.props.onDeleted(id);
-            }
-            this.setState({ deleteVisit: undefined });
-        }).catch(error => {
-            this.setState({ deleteVisit: undefined });
-            this.handleSubmissionFailure(error);
+        this.setState({ deleteVisit: undefined, submitting: true }, () => {
+            this.props.moduleVisitService.delete(id).then(() => {
+                if (this.props.onDeleted) {
+                    this.props.onDeleted(id);
+                }
+                this.setState({ submitting: false });
+            }).catch(error => {
+                this.setState({ submitting: false });
+                this.handleSubmissionFailure(error);
+            });
+
         });
     };
 
     private handleSubmissionFailure = (error: any) => {
-        this.setState({ submissionError: error.toString() });
+        this.setState({ submissionError: error.toString(), submitting: false });
     };
 
     private handleSubmit = (event: React.BaseSyntheticEvent) => {
         event.preventDefault();
         if (this.validate()) {
+            this.setState({ submitting: true });
             if (this.props.edit) {
                 this.props.moduleVisitService
                     .update(this.props.edit.id as string, this.state.moduleVisit)
@@ -256,7 +260,7 @@ class ModuleVisitDialog extends React.Component<CreateModuleVisitDialogProps, Cr
 
     public render() {
         const { classes, edit } = this.props;
-        const { submissionError, isModuleSelectionOpen, moduleVisit, deleteVisit } = this.state;
+        const { submissionError, submitting, isModuleSelectionOpen, moduleVisit, deleteVisit } = this.state;
         return (
             <>
                 <Dialog
@@ -334,19 +338,29 @@ class ModuleVisitDialog extends React.Component<CreateModuleVisitDialogProps, Cr
                                     </Select>
                                 </div>
                             </FormControl>
-                            {submissionError && <Alert color="error">{submissionError}</Alert>}
+                            {submissionError && (
+                                <Alert color="error"><Trans>translation:messages.moduleVisit.dialog.error</Trans></Alert>
+                            )}
                             <input type="submit" hidden/>
                         </form>
                     </DialogContent>
                     <DialogActions>
-                        {edit && <Button color="secondary" variant="contained" onClick={this.handleDelete}>
+                        {edit &&
+                        <Button
+                            color="secondary"
+                            variant="contained"
+                            onClick={this.handleDelete}
+                            disabled={submitting}
+                        >
                           <Trans>translation:messages.moduleVisit.dialog.delete</Trans>
-                        </Button>}
+                        </Button>
+                        }
                         <div className={classes.grow}/>
                         <Button
                             color="primary"
                             variant="contained"
                             onClick={this.handleSubmit}
+                            disabled={submitting}
                         >
                             <Trans>translation:messages.moduleVisit.dialog.save</Trans>
                         </Button>

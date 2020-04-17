@@ -112,28 +112,30 @@ class Menu extends React.Component<MenuProps, MenuState> {
                     </div>
                     <Divider/>
                     <List className={classes.list}>
-                        <Protected silent>
-                            <ListItem button>
-                                <ListItemIcon><Icons.Home/></ListItemIcon>
-                                <ListItemText primary={'Home'}/>
-                            </ListItem>
+                        <Protected>
+                            <Link to="/" className={classes.link}>
+                                <ListItem button>
+                                    <ListItemIcon><Icons.Home/></ListItemIcon>
+                                    <ListItemText primary={'Home'}/>
+                                </ListItem>
+                            </Link>
                         </Protected>
                         <div className={classes.grow}/>
+                        <Protected>
+                            <Link to="/student" className={classes.link}>
+                                <ListItem button>
+                                    <ListItemIcon><Icons.AccountBox/></ListItemIcon>
+                                    <ListItemText primary={t('translation:messages.student.title')}/>
+                                </ListItem>
+                            </Link>
+                        </Protected>
                         <LanguageSelector>
                             <ListItem button>
                                 <ListItemIcon><Icons.Language/></ListItemIcon>
                                 <ListItemText primary={<Trans>translation:language</Trans>}/>
                             </ListItem>
                         </LanguageSelector>
-                        <Protected silent>
-                            <Link to="/student" className={classes.link}>
-                                <ListItem button>
-                                    <ListItemIcon><Icons.AccountBox/></ListItemIcon>
-                                    <ListItemText primary={t('translation:student.title')}/>
-                                </ListItem>
-                            </Link>
-                        </Protected>
-                        <Protected silent>
+                        <Protected>
                             <ListItem button onClick={this.handleLogout}>
                                 <ListItemIcon><Icons.ExitToApp/></ListItemIcon>
                                 <ListItemText primary={<Trans>translation:messages.logout.title</Trans>}/>

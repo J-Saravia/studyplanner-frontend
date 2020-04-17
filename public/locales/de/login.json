@@ -3,8 +3,44 @@
   "email": "E-Mail-Adresse",
   "password": "Passwort",
   "signIn": "Anmelden",
-  "resetPassword": "Passwort vergessen?",
+  "forgotPassword": "Passwort vergessen?",
   "signUp": "Noch kein Account? Registrieren.",
+  "error": "Anmeldung fehlgeschlagen",
+  "forgot": {
+    "title": "Passwort Zurücksetzen",
+    "help": "Falls Sie ihr Passwort vergessen haben, so können Sie, über dieses Formular, ein Zurücksetzungsschlüssel anfordernd und ihr Passwort zurücksetzen.",
+    "error": "Anfrage fehlgeschlagen",
+    "email": {
+      "title": "Email Adresse",
+      "help": ""
+    },
+    "submit": "Schlüssel anfordern",
+    "back": "Zurück zum Login"
+  },
+  "reset": {
+    "title": "Passwort Zurücksetzen",
+    "help": "Geben Sie ihre email Adresse, der erhaltene Schlüssel und ihr neues Passwort ein um das Zurücksetzen abzuschliessen.",
+    "error": "Zurücksetzen fehlgeschlagen",
+    "email": {
+      "title": "Email Adresse",
+      "help": ""
+    },
+    "forgotToken": {
+      "title": "Zurücksetzungschlüssel",
+      "help": "Den Zurücksetzungschlüssel, welchen Sie per Email erhalten haben"
+    },
+    "password": {
+      "title": "Passwort",
+      "help": "Das Passwort muss mindestens 10 Zeichen lang sein"
+    },
+    "confirmPassword": {
+      "title": "Passwort bestätigen",
+      "help": ""
+    },
+    "submit": "Zurücksetzen",
+    "back": "Zurück zum Login",
+    "success": "Ihr Passwort wurde erfolgreich zurückgesetzt. Sie können sich nun mit Ihrem neuen Passwort anmelden."
+  },
   "register": "Registrieren",
   "account": "Schon einen Account erstellt? Anmelden.",
   "registered": "Registration war erfolgreich. Sie können sich jetzt mit Ihrem neuen Account anmelden.",

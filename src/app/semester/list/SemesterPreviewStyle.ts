@@ -39,16 +39,21 @@ const SemesterPreviewStyle = (theme: Theme) => createStyles({
         alignItems: 'center',
         [theme.breakpoints.down('sm')]: {
             flexDirection: 'column',
-            alignItems: 'stretch',
         }
     },
     modules: {
         flexGrow: 1,
         display: 'flex',
         flexWrap: 'wrap',
+        [theme.breakpoints.down('sm')]: {
+            width: '100%'
+        }
     },
     button: {
-        fontSize: '2.25em'
+        fontSize: '2.25em',
+        [theme.breakpoints.down('sm')]: {
+            alignItems: 'center'
+        }
     },
     summary: {
         minWidth: 64,

@@ -88,12 +88,12 @@ export class Request {
 
     public async fetch<T>(init?: RequestInit): Promise<T> {
         const realInit: RequestInit = {
-            ...init,
             body: JSON.stringify(this._body),
             method: this._method,
+            ...init,
             headers: {
-                ...init?.headers,
                 ...await this.generateHeaders(),
+                ...init?.headers,
             },
         };
         return fetch(await this.client.generateUrl(this._url, this._queryString), realInit).then(Request.handleResponse);

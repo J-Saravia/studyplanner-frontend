@@ -16,6 +16,7 @@ import DeleteModuleVisitDialog from "../dialog/DeleteModuleVisitDialog";
 import SemesterStatistics from "./SemesterStatistics";
 import { Trans, WithTranslation, withTranslation } from 'react-i18next';
 import ModuleVisitDialog from '../dialog/ModuleVisitDialog';
+import { Alert } from '@material-ui/lab';
 
 interface SemesterViewProps extends RouteComponentProps<{ id: any }>, StyledComponentProps, ModuleVisitServiceProps, WithTranslation {
     classes: ClassNameMap;
@@ -26,6 +27,8 @@ interface SemesterViewState {
     selectedModuleVisit?: ModuleVisit;
     moduleVisitToDelete?: ModuleVisit;
     createModuleVisit?: boolean;
+    error?: string;
+    loadError?: string;
 }
 
 class SemesterView extends React.Component<SemesterViewProps, SemesterViewState> {
@@ -42,7 +45,8 @@ class SemesterView extends React.Component<SemesterViewProps, SemesterViewState>
         if (/^(?:fs|hs)[0-9]{1,2}$/.test(this.semester)) {
             this.props.moduleVisitService
                 .map()
-                .then(map => this.setState({ moduleList: map[this.semester] || [] }));
+                .then(map => this.setState({ moduleList: map[this.semester] || [] }))
+                .catch(error => this.setState({ loadError: error.toString() }));
         }
     }
 
@@ -60,10 +64,9 @@ class SemesterView extends React.Component<SemesterViewProps, SemesterViewState>
             const id = moduleVisitToDelete.id as string;
             this.props.moduleVisitService.delete(id).then(_ => {
                 this.removeModule(id);
-                this.setState({ moduleVisitToDelete: undefined });
+                this.setState({ moduleVisitToDelete: undefined, error: undefined });
             }).catch(error => {
-                this.setState({ moduleVisitToDelete: undefined });
-                console.log(error);
+                this.setState({ moduleVisitToDelete: undefined, error: error.toString() });
             });
         }
     };
@@ -126,9 +129,13 @@ class SemesterView extends React.Component<SemesterViewProps, SemesterViewState>
             );
         }
 
+        const { error, loadError } = this.state;
+
         return (
             <div className={classes.root}>
+                {loadError && <Alert color="error"><Trans>translation:semester.load.error</Trans></Alert>}
                 {this.getOverview()}
+                {error && <Alert color="error"><Trans>translation:semester.delete.error</Trans></Alert>}
                 {this.getStatistic()}
             </div>
         );

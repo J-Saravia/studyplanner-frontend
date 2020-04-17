@@ -1,6 +1,7 @@
 {
   "language": "English",
   "messages": {
+    "initialising": "The page is loading, this may take up to several seconds depending on the current connection.",
     "yes": "Yes",
     "no": "No",
     "logout": {
@@ -11,8 +12,14 @@
     "semester": {
       "create": "Add semester",
       "label": "Semester",
-      "help": "The name of the semester consist of two letters (hs/fs) and the year .(example: hs17)",
+      "help": "The name of the semester consist of two letters (hs/fs) and the year. (example: hs17)",
       "cancel": "Cancel",
+      "delete": {
+        "error": "Deletion failed"
+      },
+      "load": {
+        "error": "Failed to load module visits"
+      },
       "invalid": "This semester is invalid",
       "backToList": "Back to the semester list"
     },
@@ -50,6 +57,7 @@
         "title": "Modulevisit",
         "save": "Confirm",
         "delete": "Delete",
+        "error": "Action failed",
         "field": {
           "grade": {
             "title": "Grade",
@@ -157,6 +165,7 @@
           }
         }
       },
+      "studyStatistic": "Study statistics",
       "unauthorized": "Access denied"
     }
   }

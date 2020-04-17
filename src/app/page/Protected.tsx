@@ -3,9 +3,10 @@ import * as Rx from 'rxjs';
 import { AuthServiceProps, withAuthService } from '../../service/AuthService';
 import { Trans } from 'react-i18next';
 
-interface ProtectedProps extends AuthServiceProps {
+interface ProtectedProps extends AuthServiceProps{
     fallback?: React.ReactNode;
-    silent?: boolean;
+    showMessage?: boolean;
+    redirectToLogin?: boolean;
 }
 
 interface ProtectedState {
@@ -29,7 +30,7 @@ class Protected extends React.Component<ProtectedProps, ProtectedState> {
 
     public componentDidMount() {
         this.subscription = this.props.authService
-            .addAuthStateListener(isLoggedIn => this.setState({ isLoggedIn }));
+            .addAuthStateListener(isLoggedIn => this.setState({isLoggedIn}));
     }
 
     public componentWillUnmount() {
@@ -39,11 +40,11 @@ class Protected extends React.Component<ProtectedProps, ProtectedState> {
     }
 
     public render() {
-        const { silent, fallback, children } = this.props;
+        const { showMessage, fallback, children } = this.props;
         const { isLoggedIn } = this.state;
         if (isLoggedIn) {
             return children;
-        } else if (!silent) {
+        } else if (showMessage) {
             return fallback || (<Trans>translation:messages.unauthorized</Trans>);
         }
         return null;

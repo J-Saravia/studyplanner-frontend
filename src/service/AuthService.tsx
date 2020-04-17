@@ -108,6 +108,24 @@ export default class AuthService {
         return this.authStateSubject.subscribe(observer);
     }
 
+    public requestPasswordReset(mail: string): Promise<void> {
+        return this.restClient
+            .request('post')
+            .url('forgot')
+            .query({mail})
+            .noAuthHeader()
+            .fetch();
+    }
+
+    public resetPassword(email: string, forgotToken: string, password: string): Promise<void>  {
+        return this.restClient
+            .request('POST')
+            .body({ email, forgotToken, password })
+            .url('reset')
+            .noAuthHeader()
+            .fetch();
+    }
+
     /**
      * Tries to authenticate with the given credentials.
      * This function will notify all listeners of studentSubject, if and when the login was successful.
