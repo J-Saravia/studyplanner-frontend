@@ -30,6 +30,7 @@
           "written": "Written",
           "oral": "Oral"
         },
+        "studyStatistic": "Study statistics",
         "state": {
           "blocked": "Blocked",
           "failed": "Failed",
@@ -102,17 +103,16 @@
       }
     },
     "semesterStatistic": {
-      "title" : "Semester statistic",
+      "title": "Semester statistic",
       "etcs": {
         "total": "Total",
         "passed": "Passed",
         "failed": "Failed"
       },
       "grade": {
-        "title" : "Grades",
+        "title": "Grades",
         "avg": "Average",
         "high": "Highest"
-
       },
       "msp": {
         "total": "Total",

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import SemesterPreview from './SemesterPreview';
-import { Button, StyledComponentProps, withStyles } from '@material-ui/core';
+import {Button, StyledComponentProps, Typography, withStyles} from '@material-ui/core';
 import SemesterListStyle from './SemesterListStyle';
 import ModuleVisit from '../../../model/ModuleVisit';
 import { StudentServiceProps, withStudentService } from '../../../service/StudentService';
@@ -9,6 +9,7 @@ import { ModuleVisitServiceProps, withModuleVisitService } from '../../../servic
 import { AuthServiceProps, withAuthService } from '../../../service/AuthService';
 import { Trans } from 'react-i18next';
 import CreateSemesterDialog from '../dialog/CreateSemesterDialog';
+import StudyStatistics from "./StudyStatistics";
 
 interface SemesterListState {
     semesterModuleMap?: { [key: string]: ModuleVisit[] };
@@ -43,32 +44,6 @@ class SemesterList extends React.Component<SemesterListProps, SemesterListState>
     public render() {
         const { classes } = this.props;
         const { semesterModuleMap, createSemester } = this.state;
-        let totalCredits = 0;
-        let currentCredits = 0;
-        let currentNegativeCredits = 0;
-        let weightedGradeSum = 0;
-        let divider = 0;
-        if (semesterModuleMap) {
-            const keys = Object.keys(semesterModuleMap);
-            keys.forEach(key => {
-                semesterModuleMap[key].forEach(mv => {
-                    const credits = mv.module.credits;
-                    totalCredits += credits;
-                    if (mv.state === 'passed') {
-                        currentCredits += credits;
-                        if (mv.grade) {
-                            weightedGradeSum += mv.module.credits * mv.grade;
-                            divider += mv.module.credits;
-                        }
-                    } else if (mv.state === 'failed') {
-                        currentNegativeCredits += credits;
-                        weightedGradeSum += mv.module.credits * mv.grade;
-                        divider += mv.module.credits;
-                    }
-                });
-            });
-        }
-        let averageGrade = (weightedGradeSum / divider).toFixed(2);
 
         return (
             <div className={classes.root}>
@@ -88,13 +63,34 @@ class SemesterList extends React.Component<SemesterListProps, SemesterListState>
                             moduleVisits={semesterModuleMap[key]}
                         />
                     ))}
+                    {this.getStatistic()}
                 </div>
-                <div>{currentCredits} / {totalCredits}</div>
-                <div>{currentNegativeCredits} / 60</div>
-                <div>Grade: {averageGrade}</div>
                 <CreateSemesterDialog open={createSemester} onCancel={this.handleCreateSemesterCancel}/>
             </div>
         );
+    }
+
+    private getStatistic() {
+        const { classes } = this.props;
+        const { semesterModuleMap } = this.state;
+
+        return <>
+            <div className={classes.header}>
+                <Typography variant="h6" className={classes.title}>
+                    <Trans>translation:messages.studyStatistic</Trans></Typography>
+                <hr className={classes.rule}/>
+            </div>
+            <div className={classes.content}>
+
+                <div className={classes.modules}>
+                    {semesterModuleMap &&
+                    <StudyStatistics
+                        semesterModuleMap={semesterModuleMap}>
+                    </StudyStatistics>
+                    }
+                </div>
+            </div>
+        </>;
     }
 
 }
