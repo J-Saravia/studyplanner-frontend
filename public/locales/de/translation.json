@@ -23,6 +23,14 @@
       "invalid": "Dies ist ein ungültiges Semester.",
       "backToList": "Zur Semesterliste"
     },
+    "moduleGroups": {
+      "title": "Modulgruppen"
+    },
+    "moduleGroupStatistics": {
+      "total": "gesamt",
+      "plannedOrOngoing": "geplant oder wird besucht",
+      "passed": "bestanden"
+    },
     "module": {
       "selection": {
         "loading": "Module werden geladen...",

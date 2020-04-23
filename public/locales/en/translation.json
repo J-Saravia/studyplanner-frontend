@@ -23,6 +23,14 @@
       "invalid": "This semester is invalid",
       "backToList": "Back to the semester list"
     },
+    "moduleGroups": {
+      "title": "Module groups"
+    },
+    "moduleGroupStatistics": {
+      "total": "total",
+      "plannedOrOngoing": "planned or ongoing",
+      "passed": "passed"
+    },
     "module": {
       "selection": {
         "loading": "Loading modules...",
