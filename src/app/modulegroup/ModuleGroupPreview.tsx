@@ -27,6 +27,7 @@ interface ModuleGroupPreviewProps
   group: ModuleGroup;
   moduleVisits?: ModuleVisit[];
   width: Breakpoint;
+  level: number;
 }
 
 interface ModuleGroupPreviewState {
@@ -43,11 +44,13 @@ class ModuleGroupPreview extends React.Component<
   }
 
   public render() {
-    const { classes, moduleVisits, group, width } = this.props;
+    const { classes, moduleVisits, group, width, level } = this.props;
     const isMobile = isWidthDown('sm', width);
 
+    const levelMargin = isMobile ? 10 * level : 20 * level;
+
     return (
-      <div className={classes.root}>
+      <div className={classes.root} style={{ marginLeft: levelMargin }}>
         <Typography variant="h6" className={classes.title}>
           {group.name}
         </Typography>

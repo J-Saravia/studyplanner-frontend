@@ -57,7 +57,6 @@ export default class ModuleGroupService extends CacheableService<ModuleGroup> {
         group.modules.push(await ModuleService.INSTANCE.findById(id));
       }
     }
-    console.log(data.map((d) => d.group));
     return data.map((d) => d.group);
   }
 }

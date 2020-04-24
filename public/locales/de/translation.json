@@ -24,7 +24,8 @@
       "backToList": "Zur Semesterliste"
     },
     "moduleGroups": {
-      "title": "Modulgruppen"
+      "title": "Modulgruppen",
+      "othermodulevisits": "Andere Modulbesuche"
     },
     "moduleGroupStatistics": {
       "total": "gesamt",
