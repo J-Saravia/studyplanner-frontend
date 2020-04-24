@@ -119,7 +119,7 @@
     },
     "semesterStatistic": {
       "title": "Semester statistic",
-      "etcs": {
+      "ects": {
         "total": "Total",
         "passed": "Passed",
         "failed": "Failed"

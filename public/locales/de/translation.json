@@ -119,7 +119,7 @@
     },
     "semesterStatistic": {
       "title": "Semesterstatistik",
-      "etcs": {
+      "ects": {
         "total": "Gesamt",
         "passed": "Bestanden",
         "failed": "Ungenügend"
