@@ -133,9 +133,9 @@ class SemesterView extends React.Component<SemesterViewProps, SemesterViewState>
 
         return (
             <div className={classes.root}>
-                {loadError && <Alert color="error"><Trans>translation:semester.load.error</Trans></Alert>}
+                {loadError && <Alert color="error"><Trans>translation:messages.semester.load.error</Trans></Alert>}
                 {this.getOverview()}
-                {error && <Alert color="error"><Trans>translation:semester.delete.error</Trans></Alert>}
+                {error && <Alert color="error"><Trans>translation:messages.semester.delete.error</Trans></Alert>}
                 {this.getStatistic()}
             </div>
         );
