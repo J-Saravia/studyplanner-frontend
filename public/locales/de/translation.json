@@ -23,6 +23,15 @@
       "invalid": "Dies ist ein ungültiges Semester.",
       "backToList": "Zur Semesterliste"
     },
+    "moduleGroups": {
+      "title": "Modulgruppen",
+      "othermodulevisits": "Andere Modulbesuche"
+    },
+    "moduleGroupStatistics": {
+      "total": "gesamt",
+      "plannedOrOngoing": "geplant oder wird besucht",
+      "passed": "bestanden"
+    },
     "module": {
       "selection": {
         "loading": "Module werden geladen...",
@@ -111,7 +120,7 @@
     },
     "semesterStatistic": {
       "title": "Semesterstatistik",
-      "etcs": {
+      "ects": {
         "total": "Gesamt",
         "passed": "Bestanden",
         "failed": "Ungenügend"

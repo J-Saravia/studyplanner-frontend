@@ -1,21 +1,25 @@
 import * as React from 'react';
-import { ClassNameMap, StyledComponentProps, withStyles } from '@material-ui/styles';
 import {
-    AppBar,
-    Drawer,
-    IconButton,
-    Toolbar,
-    Typography,
-    withWidth,
-    isWidthDown,
-    withTheme,
-    Divider,
-    List,
-    ListItemText,
-    ListItem,
-    ListItemIcon,
-    WithWidthProps,
-    Theme
+  ClassNameMap,
+  StyledComponentProps,
+  withStyles,
+} from '@material-ui/styles';
+import {
+  AppBar,
+  Drawer,
+  IconButton,
+  Toolbar,
+  Typography,
+  withWidth,
+  isWidthDown,
+  withTheme,
+  Divider,
+  List,
+  ListItemText,
+  ListItem,
+  ListItemIcon,
+  WithWidthProps,
+  Theme,
 } from '@material-ui/core';
 import * as Icons from '@material-ui/icons';
 import MenuStyle from './MenuStyle';
@@ -28,132 +32,168 @@ import LanguageSelector from '../dialog/LanguageSelectionDialog';
 import Protected from './Protected';
 import { Link } from 'react-router-dom';
 
-interface MenuProps extends WithWidthProps, StyledComponentProps, AuthServiceProps, WithTranslation {
-    classes: ClassNameMap;
-    theme: Theme;
-    width: Breakpoint;
+interface MenuProps
+  extends WithWidthProps,
+    StyledComponentProps,
+    AuthServiceProps,
+    WithTranslation {
+  classes: ClassNameMap;
+  theme: Theme;
+  width: Breakpoint;
 }
 
 interface MenuState {
-    open?: boolean;
-    hasUserRequestedLogout?: boolean;
+  open?: boolean;
+  hasUserRequestedLogout?: boolean;
 }
 
 class Menu extends React.Component<MenuProps, MenuState> {
+  constructor(props: Readonly<any>) {
+    super(props);
+    this.state = {};
+  }
 
-    constructor(props: Readonly<any>) {
-        super(props);
-        this.state = {};
-    }
+  private handleDrawerToggle = () => {
+    this.setState({ open: !this.state.open });
+  };
 
-    private handleDrawerToggle = () => {
-        this.setState({ open: !this.state.open });
-    };
+  private handleLogout = () => {
+    this.setState({ hasUserRequestedLogout: true });
+  };
 
-    private handleLogout = () => {
-        this.setState({ hasUserRequestedLogout: true });
-    };
+  private handleLogoutConfirmation = () => {
+    this.setState({ hasUserRequestedLogout: false });
+    this.props.authService.logout();
+  };
 
-    private handleLogoutConfirmation = () => {
-        this.setState({ hasUserRequestedLogout: false });
-        this.props.authService.logout();
-    };
+  private handleLogoutCancel = () => {
+    this.setState({ hasUserRequestedLogout: false });
+  };
 
-    private handleLogoutCancel = () => {
-        this.setState({ hasUserRequestedLogout: false });
-    };
-
-    public render = () => {
-        const { classes, width, theme, t } = this.props;
-        const { open, hasUserRequestedLogout } = this.state;
-        const isMobile = isWidthDown('sm', width);
-        return (
-            <div>
-                <AppBar position="fixed" className={clsx(classes.appBar, {
-                    [classes.appBarShift]: open && !isMobile
-                })}>
-                    <Toolbar>
-                        <IconButton
-                            color="inherit"
-                            aria-label="open drawer"
-                            edge="start"
-                            className={clsx(classes.menuButton, {
-                                [classes.hide]: open && !isMobile,
-                            })}
-                            onClick={this.handleDrawerToggle}
-                        >
-                            <Icons.Menu/>
-                        </IconButton>
-                        <Typography variant="h6" className={classes.title}>
-                            Modulplaner
-                        </Typography>
-                    </Toolbar>
-                </AppBar>
-                <Drawer
-                    variant={isMobile ? 'temporary' : 'permanent'}
-                    className={clsx(classes.drawer, {
-                        [classes.drawerOpen]: open || isMobile,
-                        [classes.drawerClose]: !open && !isMobile,
-                    })}
-                    classes={{
-                        paper: clsx({
-                            [classes.drawerOpen]: open || isMobile,
-                            [classes.drawerClose]: !open && !isMobile,
-                        }),
-                    }}
-                    open={open}
-                    onClose={this.handleDrawerToggle}
-                    ModalProps={{ keepMounted: true }}
-                >
-                    <div className={classes.toolbar}>
-                        <IconButton onClick={this.handleDrawerToggle}>
-                            {theme.direction === 'rtl' ? <Icons.ChevronRight/> : <Icons.ChevronLeft/>}
-                        </IconButton>
-                    </div>
-                    <Divider/>
-                    <List className={classes.list}>
-                        <Protected>
-                            <Link to="/" className={classes.link}>
-                                <ListItem button>
-                                    <ListItemIcon><Icons.Home/></ListItemIcon>
-                                    <ListItemText primary={'Home'}/>
-                                </ListItem>
-                            </Link>
-                        </Protected>
-                        <div className={classes.grow}/>
-                        <Protected>
-                            <Link to="/student" className={classes.link}>
-                                <ListItem button>
-                                    <ListItemIcon><Icons.AccountBox/></ListItemIcon>
-                                    <ListItemText primary={t('translation:messages.student.title')}/>
-                                </ListItem>
-                            </Link>
-                        </Protected>
-                        <LanguageSelector>
-                            <ListItem button>
-                                <ListItemIcon><Icons.Language/></ListItemIcon>
-                                <ListItemText primary={<Trans>translation:language</Trans>}/>
-                            </ListItem>
-                        </LanguageSelector>
-                        <Protected>
-                            <ListItem button onClick={this.handleLogout}>
-                                <ListItemIcon><Icons.ExitToApp/></ListItemIcon>
-                                <ListItemText primary={<Trans>translation:messages.logout.title</Trans>}/>
-                            </ListItem>
-                        </Protected>
-                    </List>
-                </Drawer>
-                <ConfirmationDialog
-                    title={'translation:messages.logout.title'}
-                    content={'translation:messages.logout.content'}
-                    confirmLabel={'translation:messages.logout.confirm'}
-                    onConfirm={this.handleLogoutConfirmation}
-                    onCancel={this.handleLogoutCancel}
-                    open={hasUserRequestedLogout}
+  public render = () => {
+    const { classes, width, theme, t } = this.props;
+    const { open, hasUserRequestedLogout } = this.state;
+    const isMobile = isWidthDown('sm', width);
+    return (
+      <div>
+        <AppBar
+          position="fixed"
+          className={clsx(classes.appBar, {
+            [classes.appBarShift]: open && !isMobile,
+          })}
+        >
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              className={clsx(classes.menuButton, {
+                [classes.hide]: open && !isMobile,
+              })}
+              onClick={this.handleDrawerToggle}
+            >
+              <Icons.Menu />
+            </IconButton>
+            <Typography variant="h6" className={classes.title}>
+              Modulplaner
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <Drawer
+          variant={isMobile ? 'temporary' : 'permanent'}
+          className={clsx(classes.drawer, {
+            [classes.drawerOpen]: open || isMobile,
+            [classes.drawerClose]: !open && !isMobile,
+          })}
+          classes={{
+            paper: clsx({
+              [classes.drawerOpen]: open || isMobile,
+              [classes.drawerClose]: !open && !isMobile,
+            }),
+          }}
+          open={open}
+          onClose={this.handleDrawerToggle}
+          ModalProps={{ keepMounted: true }}
+        >
+          <div className={classes.toolbar}>
+            <IconButton onClick={this.handleDrawerToggle}>
+              {theme.direction === 'rtl' ? (
+                <Icons.ChevronRight />
+              ) : (
+                <Icons.ChevronLeft />
+              )}
+            </IconButton>
+          </div>
+          <Divider />
+          <List className={classes.list}>
+            <Protected>
+              <Link to="/" className={classes.link}>
+                <ListItem button>
+                  <ListItemIcon>
+                    <Icons.Home />
+                  </ListItemIcon>
+                  <ListItemText primary={'Home'} />
+                </ListItem>
+              </Link>
+            </Protected>
+            <Protected>
+              <Link to="/groups" className={classes.link}>
+                <ListItem button>
+                  <ListItemIcon>
+                    <Icons.CollectionsBookmark />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={t('translation:messages.moduleGroups.title')}
+                  />
+                </ListItem>
+              </Link>
+            </Protected>
+            <div className={classes.grow} />
+            <Protected>
+              <Link to="/student" className={classes.link}>
+                <ListItem button>
+                  <ListItemIcon>
+                    <Icons.AccountBox />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={t('translation:messages.student.title')}
+                  />
+                </ListItem>
+              </Link>
+            </Protected>
+            <LanguageSelector>
+              <ListItem button>
+                <ListItemIcon>
+                  <Icons.Language />
+                </ListItemIcon>
+                <ListItemText primary={<Trans>translation:language</Trans>} />
+              </ListItem>
+            </LanguageSelector>
+            <Protected>
+              <ListItem button onClick={this.handleLogout}>
+                <ListItemIcon>
+                  <Icons.ExitToApp />
+                </ListItemIcon>
+                <ListItemText
+                  primary={<Trans>translation:messages.logout.title</Trans>}
                 />
-            </div>
-        );
-    }
+              </ListItem>
+            </Protected>
+          </List>
+        </Drawer>
+        <ConfirmationDialog
+          title={'translation:messages.logout.title'}
+          content={'translation:messages.logout.content'}
+          confirmLabel={'translation:messages.logout.confirm'}
+          onConfirm={this.handleLogoutConfirmation}
+          onCancel={this.handleLogoutCancel}
+          open={hasUserRequestedLogout}
+        />
+      </div>
+    );
+  };
 }
 
-export default withTranslation()(withAuthService(withWidth()(withStyles(MenuStyle)(withTheme(Menu)))));
+export default withTranslation()(
+  withAuthService(withWidth()(withStyles(MenuStyle)(withTheme(Menu))))
+);

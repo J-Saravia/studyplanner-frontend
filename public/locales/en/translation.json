@@ -23,6 +23,15 @@
       "invalid": "This semester is invalid",
       "backToList": "Back to the semester list"
     },
+    "moduleGroups": {
+      "title": "Module groups",
+      "othermodulevisits": "Other module visits"
+    },
+    "moduleGroupStatistics": {
+      "total": "total",
+      "plannedOrOngoing": "planned or ongoing",
+      "passed": "passed"
+    },
     "module": {
       "selection": {
         "loading": "Loading modules...",
@@ -111,7 +120,7 @@
     },
     "semesterStatistic": {
       "title": "Semester statistic",
-      "etcs": {
+      "ects": {
         "total": "Total",
         "passed": "Passed",
         "failed": "Failed"
