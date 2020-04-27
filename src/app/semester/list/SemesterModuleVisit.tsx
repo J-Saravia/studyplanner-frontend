@@ -1,5 +1,12 @@
 import * as React from 'react';
-import { Chip, isWidthDown, StyledComponentProps, withStyles, withWidth, WithWidthProps } from '@material-ui/core';
+import {
+    Chip,
+    isWidthDown,
+    StyledComponentProps,
+    withStyles,
+    withWidth,
+    WithWidthProps,
+} from '@material-ui/core';
 import SemesterModuleVisitStyle from './SemesterModuleVisitStyle';
 import clsx from 'clsx';
 import { ClassNameMap } from '@material-ui/core/styles/withStyles';
@@ -16,7 +23,6 @@ interface SemesterModuleProps extends StyledComponentProps, WithWidthProps {
 }
 
 class SemesterModuleVisit extends React.Component<SemesterModuleProps, any> {
-
     constructor(props: Readonly<any>) {
         super(props);
         this.state = {};
@@ -52,34 +58,47 @@ class SemesterModuleVisit extends React.Component<SemesterModuleProps, any> {
 
     public render() {
         const { isMouseOver } = this.state;
-        const { classes, onClick, onDelete, width, moduleVisit, isDetailed } = this.props;
+        const {
+            classes,
+            onClick,
+            onDelete,
+            width,
+            moduleVisit,
+            isDetailed,
+        } = this.props;
 
         const planned = moduleVisit.state === 'planned';
         const active = moduleVisit.state === 'ongoing';
         const passed = moduleVisit.state === 'passed';
         const failed = moduleVisit.state === 'failed';
 
-        const labelPreview = moduleVisit.module.code + (moduleVisit.grade ? ` (${moduleVisit.grade})` : '');
-        const labelView = <div>
-            <div className={classes.moduleCode}>
-                {moduleVisit.module.code}
+        const labelPreview =
+            moduleVisit.module.code +
+            (moduleVisit.grade ? ` (${moduleVisit.grade})` : '');
+        const labelView = (
+            <div>
+                <div className={classes.moduleCode}>
+                    {moduleVisit.module.code}
+                </div>
+                <div className={classes.label}>
+                    {moduleVisit.module.credits} ECTS
+                    {moduleVisit.module.msp !== 'NONE' ? ', MSP' : ''}
+                </div>
+                <div className={classes.label}>
+                    {moduleVisit.grade ? `(${moduleVisit.grade})` : ''}
+                </div>
             </div>
-            <div className={classes.label}>{moduleVisit.module.credits} ETCS
-                {moduleVisit.module.msp !== 'NONE' ? ', MSP' : ''}
-            </div>
-            <div className={classes.label}>
-                {moduleVisit.grade ? `(${moduleVisit.grade})` : ''}
-            </div>
-        </div>;
+        );
 
         const isMobile = isWidthDown('sm', width);
-        const chipWidth = (isMobile ? 40 : 112) * (moduleVisit.module.credits / 2);
+        const chipWidth =
+            (isMobile ? 40 : 112) * (moduleVisit.module.credits / 2);
 
         return (
             <Chip
                 tabIndex={-1}
                 label={isDetailed ? labelView : labelPreview}
-                onDelete={(!isMobile && onDelete) ? this.onDelete : undefined}
+                onDelete={!isMobile && onDelete ? this.onDelete : undefined}
                 onClick={onClick && this.onClick}
                 onMouseEnter={this.onMouseEnter}
                 onMouseOver={this.onMouseEnter}
@@ -94,19 +113,29 @@ class SemesterModuleVisit extends React.Component<SemesterModuleProps, any> {
                         [classes.mobile]: !isDetailed && isMobile,
                     }),
                     deleteIcon: clsx(classes.button, {
-                        [classes.hidden]: !isMouseOver
+                        [classes.hidden]: !isMouseOver,
                     }),
                     label: classes.label,
                 }}
                 style={{
-                    width: isDetailed ? (!isMobile ? '135px' : '110px') : (isMobile ? '' : `${chipWidth}px`),
-                    height: isDetailed ? '70px' : (!isMobile ? '' : `${chipWidth}px`)
+                    width: isDetailed
+                        ? !isMobile
+                            ? '135px'
+                            : '110px'
+                        : isMobile
+                        ? ''
+                        : `${chipWidth}px`,
+                    height: isDetailed
+                        ? '70px'
+                        : !isMobile
+                        ? ''
+                        : `${chipWidth}px`,
                 }}
             />
-        )
-
+        );
     }
-
 }
 
-export default withWidth()(withStyles(SemesterModuleVisitStyle)(SemesterModuleVisit));
+export default withWidth()(
+    withStyles(SemesterModuleVisitStyle)(SemesterModuleVisit)
+);
