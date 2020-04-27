@@ -39,6 +39,7 @@ export default class ModuleVisitService {
         }
         const student = authService.getCurrentStudent();
         if (!student) {
+            console.error('Invalid state: Student not defined while logged in');
             throw new Error('Invalid state: Student not defined while logged in');
         }
         const dtos = await this.restClient

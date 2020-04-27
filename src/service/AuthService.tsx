@@ -138,7 +138,7 @@ export default class AuthService {
             .body(credentials)
             .noAuthHeader()
             .fetch<AuthResponse>();
-        this.handleAuthResponse(authResponse);
+        await this.handleAuthResponse(authResponse);
         return authResponse;
     }
 
@@ -171,7 +171,7 @@ export default class AuthService {
             .body({ refreshToken: this.refreshToken?.tokenString })
             .noAuthHeader()
             .fetch<AuthResponse>();
-        this.handleAuthResponse(authResponse);
+        await this.handleAuthResponse(authResponse);
         return authResponse;
     }
 

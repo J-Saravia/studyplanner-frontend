@@ -65,8 +65,8 @@ class Page extends React.Component<PageProps, PageState> {
                             <Forgot />
                         </Route>
                         <Route path="/student">
-                            <Protected fallback={<Login />}>
-                                <Student />
+                            <Protected fallback={<Login/>} showMessage>
+                                <Student/>
                             </Protected>
                         </Route>
                         <Route path="/semester/:id">
