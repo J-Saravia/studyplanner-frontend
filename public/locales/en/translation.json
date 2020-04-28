@@ -4,6 +4,7 @@
     "initialising": "The page is loading, this may take up to several seconds depending on the current connection.",
     "yes": "Yes",
     "no": "No",
+    "title": "Studyplanner",
     "logout": {
       "title": "Logout",
       "content": "Are you sure you want to log out?",

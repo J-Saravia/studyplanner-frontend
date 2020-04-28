@@ -4,6 +4,7 @@
     "initialising": "Die Seite wird gerade initialisiert, dies kann bis zu einigen Sekunden dauern, basierend auf die Geschwindigkeit der aktuellen Verbindung.",
     "yes": "Ja",
     "no": "Nein",
+    "title": "Modulplaner",
     "logout": {
       "title": "Abmelden",
       "content": "Sind Sie sich sicher, dass Sie sich abmelden wollen?",
