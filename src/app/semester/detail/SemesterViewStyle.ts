@@ -6,14 +6,13 @@ const SemesterViewStyle = (theme: Theme) => createStyles({
     },
     header: {
         display: 'flex',
-        alignItems: 'center',
-        cursor: 'default'
+        alignItems: 'center'
     },
     title: {
         flexShrink: 1,
         marginRight: theme.spacing(2),
         userSelect: 'text',
-        color: '#1976D2'
+        color: theme.palette.primary.main
     },
     rule: {
         flexGrow: 1,
