@@ -6,7 +6,6 @@ const ModuleGroupPreviewStyle = (theme: Theme) =>
             padding: theme.spacing(1),
             boxSizing: 'border-box',
             borderRadius: 2,
-            userSelect: 'none',
             color: theme.palette.text.primary,
             display: 'block',
             '&:hover': {
@@ -20,7 +19,6 @@ const ModuleGroupPreviewStyle = (theme: Theme) =>
         header: {
             display: 'flex',
             alignItems: 'center',
-            textDecoration: 'none',
         },
         title: {
             flexShrink: 1,
@@ -48,6 +46,31 @@ const ModuleGroupPreviewStyle = (theme: Theme) =>
                 width: '100%',
             },
         },
+        unclickablePlanned:{
+            cursor:'default',
+            '&:hover': {
+                backgroundColor: '#DEE7FF'
+            }
+        },
+        unclickableOngoing:{
+            cursor:'default',
+            '&:hover': {
+                backgroundColor: '#ffffe0'
+            },
+
+        },
+        unclickablePassed:{
+            cursor:'default',
+            '&:hover': {
+                backgroundColor: '#eeffdd'
+            }
+        },
+        unclickableFailed:{
+            cursor:'default',
+            '&:hover': {
+                backgroundColor: '#ffc2c2'
+            },
+        }
     });
 
 export default ModuleGroupPreviewStyle;

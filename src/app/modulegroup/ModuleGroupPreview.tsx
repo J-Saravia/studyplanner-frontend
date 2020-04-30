@@ -34,10 +34,8 @@ interface ModuleGroupPreviewState {
     error?: string;
 }
 
-class ModuleGroupPreview extends React.Component<
-    ModuleGroupPreviewProps,
-    ModuleGroupPreviewState
-> {
+class ModuleGroupPreview extends React.Component<ModuleGroupPreviewProps, ModuleGroupPreviewState> {
+
     constructor(props: Readonly<ModuleGroupPreviewProps>) {
         super(props);
         this.state = {};
@@ -47,25 +45,35 @@ class ModuleGroupPreview extends React.Component<
         const { classes, moduleVisits, group, width, level } = this.props;
         const isMobile = isWidthDown('sm', width);
 
-        const levelMargin = isMobile ? 10 * level : 20 * level;
+        const levelMargin = isMobile ? 16 * level : 24 * level;
 
         return (
             <div className={classes.root} style={{ marginLeft: levelMargin }}>
-                <Typography variant="h6" className={classes.title}>
-                    {group.name}
-                </Typography>
-                <hr className={classes.rule} />
+                <div className={classes.header}>
+                    {level < 1 ? <Typography variant="h6" className={classes.title}>
+                        {group.name}
+                    </Typography> : <Typography variant="subtitle2" className={classes.title}>
+                        {group.name}
+                    </Typography>}
+                    <hr className={classes.rule}/>
+                </div>
 
                 <div className={classes.content}>
                     <div className={classes.modules}>
                         {moduleVisits &&
-                            moduleVisits.map((mv) => (
-                                <SemesterModuleVisit
-                                    key={`ModuleGroupPreview-moduleVisit-${mv.id}`}
-                                    moduleVisit={mv}
-                                    isDetailed={false}
-                                />
-                            ))}
+                        moduleVisits.map((mv) => (
+                            <SemesterModuleVisit
+                                classes={{
+                                    planned: classes.unclickablePlanned,
+                                    ongoing: classes.unclickableOngoing,
+                                    passed: classes.unclickablePassed,
+                                    failed: classes.unclickableFailed
+                                }}
+                                key={`ModuleGroupPreview-moduleVisit-${mv.id}`}
+                                moduleVisit={mv}
+                                isDetailed={false}
+                            />
+                        ))}
                         {moduleVisits && moduleVisits.length === 0 ? '-' : ''}
                     </div>
                     {!isMobile && (
