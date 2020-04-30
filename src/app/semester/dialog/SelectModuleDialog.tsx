@@ -43,13 +43,6 @@ class SelectModuleDialog extends React.Component<SelectModuleDialogProps, Select
         this.loadModuleInfoList();
     }
 
-    componentDidUpdate(prevProps: Readonly<SelectModuleDialogProps>, prevState: Readonly<SelectModuleDialogState>, snapshot?: any): void {
-        if (!prevProps.open && this.props.open) {
-            this.setState({ infos: undefined, selected: undefined, filter: undefined });
-            this.loadModuleInfoList();
-        }
-    }
-
     private loadModuleInfoList = () => {
         this.props.moduleService.generateModuleInfoList().then(infos => {
             infos = infos.sort((a, b) => this.getInfoValue(a) - this.getInfoValue(b));
