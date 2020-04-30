@@ -171,7 +171,8 @@ class SemesterView extends React.Component<SemesterViewProps, SemesterViewState>
 
     private getOverview() {
         const { classes } = this.props;
-        const { moduleList } = this.state;
+        const { moduleList, createModuleVisit, selectedModuleVisit} = this.state;
+        const showModuleVisitDialog = createModuleVisit || selectedModuleVisit;
 
         return <>
             <div className={classes.header}>
@@ -203,14 +204,16 @@ class SemesterView extends React.Component<SemesterViewProps, SemesterViewState>
                 onCancel={this.handleCancelDelete}
                 onConfirm={this.handleConfirmDelete}
             />
-            <ModuleVisitDialog
-                semester={this.semester}
-                open={this.state.createModuleVisit || !!this.state.selectedModuleVisit}
-                edit={this.state.selectedModuleVisit}
-                onFinished={this.handleFinishCreateModuleVisit}
-                onCancel={this.handleCancelModuleVisitDialog}
-                onDeleted={this.handleDeleted}
-            />
+            {showModuleVisitDialog && (
+                <ModuleVisitDialog
+                    semester={this.semester}
+                    open
+                    edit={this.state.selectedModuleVisit}
+                    onFinished={this.handleFinishCreateModuleVisit}
+                    onCancel={this.handleCancelModuleVisitDialog}
+                    onDeleted={this.handleDeleted}
+                />
+            )}
         </>;
     }
 }
