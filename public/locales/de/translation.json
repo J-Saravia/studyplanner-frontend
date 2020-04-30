@@ -26,7 +26,10 @@
     },
     "moduleGroups": {
       "title": "Modulgruppen",
-      "othermodulevisits": "Andere Modulbesuche"
+      "othermodulevisits": "Andere Modulbesuche",
+      "load": {
+        "error": "Laden der Modulgruppen fehlgeschlagen"
+      }
     },
     "profiles": {
       "title": "Vertiefungen"

@@ -190,19 +190,33 @@ class ModuleGroupList extends React.Component<
 
         return (
             <div className={classes.root}>
-                <div className={classes.list}>
-                    <h1>
-                        <Trans>translation:messages.moduleGroups.title</Trans>
-                    </h1>
-                    {moduleGroupResult}
-                </div>
-                <div className={classes.list}>
-                    <h1>
-                        <Trans>translation:messages.profiles.title</Trans>
-                    </h1>
-                    {profileElements}
-                </div>
-                {error && <Alert color="error">Error</Alert>}
+                {!error && (
+                    <div>
+                        <div className={classes.list}>
+                            <h1>
+                                <Trans>
+                                    translation:messages.moduleGroups.title
+                                </Trans>
+                            </h1>
+                            {moduleGroupResult}
+                        </div>
+                        <div className={classes.list}>
+                            <h1>
+                                <Trans>
+                                    translation:messages.profiles.title
+                                </Trans>
+                            </h1>
+                            {profileElements}
+                        </div>
+                    </div>
+                )}
+                {error && (
+                    <Alert color="error">
+                        <Trans>
+                            translation:messages.moduleGroups.load.error
+                        </Trans>
+                    </Alert>
+                )}
             </div>
         );
     }

@@ -26,7 +26,10 @@
     },
     "moduleGroups": {
       "title": "Module groups",
-      "othermodulevisits": "Other module visits"
+      "othermodulevisits": "Other module visits",
+      "load": {
+        "error": "Failed to load module groups"
+      }
     },
     "profiles": {
       "title": "Profiles"
