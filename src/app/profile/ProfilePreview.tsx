@@ -8,7 +8,7 @@ import {
     WithWidthProps,
     Box,
 } from '@material-ui/core';
-import ModuleGroupPreviewStyle from './ModuleGroupPreviewStyle';
+import ProfilePreviewStyle from './ProfilePreviewStyle';
 import { ClassNameMap } from '@material-ui/core/styles/withStyles';
 import { Breakpoint } from '@material-ui/core/styles/createBreakpoints';
 import ModuleVisit from '../../model/ModuleVisit';
@@ -16,36 +16,36 @@ import {
     ModuleVisitServiceProps,
     withModuleVisitService,
 } from '../../service/ModuleVisitService';
-import ModuleGroup from '../../model/ModuleGroup';
-import ModuleGroupStatistics from './ModuleGroupStatistics';
-import SemesterModuleVisit from '../semester/list/SemesterModuleVisit';
+import Profile from '../../model/Profile';
+import ProfileModule from './ProfileModule';
+import ProfileStatistics from './ProfileStatistics';
 
-interface ModuleGroupPreviewProps
+interface ProfilePreviewProps
     extends StyledComponentProps,
         WithWidthProps,
         ModuleVisitServiceProps {
     classes: ClassNameMap;
-    group: ModuleGroup;
+    profile: Profile;
     moduleVisits?: ModuleVisit[];
     width: Breakpoint;
     level: number;
 }
 
-interface ModuleGroupPreviewState {
+interface ProfilePreviewState {
     error?: string;
 }
 
-class ModuleGroupPreview extends React.Component<
-    ModuleGroupPreviewProps,
-    ModuleGroupPreviewState
+class ProfilePreview extends React.Component<
+    ProfilePreviewProps,
+    ProfilePreviewState
 > {
-    constructor(props: Readonly<ModuleGroupPreviewProps>) {
+    constructor(props: Readonly<ProfilePreviewProps>) {
         super(props);
         this.state = {};
     }
 
     public render() {
-        const { classes, moduleVisits, group, width, level } = this.props;
+        const { classes, moduleVisits, profile, width, level } = this.props;
         const isMobile = isWidthDown('sm', width);
 
         const levelMargin = isMobile ? 10 * level : 20 * level;
@@ -53,30 +53,32 @@ class ModuleGroupPreview extends React.Component<
         return (
             <div className={classes.root} style={{ marginLeft: levelMargin }}>
                 <Typography variant="h6" className={classes.title}>
-                    {group.name}
+                    {profile.name}
                 </Typography>
                 <hr className={classes.rule} />
 
                 <div className={classes.content}>
                     <Box width={isMobile ? '100%' : '85%'}>
                         <div className={classes.modules}>
-                            {moduleVisits &&
-                                moduleVisits.map((mv) => (
-                                    <SemesterModuleVisit
-                                        key={`ModuleGroupPreview-moduleVisit-${mv.id}`}
-                                        moduleVisit={mv}
-                                        isDetailed={false}
+                            {profile.modules &&
+                                moduleVisits &&
+                                profile.modules.map((m) => (
+                                    <ProfileModule
+                                        key={`ProfilePreview-module-${m.id}`}
+                                        moduleOfProfile={m}
+                                        state={
+                                            moduleVisits.find(
+                                                (mv) => mv.module.id === m.id
+                                            )?.state
+                                        }
                                     />
                                 ))}
-                            {moduleVisits && moduleVisits.length === 0
-                                ? '-'
-                                : ''}
                         </div>
                     </Box>
                     {!isMobile && (
                         <Box width="15%">
-                            <ModuleGroupStatistics
-                                group={group}
+                            <ProfileStatistics
+                                profile={profile}
                                 moduleVisits={moduleVisits}
                             />
                         </Box>
@@ -88,7 +90,5 @@ class ModuleGroupPreview extends React.Component<
 }
 
 export default withWidth()(
-    withModuleVisitService(
-        withStyles(ModuleGroupPreviewStyle)(ModuleGroupPreview)
-    )
+    withModuleVisitService(withStyles(ProfilePreviewStyle)(ProfilePreview))
 );

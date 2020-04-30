@@ -28,7 +28,13 @@
       "title": "Module groups",
       "othermodulevisits": "Other module visits"
     },
-    "moduleGroupStatistics": {
+    "profiles": {
+      "title": "Profiles"
+    },
+    "profileStatistics": {
+      "passed": "passed"
+    },
+    "moduleGroupAndProfileStatistics": {
       "total": "total",
       "plannedOrOngoing": "planned or ongoing",
       "passed": "passed"

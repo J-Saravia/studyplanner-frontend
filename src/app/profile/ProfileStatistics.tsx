@@ -1,53 +1,47 @@
 import * as React from 'react';
 import { StyledComponentProps, withStyles } from '@material-ui/core';
 import ModuleVisit from '../../model/ModuleVisit';
-import ModuleGroup from '../../model/ModuleGroup';
 import { ClassNameMap } from '@material-ui/core/styles/withStyles';
-import ModuleGroupStatisticsStyle from './ModuleGroupStatisticsStyle';
+import ProfileStatisticsStyle from './ProfileStatisticsStyle';
 import { Trans, WithTranslation, withTranslation } from 'react-i18next';
+import Profile from '../../model/Profile';
 
-interface ModuleGroupStatisticsProps
-    extends StyledComponentProps,
-        WithTranslation {
+interface ProfileStatisticsProps extends StyledComponentProps, WithTranslation {
     classes: ClassNameMap;
     moduleVisits?: ModuleVisit[];
-    group: ModuleGroup;
+    profile: Profile;
 }
 
-class ModuleGroupStatistics extends React.Component<
-    ModuleGroupStatisticsProps,
-    any
-> {
-    constructor(props: Readonly<ModuleGroupStatisticsProps>) {
+class ProfileStatistics extends React.Component<ProfileStatisticsProps, any> {
+    constructor(props: Readonly<ProfileStatisticsProps>) {
         super(props);
         this.state = {};
     }
 
     public render() {
-        const { classes, moduleVisits, group } = this.props;
-        let passedCredits = 0;
-        let plannedOrOngoingCredits = 0;
+        const { classes, moduleVisits, profile } = this.props;
+        let passedModules = 0;
+        let plannedOrOngoingModules = 0;
         moduleVisits &&
             moduleVisits.forEach((mv) => {
-                const { credits } = mv.module;
-                if (mv.state === 'passed') {
-                    passedCredits += credits;
-                }
                 if (mv.state === 'planned' || mv.state === 'ongoing') {
-                    plannedOrOngoingCredits += credits;
+                    plannedOrOngoingModules += 1;
+                }
+                if (mv.state === 'passed') {
+                    passedModules += 1;
                 }
             });
 
         return (
             <div>
                 <div>
-                    {plannedOrOngoingCredits}{' '}
+                    {plannedOrOngoingModules}{' '}
                     <Trans>
                         translation:messages.moduleGroupAndProfileStatistics.plannedOrOngoing
                     </Trans>
                 </div>
                 <div>
-                    {passedCredits}{' '}
+                    {passedModules}{' '}
                     <Trans>
                         translation:messages.moduleGroupAndProfileStatistics.passed
                     </Trans>
@@ -56,12 +50,13 @@ class ModuleGroupStatistics extends React.Component<
                     className={
                         classes.total +
                         ' ' +
-                        (passedCredits + plannedOrOngoingCredits >= group.minima
+                        (plannedOrOngoingModules + passedModules >=
+                        profile.minima
                             ? classes.enoughCredits
                             : classes.notEnoughCredits)
                     }
                 >
-                    {passedCredits + plannedOrOngoingCredits} / {group.minima}{' '}
+                    {plannedOrOngoingModules + passedModules} / {profile.minima}{' '}
                     <Trans>
                         translation:messages.moduleGroupAndProfileStatistics.total
                     </Trans>
@@ -72,5 +67,5 @@ class ModuleGroupStatistics extends React.Component<
 }
 
 export default withTranslation()(
-    withStyles(ModuleGroupStatisticsStyle)(ModuleGroupStatistics)
+    withStyles(ProfileStatisticsStyle)(ProfileStatistics)
 );

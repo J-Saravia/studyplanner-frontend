@@ -1,6 +1,6 @@
 import { createStyles, Theme } from '@material-ui/core';
 
-const ModuleGroupPreviewStyle = (theme: Theme) =>
+const ProfilePreviewStyle = (theme: Theme) =>
     createStyles({
         root: {
             padding: theme.spacing(1),
@@ -45,4 +45,4 @@ const ModuleGroupPreviewStyle = (theme: Theme) =>
         },
     });
 
-export default ModuleGroupPreviewStyle;
+export default ProfilePreviewStyle;

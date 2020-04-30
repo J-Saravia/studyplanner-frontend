@@ -5,14 +5,17 @@ import { ClassNameMap } from '@material-ui/core/styles/withStyles';
 import ModuleVisit from '../../model/ModuleVisit';
 import ModuleGroup from '../../model/ModuleGroup';
 import ModuleGroupPreview from './ModuleGroupPreview';
+import ProfilePreview from '../profile/ProfilePreview';
 import { AuthServiceProps } from '../../service/AuthService';
 import { Alert } from '@material-ui/lab';
-import { WithTranslation, withTranslation } from 'react-i18next';
+import { WithTranslation, withTranslation, Trans } from 'react-i18next';
 import withServices, { WithServicesProps } from '../../service/WithServices';
+import Profile from '../../model/Profile';
 
 interface ModuleGroupListState {
     moduleGroups?: ModuleGroup[];
     moduleVisits?: ModuleVisit[];
+    profiles?: Profile[];
     error?: string;
 }
 
@@ -45,6 +48,14 @@ class ModuleGroupList extends React.Component<
             .then((moduleVisitsOfStudent: ModuleVisit[]) =>
                 this.setState({
                     moduleVisits: moduleVisitsOfStudent,
+                })
+            )
+            .catch((error) => this.setState({ error: error.toString() }));
+        this.props.profileService
+            .getForStudentDegree()
+            .then((profilesOfStudent: Profile[]) =>
+                this.setState({
+                    profiles: profilesOfStudent,
                 })
             )
             .catch((error) => this.setState({ error: error.toString() }));
@@ -87,6 +98,25 @@ class ModuleGroupList extends React.Component<
         }
 
         return { moduleGroupElements, usedModuleVisits };
+    };
+
+    getProfileList = () => {
+        return (
+            this.state.profiles &&
+            this.state.profiles.map((p) => {
+                const moduleVisitsOfCurrentProfile = this.state.moduleVisits?.filter(
+                    (mv) => p.modules.includes(mv.module)
+                );
+                return (
+                    <ProfilePreview
+                        key={p.id}
+                        profile={p}
+                        moduleVisits={moduleVisitsOfCurrentProfile}
+                        level={0}
+                    />
+                );
+            })
+        );
     };
 
     public render() {
@@ -156,9 +186,22 @@ class ModuleGroupList extends React.Component<
             );
         }
 
+        const profileElements = this.getProfileList();
+
         return (
             <div className={classes.root}>
-                <div className={classes.list}>{moduleGroupResult}</div>
+                <div className={classes.list}>
+                    <h1>
+                        <Trans>translation:messages.moduleGroups.title</Trans>
+                    </h1>
+                    {moduleGroupResult}
+                </div>
+                <div className={classes.list}>
+                    <h1>
+                        <Trans>translation:messages.profiles.title</Trans>
+                    </h1>
+                    {profileElements}
+                </div>
                 {error && <Alert color="error">Error</Alert>}
             </div>
         );

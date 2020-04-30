@@ -28,7 +28,10 @@
       "title": "Modulgruppen",
       "othermodulevisits": "Andere Modulbesuche"
     },
-    "moduleGroupStatistics": {
+    "profiles": {
+      "title": "Vertiefungen"
+    },
+    "moduleGroupAndProfileStatistics": {
       "total": "gesamt",
       "plannedOrOngoing": "geplant oder wird besucht",
       "passed": "bestanden"

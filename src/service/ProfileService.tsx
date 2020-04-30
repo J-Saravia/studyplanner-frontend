@@ -3,9 +3,10 @@ import HttpClient from './HttpClient';
 import Profile, { ProfileDto } from '../model/Profile';
 import CacheableService from './CacheableService';
 import ModuleService from './ModuleService';
+import AuthService from './AuthService';
+import Student from '../model/Student';
 
-export default class ProfileService extends CacheableService<Profile>{
-
+export default class ProfileService extends CacheableService<Profile> {
     public static readonly INSTANCE = new ProfileService();
 
     private restClient = new HttpClient('profiles');
@@ -15,16 +16,35 @@ export default class ProfileService extends CacheableService<Profile>{
     }
 
     protected async loadData(): Promise<Profile[]> {
-        const data = [];
-        const dtos = (await this.restClient.getList<ProfileDto>());
-        for(const dto of dtos) {
+        const dtos = await this.restClient.getList<ProfileDto>();
+        return ProfileService.convertToModel(dtos);
+    }
+
+    public async getForStudentDegree(): Promise<Profile[]> {
+        const authService = AuthService.INSTANCE;
+        if (!authService.isLoggedIn()) {
+            throw new Error('Unauthorized');
+        }
+        const student = authService.getCurrentStudent() as Student;
+        const dtos = await this.restClient
+            .request()
+            .query({ degree: student.degree.id })
+            .fetch<ProfileDto[]>();
+        return ProfileService.convertToModel(dtos);
+    }
+
+    private static async convertToModel(
+        dtos: ProfileDto[]
+    ): Promise<Profile[]> {
+        let data = [];
+        for (const dto of dtos) {
             const modules = [];
-            for(const id of dto.modules) {
+            for (const id of dto.modules) {
                 modules.push(await ModuleService.INSTANCE.findById(id));
             }
             data.push({
                 ...dto,
-                modules
+                modules,
             });
         }
         return data;
@@ -39,13 +59,14 @@ export interface ProfileServiceProps {
     profileService: ProfileService;
 }
 
-export const withProfileService = <P extends ProfileServiceProps>(Component: React.ComponentType<P>): React.FC<Omit<P, keyof ProfileServiceProps>> =>
-    props => (
-        <Consumer>
-            {value => <Component {...props as P} profileService={value}/>}
-        </Consumer>
-    );
-
-export const ProfileServiceProvider: React.FC<ProfileServiceProps> = props => (
-    <Provider value={props.profileService}>{props.children}</Provider>
+export const withProfileService = <P extends ProfileServiceProps>(
+    Component: React.ComponentType<P>
+): React.FC<Omit<P, keyof ProfileServiceProps>> => (props) => (
+    <Consumer>
+        {(value) => <Component {...(props as P)} profileService={value} />}
+    </Consumer>
 );
+
+export const ProfileServiceProvider: React.FC<ProfileServiceProps> = (
+    props
+) => <Provider value={props.profileService}>{props.children}</Provider>;

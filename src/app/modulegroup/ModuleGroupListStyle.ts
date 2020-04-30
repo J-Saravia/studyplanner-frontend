@@ -10,11 +10,6 @@ const ModuleGroupListStyle = (theme: Theme) =>
             margin: theme.spacing(1),
             padding: theme.spacing(1),
         },
-        header: {
-            display: 'flex',
-            alignItems: 'center',
-            cursor: 'default',
-        },
         title: {
             flexShrink: 1,
             marginRight: theme.spacing(2),
