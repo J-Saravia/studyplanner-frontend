@@ -116,9 +116,11 @@ class SemesterPreview extends React.Component<SemesterPreviewProps, SemesterPrev
     };
 
     public render() {
-        const {classes, moduleVisits, semester, width} = this.props;
-        const {error} = this.state;
+        const { classes, moduleVisits, semester, width } = this.props;
+        const { error, createModuleVisit, selectedModuleVisit } = this.state;
         const isMobile = isWidthDown('sm', width);
+        const showModuleVisitDialog = createModuleVisit || selectedModuleVisit;
+
         let maxCredits = 0;
         let currentCredits = 0;
         moduleVisits.forEach(mv => {
@@ -162,14 +164,16 @@ class SemesterPreview extends React.Component<SemesterPreviewProps, SemesterPrev
                     onCancel={this.handleCancelDelete}
                     onConfirm={this.handleConfirmDelete}
                 />
-                <ModuleVisitDialog
-                    semester={semester}
-                    open={this.state.createModuleVisit || !!this.state.selectedModuleVisit}
-                    edit={this.state.selectedModuleVisit}
-                    onFinished={this.handleFinishModuleVisit}
-                    onCancel={this.handleCancelModuleVisitDialog}
-                    onDeleted={this.handleDeleted}
-                />
+                {showModuleVisitDialog && (
+                    <ModuleVisitDialog
+                        semester={semester}
+                        open
+                        edit={this.state.selectedModuleVisit}
+                        onFinished={this.handleFinishModuleVisit}
+                        onCancel={this.handleCancelModuleVisitDialog}
+                        onDeleted={this.handleDeleted}
+                    />)
+                }
             </div>
         );
     }
