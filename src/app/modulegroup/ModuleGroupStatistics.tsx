@@ -54,7 +54,7 @@ class ModuleGroupStatistics extends React.Component<ModuleGroupStatisticsProps, 
                                 <Trans>
                                     translation:messages.moduleGroupStatistics.total
                                 </Trans>
-                                {': '}{100} / {group.minima}
+                                {': '}{passedCredits + plannedOrOngoingCredits} / {group.minima}
 
                             </div>
                             <div className={classes.value}>

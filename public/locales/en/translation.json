@@ -26,9 +26,18 @@
     },
     "moduleGroups": {
       "title": "Module groups",
-      "othermodulevisits": "Other module visits"
+      "othermodulevisits": "Other module visits",
+      "load": {
+        "error": "Failed to load module groups"
+      }
     },
-    "moduleGroupStatistics": {
+    "profiles": {
+      "title": "Profiles"
+    },
+    "profileStatistics": {
+      "passed": "passed"
+    },
+    "moduleGroupAndProfileStatistics": {
       "total": "Total",
       "open": "Pending",
       "passed": "Passed",

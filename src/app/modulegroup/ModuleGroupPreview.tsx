@@ -6,6 +6,7 @@ import {
     withStyles,
     withWidth,
     WithWidthProps,
+    Box,
 } from '@material-ui/core';
 import ModuleGroupPreviewStyle from './ModuleGroupPreviewStyle';
 import { ClassNameMap } from '@material-ui/core/styles/withStyles';
@@ -59,6 +60,8 @@ class ModuleGroupPreview extends React.Component<ModuleGroupPreviewProps, Module
                 </div>
 
                 <div className={classes.content}>
+
+ <Box width={isMobile ? '100%' : '85%'}> // new
                     <div className={classes.modules}>
                         {moduleVisits &&
                         moduleVisits.map((mv) => (
@@ -76,11 +79,14 @@ class ModuleGroupPreview extends React.Component<ModuleGroupPreviewProps, Module
                         ))}
                         {moduleVisits && moduleVisits.length === 0 ? '-' : ''}
                     </div>
+                    </Box>
                     {!isMobile && (
-                        <ModuleGroupStatistics
-                            group={group}
-                            moduleVisits={moduleVisits}
-                        />
+                        <Box width="15%"> // new
+                            <ModuleGroupStatistics
+                                group={group}
+                                moduleVisits={moduleVisits}
+                            />
+                        </Box>
                     )}
                 </div>
             </div>
@@ -88,8 +94,4 @@ class ModuleGroupPreview extends React.Component<ModuleGroupPreviewProps, Module
     }
 }
 
-export default withWidth()(
-    withModuleVisitService(
-        withStyles(ModuleGroupPreviewStyle)(ModuleGroupPreview)
-    )
-);
+export default withWidth()(withModuleVisitService(withStyles(ModuleGroupPreviewStyle)(ModuleGroupPreview)));

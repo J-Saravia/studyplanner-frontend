@@ -26,9 +26,15 @@
     },
     "moduleGroups": {
       "title": "Modulgruppen",
-      "othermodulevisits": "Andere Modulbesuche"
+      "othermodulevisits": "Andere Modulbesuche",
+      "load": {
+        "error": "Laden der Modulgruppen fehlgeschlagen"
+      }
     },
-    "moduleGroupStatistics": {
+    "profiles": {
+      "title": "Vertiefungen"
+    },
+    "moduleGroupAndProfileStatistics": {
       "total": "Gesamt",
       "open": "Ausstehend",
       "passed": "Bestanden",
