@@ -38,9 +38,10 @@
       "passed": "passed"
     },
     "moduleGroupAndProfileStatistics": {
-      "total": "total",
-      "plannedOrOngoing": "planned or ongoing",
-      "passed": "passed"
+      "total": "Total",
+      "open": "Pending",
+      "passed": "Passed",
+      "failed": "Failed"
     },
     "module": {
       "selection": {

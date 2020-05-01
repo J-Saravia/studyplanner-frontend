@@ -27,10 +27,7 @@ interface ModuleGroupListProps
     classes: ClassNameMap;
 }
 
-class ModuleGroupList extends React.Component<
-    ModuleGroupListProps,
-    ModuleGroupListState
-> {
+class ModuleGroupList extends React.Component<ModuleGroupListProps, ModuleGroupListState> {
     constructor(props: Readonly<ModuleGroupListProps>) {
         super(props);
         this.state = {};
@@ -68,10 +65,8 @@ class ModuleGroupList extends React.Component<
     ): { usedModuleVisits: ModuleVisit[]; moduleGroupElements: any[] } => {
         let moduleGroupElements: any = [];
         let usedModuleVisits: ModuleVisit[] = [];
-        const moduleVisitsForGroup = moduleVisits
-            ? moduleVisits.filter((mv) =>
-                  moduleGroup.modules.includes(mv.module)
-              )
+        const moduleVisitsForGroup = moduleVisits ?
+            moduleVisits.filter((mv) => moduleGroup.modules.includes(mv.module))
             : [];
         moduleGroupElements.push(
             <ModuleGroupPreview
@@ -165,25 +160,28 @@ class ModuleGroupList extends React.Component<
         const otherModuleVisits = moduleVisits?.filter(
             (mv) => usedModuleVisits.indexOf(mv) < 0
         );
-        if (otherModuleVisits && otherModuleVisits.length > 0) {
-            moduleGroupResult.push(
-                <ModuleGroupPreview
-                    key={0}
-                    group={{
-                        id: '0',
-                        name: t(
-                            'translation:messages.moduleGroups.othermodulevisits'
-                        ),
-                        description: '',
-                        parent: undefined,
-                        children: [],
-                        minima: 0,
-                        modules: [],
-                    }}
-                    moduleVisits={otherModuleVisits}
-                    level={0}
-                />
-            );
+
+        if (moduleGroups) { //otherwise all module visits can be shown as "Other module visits"
+            if (otherModuleVisits && otherModuleVisits.length > 0) {
+                moduleGroupResult.push(
+                    <ModuleGroupPreview
+                        key={0}
+                        group={{
+                            id: '0',
+                            name: t(
+                                'translation:messages.moduleGroups.othermodulevisits'
+                            ),
+                            description: '',
+                            parent: undefined,
+                            children: [],
+                            minima: 0,
+                            modules: [],
+                        }}
+                        moduleVisits={otherModuleVisits}
+                        level={0}
+                    />
+                );
+            }
         }
 
         const profileElements = this.getProfileList();

@@ -51,9 +51,28 @@ class SemesterList extends React.Component<SemesterListProps, SemesterListState>
         this.setState({semesterModuleMap});
     };
 
+    private sortKeys() {
+        const {semesterModuleMapReadonly} = this.state;
+        let result;
+        if (semesterModuleMapReadonly) {
+            result = Object.keys(semesterModuleMapReadonly);
+            result = result.sort((a, b) => parseInt((b.substr(2))) - (parseInt(a.substr(2))));
+            result = result.sort((c, d) => {
+                if (c.substr(2) === d.substr(2)) {
+                    return d.localeCompare(c);
+                }
+                return 0;
+            });
+        }
+        return result;
+    }
+
+
     public render() {
-        const { classes } = this.props;
-        const { semesterModuleMapReadonly, createSemester, error } = this.state;
+        const {classes} = this.props;
+        const {semesterModuleMapReadonly, createSemester, error} = this.state;
+
+        let sortedKeys = this.sortKeys();
 
         return (
             <div className={classes.root}>
@@ -66,7 +85,7 @@ class SemesterList extends React.Component<SemesterListProps, SemesterListState>
                     <Trans>translation:messages.semester.create</Trans>
                 </Button>
                 <div className={classes.list}>
-                    {semesterModuleMapReadonly && Object.keys(semesterModuleMapReadonly).map(key => (
+                    {semesterModuleMapReadonly && sortedKeys && sortedKeys.map(key => (
                         <SemesterPreview
                             key={key}
                             semester={key}

@@ -34,12 +34,32 @@ export default class AuthService {
     }
 
     /**
+     * Tries to refresh the token if it has expired.
+     * Returns a boolean Promise which will be resolved once the refresh has succeeded/failed
+     */
+    public async tryEnsureLoggedIn(): Promise<boolean> {
+        if (this.isLoggedIn()) {
+            return true;
+        }
+        try {
+            await this.refresh();
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    /**
      * Returns the current student if logged in
      */
     public getCurrentStudent(): Student | undefined {
         return this.currentStudent;
     }
 
+    /**
+     * Overwrites the locally stored user object
+     * @param student
+     */
     public updateCurrentUser(student: Student) {
         this.studentSubject.next(this.currentStudent = student);
     }

@@ -8,17 +8,17 @@ import {
     WithWidthProps
 } from '@material-ui/core';
 import SemesterPreviewStyle from './SemesterPreviewStyle';
-import {AddCircle} from '@material-ui/icons';
-import {ClassNameMap} from '@material-ui/core/styles/withStyles';
+import { AddCircle } from '@material-ui/icons';
+import { ClassNameMap } from '@material-ui/core/styles/withStyles';
 import SemesterModuleVisit from './SemesterModuleVisit';
-import {Breakpoint} from '@material-ui/core/styles/createBreakpoints';
+import { Breakpoint } from '@material-ui/core/styles/createBreakpoints';
 import ModuleVisit from '../../../model/ModuleVisit';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import ModuleVisitDialog from '../dialog/ModuleVisitDialog';
 import DeleteModuleVisitDialog from '../dialog/DeleteModuleVisitDialog';
-import {ModuleVisitServiceProps, withModuleVisitService} from '../../../service/ModuleVisitService';
-import {Alert} from '@material-ui/lab';
-import {Trans} from 'react-i18next';
+import { ModuleVisitServiceProps, withModuleVisitService } from '../../../service/ModuleVisitService';
+import { Alert } from '@material-ui/lab';
+import { Trans } from 'react-i18next';
 
 
 interface SemesterPreviewProps extends StyledComponentProps, WithWidthProps, ModuleVisitServiceProps {
@@ -47,23 +47,23 @@ class SemesterPreview extends React.Component<SemesterPreviewProps, SemesterPrev
     }
 
     private moduleVisitClickHandler = (selectedModuleVisit: ModuleVisit) => () => {
-        this.setState({selectedModuleVisit});
+        this.setState({ selectedModuleVisit });
     };
 
     private moduleVisitDeleteHandler = (moduleVisitToDelete: ModuleVisit) => () => {
-        this.setState({moduleVisitToDelete});
+        this.setState({ moduleVisitToDelete });
     };
 
 
     private handleConfirmDelete = () => {
-        const {moduleVisitToDelete} = this.state;
+        const { moduleVisitToDelete } = this.state;
         if (moduleVisitToDelete) {
             const id = moduleVisitToDelete.id as string;
             this.props.moduleVisitService.delete(id).then(_ => {
                 this.removeModule(id);
-                this.setState({moduleVisitToDelete: undefined, error: undefined});
+                this.setState({ moduleVisitToDelete: undefined, error: undefined });
             }).catch(error => {
-                this.setState({moduleVisitToDelete: undefined, error: error.toString()});
+                this.setState({ moduleVisitToDelete: undefined, error: error.toString() });
             });
         }
     };
@@ -73,7 +73,7 @@ class SemesterPreview extends React.Component<SemesterPreviewProps, SemesterPrev
         if (moduleVisits) {
             const index = moduleVisits.findIndex(visit => visit.id === id);
             moduleVisits.splice(index, 1);
-            this.setState({moduleVisits});
+            this.setState({ moduleVisits });
             this.props.onChange(moduleVisits);
         }
     };
@@ -84,11 +84,11 @@ class SemesterPreview extends React.Component<SemesterPreviewProps, SemesterPrev
     };
 
     private handleAddButtonClick = () => {
-        this.setState({createModuleVisit: true});
+        this.setState({ createModuleVisit: true });
     };
 
     private handleFinishModuleVisit = (visit: ModuleVisit) => {
-        const {moduleVisits, createModuleVisit} = this.state;
+        const { moduleVisits, createModuleVisit } = this.state;
         if (createModuleVisit) {
             moduleVisits.push(visit);
             this.setState({
@@ -108,21 +108,23 @@ class SemesterPreview extends React.Component<SemesterPreviewProps, SemesterPrev
     };
 
     private handleCancelModuleVisitDialog = () => {
-        this.setState({createModuleVisit: false, selectedModuleVisit: undefined});
+        this.setState({ createModuleVisit: false, selectedModuleVisit: undefined });
     };
 
     private handleCancelDelete = () => {
-        this.setState({moduleVisitToDelete: undefined});
+        this.setState({ moduleVisitToDelete: undefined });
     };
 
     public render() {
-        const {classes, moduleVisits, semester, width} = this.props;
-        const {error} = this.state;
+        const { classes, moduleVisits, semester, width } = this.props;
+        const { error, createModuleVisit, selectedModuleVisit } = this.state;
         const isMobile = isWidthDown('sm', width);
+        const showModuleVisitDialog = createModuleVisit || selectedModuleVisit;
+
         let maxCredits = 0;
         let currentCredits = 0;
         moduleVisits.forEach(mv => {
-            const {credits} = mv.module;
+            const { credits } = mv.module;
             maxCredits += credits;
             if (mv.state === 'passed') {
                 currentCredits += credits;
@@ -162,14 +164,16 @@ class SemesterPreview extends React.Component<SemesterPreviewProps, SemesterPrev
                     onCancel={this.handleCancelDelete}
                     onConfirm={this.handleConfirmDelete}
                 />
-                <ModuleVisitDialog
-                    semester={semester}
-                    open={this.state.createModuleVisit || !!this.state.selectedModuleVisit}
-                    edit={this.state.selectedModuleVisit}
-                    onFinished={this.handleFinishModuleVisit}
-                    onCancel={this.handleCancelModuleVisitDialog}
-                    onDeleted={this.handleDeleted}
-                />
+                {showModuleVisitDialog && (
+                    <ModuleVisitDialog
+                        semester={semester}
+                        open={this.state.createModuleVisit || !!this.state.selectedModuleVisit}
+                        edit={this.state.selectedModuleVisit}
+                        onFinished={this.handleFinishModuleVisit}
+                        onCancel={this.handleCancelModuleVisitDialog}
+                        onDeleted={this.handleDeleted}
+                    />)
+                }
             </div>
         );
     }

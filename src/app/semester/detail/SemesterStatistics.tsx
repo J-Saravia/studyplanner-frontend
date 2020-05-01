@@ -173,9 +173,6 @@ class SemesterStatistics extends React.Component<SemesterStatisticsProps, any> {
                 classes={{
                     root: classes.elem,
                 }}
-                style={{
-                    height: '60px',
-                }}
             />
         );
     }

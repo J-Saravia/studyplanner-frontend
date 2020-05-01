@@ -35,9 +35,10 @@
       "title": "Vertiefungen"
     },
     "moduleGroupAndProfileStatistics": {
-      "total": "gesamt",
-      "plannedOrOngoing": "geplant oder wird besucht",
-      "passed": "bestanden"
+      "total": "Gesamt",
+      "open": "Ausstehend",
+      "passed": "Bestanden",
+      "failed": "Ungenügend"
     },
     "module": {
       "selection": {
