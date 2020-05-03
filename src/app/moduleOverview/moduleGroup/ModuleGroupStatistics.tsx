@@ -1,14 +1,12 @@
 import * as React from 'react';
 import { Chip, StyledComponentProps, withStyles } from '@material-ui/core';
-import ModuleVisit from '../../model/ModuleVisit';
-import ModuleGroup from '../../model/ModuleGroup';
+import ModuleVisit from '../../../model/ModuleVisit';
+import ModuleGroup from '../../../model/ModuleGroup';
 import { ClassNameMap } from '@material-ui/core/styles/withStyles';
-import ModuleGroupStatisticsStyle from './ModuleGroupStatisticsStyle';
+import ModuleProfileStatisticsStyle from '../ModuleProfileStatisticsStyle';
 import { Trans, WithTranslation, withTranslation } from 'react-i18next';
 
-interface ModuleGroupStatisticsProps
-    extends StyledComponentProps,
-        WithTranslation {
+interface ModuleGroupStatisticsProps extends StyledComponentProps, WithTranslation {
     classes: ClassNameMap;
     moduleVisits?: ModuleVisit[];
     group: ModuleGroup;
@@ -47,34 +45,35 @@ class ModuleGroupStatistics extends React.Component<ModuleGroupStatisticsProps, 
                                     classes.total +
                                     ' ' +
                                     (passedCredits + plannedOrOngoingCredits >= group.minima
-                                        ? classes.enoughCredits
-                                        : classes.notEnoughCredits)
+                                        ? classes.enough
+                                        : classes.notEnough)
                                 }
                             >
                                 <Trans>
-                                    translation:messages.moduleGroupStatistics.total
+                                    translation:messages.statistic.ectsModules.total
                                 </Trans>
                                 {': '}{passedCredits + plannedOrOngoingCredits} / {group.minima}
 
                             </div>
-                            <div className={classes.value}>
-                                <Trans>
-                                    translation:messages.moduleGroupStatistics.open
-                                </Trans>
-                                {': '}{plannedOrOngoingCredits}
-                            </div>
 
                             <div className={classes.value}>
                                 <Trans>
-                                    translation:messages.moduleGroupStatistics.passed
+                                    translation:messages.statistic.ectsModules.passed
                                 </Trans>
                                 {': '}{passedCredits}
+                            </div>
+                            <div className={classes.value}>
+                                <Trans>
+                                    translation:messages.statistic.ectsModules.pending
+                                </Trans>
+                                {': '}{plannedOrOngoingCredits}
                             </div>
                         </div>
                     }
                     color="primary"
                     classes={{
                         root: classes.elem,
+                        label: classes.label
                     }}
                 />
             </div>
@@ -83,4 +82,4 @@ class ModuleGroupStatistics extends React.Component<ModuleGroupStatisticsProps, 
     }
 }
 
-export default withTranslation()(withStyles(ModuleGroupStatisticsStyle)(ModuleGroupStatistics));
+export default withTranslation()(withStyles(ModuleProfileStatisticsStyle)(ModuleGroupStatistics));
