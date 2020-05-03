@@ -82,7 +82,7 @@ class SemesterModuleVisit extends React.Component<SemesterModuleProps, any> {
                 </div>
                 <div className={classes.label}>
                     {moduleVisit.module.credits} ECTS
-                    {moduleVisit.module.msp !== 'NONE' ? ', MSP' : ''}
+                    {moduleVisit.module.msp && moduleVisit.module.msp !== 'NONE' ? ', MSP' : ''}
                 </div>
                 <div className={classes.label}>
                     {moduleVisit.grade ? `(${moduleVisit.grade})` : ''}
