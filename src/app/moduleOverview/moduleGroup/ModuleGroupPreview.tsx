@@ -39,6 +39,20 @@ class ModuleGroupPreview extends React.Component<ModuleGroupPreviewProps, Module
         this.state = {};
     }
 
+    private distinctModuleVisits() {
+        const { moduleVisits } = this.props;
+        const distinctMVs: ModuleVisit[] = [];
+        if (moduleVisits) {
+            moduleVisits.forEach(e => {
+                const distinctMapped = distinctMVs.map(mv => mv.module);
+                if (distinctMapped.indexOf(e.module) === -1) {
+                    distinctMVs.push(e);
+                }
+            });
+        }
+        return distinctMVs;
+    }
+
     public render() {
         const { classes, moduleVisits, group, width, level } = this.props;
         const isMobile = isWidthDown('sm', width);
@@ -46,8 +60,10 @@ class ModuleGroupPreview extends React.Component<ModuleGroupPreviewProps, Module
         const levelMargin = isMobile ? 16 * level : 24 * level;
         const topGroup = level < 1;
         const parentGroup = group.children.length > 0;
+        const distinctMVs = this.distinctModuleVisits();
 
         return (
+
             <div className={classes.root} style={{ marginLeft: levelMargin }}>
                 <div className={classes.header}>
                     {topGroup ? <Typography variant="h6" className={classes.title}>
@@ -61,7 +77,7 @@ class ModuleGroupPreview extends React.Component<ModuleGroupPreviewProps, Module
                 {!parentGroup ? <div className={classes.content}>
                         <div className={classes.modules}>
                             {moduleVisits &&
-                            moduleVisits.map((mv) => (
+                            distinctMVs.map((mv) => (
                                 <SemesterModuleVisit
                                     classes={{
                                         planned: classes.unclickablePlanned,
