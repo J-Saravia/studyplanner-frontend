@@ -149,7 +149,10 @@ class SemesterView extends React.Component<SemesterViewProps, SemesterViewState>
         return <>
             <div className={classes.header}>
                 <Typography variant="h6" className={classes.title}>
-                    <Trans>translation:messages.semesterStatistic.title</Trans></Typography>
+                    <Trans>
+                        translation:messages.statistic.titleSemester
+                    </Trans>
+                </Typography>
                 <hr className={classes.rule}/>
             </div>
             <div className={classes.content}>
@@ -171,7 +174,7 @@ class SemesterView extends React.Component<SemesterViewProps, SemesterViewState>
 
     private getOverview() {
         const { classes } = this.props;
-        const { moduleList, createModuleVisit, selectedModuleVisit} = this.state;
+        const { moduleList, createModuleVisit, selectedModuleVisit } = this.state;
         const showModuleVisitDialog = createModuleVisit || selectedModuleVisit;
 
         return <>

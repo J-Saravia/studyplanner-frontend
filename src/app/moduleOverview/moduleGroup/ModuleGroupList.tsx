@@ -1,33 +1,30 @@
 import * as React from 'react';
-import { StyledComponentProps, withStyles } from '@material-ui/core';
+import { StyledComponentProps, Typography, withStyles } from '@material-ui/core';
 import ModuleGroupListStyle from './ModuleGroupListStyle';
 import { ClassNameMap } from '@material-ui/core/styles/withStyles';
-import ModuleVisit from '../../model/ModuleVisit';
-import ModuleGroup from '../../model/ModuleGroup';
+import ModuleVisit from '../../../model/ModuleVisit';
+import ModuleGroup from '../../../model/ModuleGroup';
 import ModuleGroupPreview from './ModuleGroupPreview';
-import { AuthServiceProps } from '../../service/AuthService';
+import ProfilePreview from '../profile/ProfilePreview';
+import { AuthServiceProps } from '../../../service/AuthService';
 import { Alert } from '@material-ui/lab';
-import { WithTranslation, withTranslation } from 'react-i18next';
-import withServices, { WithServicesProps } from '../../service/WithServices';
+import { WithTranslation, withTranslation, Trans } from 'react-i18next';
+import withServices, { WithServicesProps } from '../../../service/WithServices';
+import Profile from '../../../model/Profile';
 
 interface ModuleGroupListState {
     moduleGroups?: ModuleGroup[];
     moduleVisits?: ModuleVisit[];
+    profiles?: Profile[];
     error?: string;
 }
 
-interface ModuleGroupListProps
-    extends WithServicesProps,
-        StyledComponentProps,
-        WithTranslation,
-        AuthServiceProps {
+interface ModuleGroupListProps extends WithServicesProps, StyledComponentProps, WithTranslation, AuthServiceProps {
     classes: ClassNameMap;
 }
 
-class ModuleGroupList extends React.Component<
-    ModuleGroupListProps,
-    ModuleGroupListState
-> {
+class ModuleGroupList extends React.Component<ModuleGroupListProps, ModuleGroupListState> {
+
     constructor(props: Readonly<ModuleGroupListProps>) {
         super(props);
         this.state = {};
@@ -48,6 +45,14 @@ class ModuleGroupList extends React.Component<
                 })
             )
             .catch((error) => this.setState({ error: error.toString() }));
+        this.props.profileService
+            .getForStudentDegree()
+            .then((profilesOfStudent: Profile[]) =>
+                this.setState({
+                    profiles: profilesOfStudent,
+                })
+            )
+            .catch((error) => this.setState({ error: error.toString() }));
     }
 
     getModuleGroupElementsHierarchical = (
@@ -57,10 +62,8 @@ class ModuleGroupList extends React.Component<
     ): { usedModuleVisits: ModuleVisit[]; moduleGroupElements: any[] } => {
         let moduleGroupElements: any = [];
         let usedModuleVisits: ModuleVisit[] = [];
-        const moduleVisitsForGroup = moduleVisits
-            ? moduleVisits.filter((mv) =>
-                  moduleGroup.modules.includes(mv.module)
-              )
+        const moduleVisitsForGroup = moduleVisits ?
+            moduleVisits.filter((mv) => moduleGroup.modules.includes(mv.module))
             : [];
         moduleGroupElements.push(
             <ModuleGroupPreview
@@ -87,6 +90,25 @@ class ModuleGroupList extends React.Component<
         }
 
         return { moduleGroupElements, usedModuleVisits };
+    };
+
+    getProfileList = () => {
+        return (
+            this.state.profiles &&
+            this.state.profiles.map((p) => {
+                const moduleVisitsOfCurrentProfile = this.state.moduleVisits?.filter(
+                    (mv) => p.modules.includes(mv.module)
+                );
+                return (
+                    <ProfilePreview
+                        key={p.id}
+                        profile={p}
+                        moduleVisits={moduleVisitsOfCurrentProfile}
+                        level={0}
+                    />
+                );
+            })
+        );
     };
 
     public render() {
@@ -135,36 +157,65 @@ class ModuleGroupList extends React.Component<
         const otherModuleVisits = moduleVisits?.filter(
             (mv) => usedModuleVisits.indexOf(mv) < 0
         );
-        if (otherModuleVisits && otherModuleVisits.length > 0) {
-            moduleGroupResult.push(
-                <ModuleGroupPreview
-                    key={0}
-                    group={{
-                        id: '0',
-                        name: t(
-                            'translation:messages.moduleGroups.othermodulevisits'
-                        ),
-                        description: '',
-                        parent: undefined,
-                        children: [],
-                        minima: 0,
-                        modules: [],
-                    }}
-                    moduleVisits={otherModuleVisits}
-                    level={0}
-                />
-            );
+
+        if (moduleGroups) { //otherwise all module visits can be shown as "Other module visits"
+            if (otherModuleVisits && otherModuleVisits.length > 0) {
+                moduleGroupResult.push(
+                    <ModuleGroupPreview
+                        key={0}
+                        group={{
+                            id: '0',
+                            name: t(
+                                'translation:messages.moduleGroups.othermodulevisits'
+                            ),
+                            description: '',
+                            parent: undefined,
+                            children: [],
+                            minima: 0,
+                            modules: [],
+                        }}
+                        moduleVisits={otherModuleVisits}
+                        level={0}
+                    />
+                );
+            }
         }
+
+        const profileElements = this.getProfileList();
 
         return (
             <div className={classes.root}>
-                <div className={classes.list}>{moduleGroupResult}</div>
-                {error && <Alert color="error">Error</Alert>}
+                {!error && moduleGroups && (<div>
+                        <div className={classes.list}>
+                            <Typography variant="h5" className={classes.title}>
+                                <Trans>
+                                    translation:messages.moduleGroups.title
+                                </Trans>
+                            </Typography>
+                            {moduleGroupResult}
+
+                        </div>
+                        <div className={classes.list}>
+                            {profileElements && (
+                                <Typography variant="h5" className={classes.title}>
+                                    <Trans>
+                                        translation:messages.profiles.title
+                                    </Trans>
+                                </Typography>)}
+                            {profileElements}
+                        </div>
+                    </div>
+                )}
+                {error && (
+                    <Alert color="error">
+                        <Trans>
+                            translation:messages.moduleGroups.load.error
+                        </Trans>
+                    </Alert>
+                )}
             </div>
         );
     }
 }
 
-export default withTranslation()(
-    withServices(withStyles(ModuleGroupListStyle)(ModuleGroupList))
-);
+export default withTranslation()(withServices(withStyles(ModuleGroupListStyle)(ModuleGroupList)));

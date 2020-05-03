@@ -26,12 +26,13 @@
     },
     "moduleGroups": {
       "title": "Module groups",
-      "othermodulevisits": "Other module visits"
+      "othermodulevisits": "Other module visits",
+      "load": {
+        "error": "Failed to load module groups"
+      }
     },
-    "moduleGroupStatistics": {
-      "total": "total",
-      "plannedOrOngoing": "planned or ongoing",
-      "passed": "passed"
+    "profiles": {
+      "title": "Profiles"
     },
     "module": {
       "selection": {
@@ -119,24 +120,6 @@
         "confirm": "Delete"
       }
     },
-    "semesterStatistic": {
-      "title": "Semester statistic",
-      "ects": {
-        "total": "Total",
-        "passed": "Passed",
-        "failed": "Failed"
-      },
-      "grade": {
-        "title": "Grades",
-        "avg": "Average",
-        "high": "Highest"
-      },
-      "msp": {
-        "total": "Total",
-        "written": "Written",
-        "oral": "Oral"
-      }
-    },
     "student": {
       "title": "Account",
       "delete": {
@@ -174,9 +157,29 @@
             "help": ""
           }
         }
+      }
+    },
+    "statistic": {
+      "titleSemester": "Semester statistic",
+      "titleStudy": "Study statistic",
+      "ectsModules": {
+        "modules": "Modules",
+        "total": "Total",
+        "pending": "Pending",
+        "passed": "Passed",
+        "failed": "Failed"
       },
-      "studyStatistic": "Study statistics",
-      "unauthorized": "Access denied"
-    }
+      "grade": {
+        "title": "Grades",
+        "avg": "Average",
+        "high": "Highest"
+      },
+      "msp": {
+        "total": "Total",
+        "written": "Written",
+        "oral": "Oral"
+      }
+    },
+    "unauthorized": "Access denied"
   }
 }

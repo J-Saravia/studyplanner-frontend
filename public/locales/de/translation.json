@@ -26,12 +26,13 @@
     },
     "moduleGroups": {
       "title": "Modulgruppen",
-      "othermodulevisits": "Andere Modulbesuche"
+      "othermodulevisits": "Andere Modulbesuche",
+      "load": {
+        "error": "Laden der Modulgruppen fehlgeschlagen"
+      }
     },
-    "moduleGroupStatistics": {
-      "total": "gesamt",
-      "plannedOrOngoing": "geplant oder wird besucht",
-      "passed": "bestanden"
+    "profiles": {
+      "title": "Vertiefungen"
     },
     "module": {
       "selection": {
@@ -119,24 +120,6 @@
         "confirm": "Löschen"
       }
     },
-    "semesterStatistic": {
-      "title": "Semesterstatistik",
-      "ects": {
-        "total": "Gesamt",
-        "passed": "Bestanden",
-        "failed": "Ungenügend"
-      },
-      "grade": {
-        "title": "Noten",
-        "avg": "Durchschnitt",
-        "high": "Höchste"
-      },
-      "msp": {
-        "total": "Gesamt",
-        "written": "Schriftlich",
-        "oral": "Mündlich"
-      }
-    },
     "student": {
       "title": "Benutzer",
       "delete": {
@@ -176,7 +159,27 @@
         }
       }
     },
-    "studyStatistic": "Studiumstatistik",
+    "statistic": {
+      "titleSemester": "Semesterstatistik",
+      "titleStudy": "Studiumstatistik",
+      "ectsModules": {
+        "modules": "Module",
+        "total": "Gesamt",
+        "pending": "Ausstehend",
+        "passed": "Bestanden",
+        "failed": "Ungenügend"
+      },
+      "grade": {
+        "title": "Noten",
+        "avg": "Durchschnitt",
+        "high": "Höchste"
+      },
+      "msp": {
+        "total": "Gesamt",
+        "written": "Schriftlich",
+        "oral": "Mündlich"
+      }
+    },
     "unauthorized": "Zugriff verweigert"
   }
 }
