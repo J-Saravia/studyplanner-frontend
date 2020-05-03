@@ -34,15 +34,6 @@
     "profiles": {
       "title": "Profiles"
     },
-    "profileStatistics": {
-      "passed": "passed"
-    },
-    "moduleGroupAndProfileStatistics": {
-      "total": "Total",
-      "open": "Pending",
-      "passed": "Passed",
-      "failed": "Failed"
-    },
     "module": {
       "selection": {
         "loading": "Loading modules...",
@@ -129,24 +120,6 @@
         "confirm": "Delete"
       }
     },
-    "semesterStatistic": {
-      "title": "Semester statistic",
-      "ects": {
-        "total": "Total",
-        "passed": "Passed",
-        "failed": "Failed"
-      },
-      "grade": {
-        "title": "Grades",
-        "avg": "Average",
-        "high": "Highest"
-      },
-      "msp": {
-        "total": "Total",
-        "written": "Written",
-        "oral": "Oral"
-      }
-    },
     "student": {
       "title": "Account",
       "delete": {
@@ -184,9 +157,29 @@
             "help": ""
           }
         }
+      }
+    },
+    "statistic": {
+      "titleSemester": "Semester statistic",
+      "titleStudy": "Study statistic",
+      "ectsModules": {
+        "modules": "Modules",
+        "total": "Total",
+        "pending": "Pending",
+        "passed": "Passed",
+        "failed": "Failed"
       },
-      "studyStatistic": "Study statistics",
-      "unauthorized": "Access denied"
-    }
+      "grade": {
+        "title": "Grades",
+        "avg": "Average",
+        "high": "Highest"
+      },
+      "msp": {
+        "total": "Total",
+        "written": "Written",
+        "oral": "Oral"
+      }
+    },
+    "unauthorized": "Access denied"
   }
 }
