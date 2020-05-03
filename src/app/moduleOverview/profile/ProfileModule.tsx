@@ -11,7 +11,7 @@ import ProfileModuleStyle from './ProfileModuleStyle';
 import clsx from 'clsx';
 import { ClassNameMap } from '@material-ui/core/styles/withStyles';
 import { Breakpoint } from '@material-ui/core/styles/createBreakpoints';
-import Module from '../../model/Module';
+import Module from '../../../model/Module';
 
 interface ProfileModuleProps extends StyledComponentProps, WithWidthProps {
     moduleOfProfile: Module;
@@ -21,6 +21,7 @@ interface ProfileModuleProps extends StyledComponentProps, WithWidthProps {
 }
 
 class ProfileModule extends React.Component<ProfileModuleProps, any> {
+
     constructor(props: Readonly<any>) {
         super(props);
         this.state = {};
@@ -42,10 +43,12 @@ class ProfileModule extends React.Component<ProfileModuleProps, any> {
                         [classes.ongoing]: state === 'ongoing',
                         [classes.planned]: state === 'planned',
                         [classes.passed]: state === 'passed',
+                        [classes.failed]: state === 'failed',
                         [classes.blank]:
-                            state !== 'ongoing' &&
-                            state !== 'planned' &&
-                            state !== 'passed',
+                        state !== 'ongoing' &&
+                        state !== 'planned' &&
+                        state !== 'passed' &&
+                        state !== 'failed',
                     }),
                     label: classes.label,
                 }}

@@ -15,42 +15,47 @@ const ProfileModuleStyle = (theme: Theme) =>
             minWidth: '110px',
         },
         blank: {
-            backgroundColor: 'grey',
+            backgroundColor: 'gainsboro',
+            cursor: 'default',
             color: theme.palette.common.black,
-            borderColor: 'darkgrey',
+            borderColor: 'grey',
         },
         planned: {
             backgroundColor: '#DEE7FF',
             color: '#3366ff',
             borderColor: '#3366ff',
+            cursor: 'default',
             '&:hover': {
-                backgroundColor: '#c4d3ff',
-            },
-            '&:focus': {
-                backgroundColor: '#DEE7FF',
-            },
+                backgroundColor: '#DEE7FF'
+            }
         },
         ongoing: {
             backgroundColor: '#ffffe0',
             color: '#ffff33',
             borderColor: '#ffff33',
+            cursor: 'default',
             '&:hover': {
-                backgroundColor: '#ffffc4',
-            },
-            '&:focus': {
-                backgroundColor: '#ffffe0',
+                backgroundColor: '#ffffe0'
             },
         },
         passed: {
             backgroundColor: '#eeffdd',
             color: '#99ff33',
+            cursor: 'default',
             borderColor: '#99ff33',
             '&:hover': {
-                backgroundColor: '#e0ffc2',
+                backgroundColor: '#eeffdd'
+            }
+        },
+        failed: {
+            backgroundColor: '#ffdddd',
+            color: '#ff3333',
+            cursor: 'default',
+            borderColor: '#ff3333',
+            '&:hover': {
+                backgroundColor: '#ffdddd'
             },
-            '&:focus': {
-                backgroundColor: '#eeffdd',
-            },
+
         },
         mobile: {
             flexGrow: 1,
@@ -59,6 +64,7 @@ const ProfileModuleStyle = (theme: Theme) =>
         label: {
             color: theme.palette.common.black,
             textAlign: 'center',
+            cursor: 'text',
         },
     });
 
