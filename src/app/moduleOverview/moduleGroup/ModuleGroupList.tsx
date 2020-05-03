@@ -1,16 +1,16 @@
 import * as React from 'react';
-import { StyledComponentProps, withStyles } from '@material-ui/core';
+import { StyledComponentProps, Typography, withStyles } from '@material-ui/core';
 import ModuleGroupListStyle from './ModuleGroupListStyle';
 import { ClassNameMap } from '@material-ui/core/styles/withStyles';
-import ModuleVisit from '../../model/ModuleVisit';
-import ModuleGroup from '../../model/ModuleGroup';
+import ModuleVisit from '../../../model/ModuleVisit';
+import ModuleGroup from '../../../model/ModuleGroup';
 import ModuleGroupPreview from './ModuleGroupPreview';
 import ProfilePreview from '../profile/ProfilePreview';
-import { AuthServiceProps } from '../../service/AuthService';
+import { AuthServiceProps } from '../../../service/AuthService';
 import { Alert } from '@material-ui/lab';
 import { WithTranslation, withTranslation, Trans } from 'react-i18next';
-import withServices, { WithServicesProps } from '../../service/WithServices';
-import Profile from '../../model/Profile';
+import withServices, { WithServicesProps } from '../../../service/WithServices';
+import Profile from '../../../model/Profile';
 
 interface ModuleGroupListState {
     moduleGroups?: ModuleGroup[];
@@ -188,22 +188,23 @@ class ModuleGroupList extends React.Component<ModuleGroupListProps, ModuleGroupL
 
         return (
             <div className={classes.root}>
-                {!error && (
-                    <div>
+                {!error && moduleGroups && (<div>
                         <div className={classes.list}>
-                            <h1>
+                            <Typography variant="h5" className={classes.title}>
                                 <Trans>
                                     translation:messages.moduleGroups.title
                                 </Trans>
-                            </h1>
+                            </Typography>
                             {moduleGroupResult}
+
                         </div>
                         <div className={classes.list}>
-                            <h1>
-                                <Trans>
-                                    translation:messages.profiles.title
-                                </Trans>
-                            </h1>
+                            {profileElements && (
+                                <Typography variant="h5" className={classes.title}>
+                                    <Trans>
+                                        translation:messages.profiles.title
+                                    </Trans>
+                                </Typography>)}
                             {profileElements}
                         </div>
                     </div>
@@ -220,6 +221,4 @@ class ModuleGroupList extends React.Component<ModuleGroupListProps, ModuleGroupL
     }
 }
 
-export default withTranslation()(
-    withServices(withStyles(ModuleGroupListStyle)(ModuleGroupList))
-);
+export default withTranslation()(withServices(withStyles(ModuleGroupListStyle)(ModuleGroupList)));
