@@ -66,23 +66,6 @@ class ModuleVisitDialog extends React.Component<CreateModuleVisitDialogProps, Cr
         };
     }
 
-    componentDidUpdate(prevProps: Readonly<CreateModuleVisitDialogProps>, prevState: Readonly<CreateModuleVisitDialogState>, snapshot?: any): void {
-        if (!prevProps.open && this.props.open) {
-            this.setState({
-                moduleVisit: this.props.edit || {
-                    state: 'planned',
-                    student: this.props.authService.getCurrentStudent(),
-                    weekday: 0,
-                    timeStart: '08:15',
-                    timeEnd: '11:00',
-                    semester: this.props.semester,
-                    grade: 0
-                } as ModuleVisit,
-                error: { module: false }
-            });
-        }
-    }
-
     private handleModuleSelect = (selected: ModuleInfo) => {
         const moduleVisit = this.state.moduleVisit;
         moduleVisit.module = selected.module;
@@ -322,7 +305,8 @@ class ModuleVisitDialog extends React.Component<CreateModuleVisitDialogProps, Cr
                                     {this.renderModuleStateIndicator()}
                                     <Select className={classes.stateSelectionSelect}
                                             onChange={this.inputChangeHandler('state')}
-                                            value={moduleVisit.state}>
+                                            value={moduleVisit.state}
+                                    >
                                         <MenuItem value="planned">
                                             <Trans>translation:messages.moduleVisit.dialog.field.state.planned</Trans>
                                         </MenuItem>
@@ -366,11 +350,13 @@ class ModuleVisitDialog extends React.Component<CreateModuleVisitDialogProps, Cr
                         </Button>
                     </DialogActions>
                 </Dialog>
-                <SelectModuleDialog
-                    open={isModuleSelectionOpen}
-                    onCancel={this.closeSelectionDialog}
-                    onSelect={this.handleModuleSelect}
-                />
+                {isModuleSelectionOpen && (
+                    <SelectModuleDialog
+                        open
+                        onCancel={this.closeSelectionDialog}
+                        onSelect={this.handleModuleSelect}
+                    />
+                )}
                 <DeleteModuleVisitDialog open={!!deleteVisit} onCancel={this.handleDeleteCancel}
                                          onConfirm={this.handleDeleteConfirm}/>
             </>

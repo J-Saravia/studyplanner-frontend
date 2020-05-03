@@ -17,7 +17,7 @@ export default class ModuleVisitService {
 
     public async list(): Promise<ModuleVisit[]> {
         const authService = AuthService.INSTANCE;
-        if (!authService.isLoggedIn()) {
+        if (!await authService.tryEnsureLoggedIn()) {
             throw new Error('Unauthorized');
         }
         const student = authService.getCurrentStudent() as Student;
@@ -34,7 +34,7 @@ export default class ModuleVisitService {
 
     public async map(): Promise<{ [key: string]: ModuleVisit[] }> {
         const authService = AuthService.INSTANCE;
-        if (!authService.isLoggedIn()) {
+        if (!await authService.tryEnsureLoggedIn()) {
             throw new Error('Unauthorized');
         }
         const student = authService.getCurrentStudent();

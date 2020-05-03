@@ -23,7 +23,7 @@ export default class ModuleGroupService extends CacheableService<ModuleGroup> {
 
     public async getForStudentDegree(): Promise<ModuleGroup[]> {
         const authService = AuthService.INSTANCE;
-        if (!authService.isLoggedIn()) {
+        if (!await authService.tryEnsureLoggedIn()) {
             throw new Error('Unauthorized');
         }
         const student = authService.getCurrentStudent() as Student;
