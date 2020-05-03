@@ -15,7 +15,7 @@ import Forgot from './login/Forgot';
 import Reset from './login/Reset';
 import LoadingPage from './LoadingPage';
 import Student from '../student/StudentView';
-import ModuleGroupList from '../moduleOverview/modulegroup/ModuleGroupList';
+import ModuleGroupList from '../moduleOverview/moduleGroup/ModuleGroupList';
 
 interface PageProps extends AuthServiceProps, StyledComponentProps, WithTranslation {
     classes: ClassNameMap;
