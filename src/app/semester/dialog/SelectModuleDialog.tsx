@@ -125,8 +125,11 @@ class SelectModuleDialog extends React.Component<SelectModuleDialogProps, Select
                         <div><Trans>translation:messages.module.selection.credits</Trans>: {module.credits}</div>
                     </div>
                     <div className={classes.row}>
-                        <div>MSP: <Trans>translation:messages.module.selection.msp.{module.msp.toLowerCase()}</Trans>
-                        </div>
+                        {(module.msp &&
+                            <div>
+                                MSP: <Trans>translation:messages.module.selection.msp.{module.msp.toLowerCase()}</Trans>
+                            </div>
+                        )}
                         {this.renderStateMessage(state)}
                     </div>
                     <div className={classes.row}>
