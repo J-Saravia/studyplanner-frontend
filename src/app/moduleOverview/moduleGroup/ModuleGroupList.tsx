@@ -19,15 +19,12 @@ interface ModuleGroupListState {
     error?: string;
 }
 
-interface ModuleGroupListProps
-    extends WithServicesProps,
-        StyledComponentProps,
-        WithTranslation,
-        AuthServiceProps {
+interface ModuleGroupListProps extends WithServicesProps, StyledComponentProps, WithTranslation, AuthServiceProps {
     classes: ClassNameMap;
 }
 
 class ModuleGroupList extends React.Component<ModuleGroupListProps, ModuleGroupListState> {
+
     constructor(props: Readonly<ModuleGroupListProps>) {
         super(props);
         this.state = {};
