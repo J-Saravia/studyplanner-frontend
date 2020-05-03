@@ -15,12 +15,9 @@ import Forgot from './login/Forgot';
 import Reset from './login/Reset';
 import LoadingPage from './LoadingPage';
 import Student from '../student/StudentView';
-import ModuleGroupList from '../modulegroup/ModuleGroupList';
+import ModuleGroupList from '../moduleOverview/modulegroup/ModuleGroupList';
 
-interface PageProps
-    extends AuthServiceProps,
-        StyledComponentProps,
-        WithTranslation {
+interface PageProps extends AuthServiceProps, StyledComponentProps, WithTranslation {
     classes: ClassNameMap;
 }
 
@@ -47,22 +44,22 @@ class Page extends React.Component<PageProps, PageState> {
         const { classes } = this.props;
         const { isInitialising } = this.state;
         if (isInitialising) {
-            return <LoadingPage />;
+            return <LoadingPage/>;
         }
         return (
             <div className={classes.root}>
-                <Menu />
+                <Menu/>
                 <Paper className={classes.content}>
-                    <div className={classes.toolbar} />
+                    <div className={classes.toolbar}/>
                     <Switch>
                         <Route path="/register">
-                            <Register />
+                            <Register/>
                         </Route>
                         <Route path="/reset">
-                            <Reset />
+                            <Reset/>
                         </Route>
                         <Route path="/forgot">
-                            <Forgot />
+                            <Forgot/>
                         </Route>
                         <Route path="/student">
                             <Protected fallback={<Login/>} showMessage>
@@ -70,18 +67,18 @@ class Page extends React.Component<PageProps, PageState> {
                             </Protected>
                         </Route>
                         <Route path="/semester/:id">
-                            <Protected fallback={<Login />} showMessage>
-                                <SemesterView />
+                            <Protected fallback={<Login/>} showMessage>
+                                <SemesterView/>
                             </Protected>
                         </Route>
                         <Route path="/groups">
-                            <Protected fallback={<Login />} showMessage>
-                                <ModuleGroupList />
+                            <Protected fallback={<Login/>} showMessage>
+                                <ModuleGroupList/>
                             </Protected>
                         </Route>
                         <Route>
-                            <Protected fallback={<Login />} showMessage>
-                                <SemesterList />
+                            <Protected fallback={<Login/>} showMessage>
+                                <SemesterList/>
                             </Protected>
                         </Route>
                     </Switch>
