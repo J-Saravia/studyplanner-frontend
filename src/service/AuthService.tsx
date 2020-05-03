@@ -128,6 +128,10 @@ export default class AuthService {
         return this.authStateSubject.subscribe(observer);
     }
 
+    /**
+     * Requests a reset code for the given email address
+     * @param mail
+     */
     public requestPasswordReset(mail: string): Promise<void> {
         return this.restClient
             .request('post')
@@ -137,6 +141,12 @@ export default class AuthService {
             .fetch();
     }
 
+    /**
+     * Tries to reset the password with the given token
+     * @param email
+     * @param forgotToken
+     * @param password
+     */
     public resetPassword(email: string, forgotToken: string, password: string): Promise<void>  {
         return this.restClient
             .request('POST')
@@ -179,20 +189,32 @@ export default class AuthService {
             }
             return { 'Authorization': `Bearer ${this.token?.tokenString}` };
         } catch (e) {
+            // This could cause a memory leak in react if the Promise is resolved after the component has been unmounted due to the change in the login state.
+            // TODO: Refactor code to use something like observables
             this.logout();
             throw e;
         }
     }
 
     private async refresh(): Promise<AuthResponse> {
-        const authResponse = await this.restClient
-            .request('POST')
-            .url('refresh')
-            .body({ refreshToken: this.refreshToken?.tokenString })
-            .noAuthHeader()
-            .fetch<AuthResponse>();
-        await this.handleAuthResponse(authResponse);
-        return authResponse;
+        try {
+            if (!this.refreshToken?.isValid()) {
+                throw new Error('Refresh token has expired');
+            }
+            const authResponse = await this.restClient
+                .request('POST')
+                .url('refresh')
+                .body({refreshToken: this.refreshToken?.tokenString})
+                .noAuthHeader()
+                .fetch<AuthResponse>();
+            await this.handleAuthResponse(authResponse);
+            return authResponse;
+        } catch (e) {
+            // This could cause a memory leak in react if the Promise is resolved after the component has been unmounted due to the change in the login state.
+            // TODO: Refactor code to use something like observables
+            this.logout();
+            throw e;
+        }
     }
 
     private async handleAuthResponse(response: AuthResponse) {
