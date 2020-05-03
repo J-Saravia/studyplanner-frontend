@@ -22,7 +22,7 @@ export default class ProfileService extends CacheableService<Profile> {
 
     public async getForStudentDegree(): Promise<Profile[]> {
         const authService = AuthService.INSTANCE;
-        if (!authService.isLoggedIn()) {
+        if (!await authService.tryEnsureLoggedIn()) {
             throw new Error('Unauthorized');
         }
         const student = authService.getCurrentStudent() as Student;
