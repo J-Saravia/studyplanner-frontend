@@ -2,8 +2,8 @@ import * as React from 'react';
 import { Chip, StyledComponentProps, withStyles } from '@material-ui/core';
 import ModuleVisit from '../../../model/ModuleVisit';
 import { ClassNameMap } from '@material-ui/core/styles/withStyles';
-import StudyStatisticsStyle from './StudyStatisticsStyle';
 import { Trans, WithTranslation, withTranslation } from 'react-i18next';
+import StatisticsStyle from "../StatisticsStyle";
 
 interface StudyStatisticsProps extends StyledComponentProps, WithTranslation {
     classes: ClassNameMap;
@@ -23,13 +23,15 @@ class StudyStatistics extends React.Component<StudyStatisticsProps, any> {
         keys.forEach((key) => {
             semesterModuleMap[key].forEach((mv) => {
                 const credits = mv.module.credits;
-                totalCredits += credits;
+                if (mv.state !== "failed") {
+                    totalCredits += credits;
+                }
             });
         });
         return totalCredits.toString();
     }
 
-    private getTotalPositive() {
+    private getPositiveEcts() {
         const { semesterModuleMap } = this.props;
         let currentCredits = 0;
         const keys = Object.keys(semesterModuleMap);
@@ -45,7 +47,23 @@ class StudyStatistics extends React.Component<StudyStatisticsProps, any> {
         return currentCredits.toString();
     }
 
-    private getTotalNegative() {
+    private getPendingEcts() {
+        const { semesterModuleMap } = this.props;
+        let currentCredits = 0;
+        const keys = Object.keys(semesterModuleMap);
+        keys.forEach((key) => {
+            semesterModuleMap[key].forEach((mv) => {
+                const credits = mv.module.credits;
+                if (mv.state === 'planned' || mv.state === 'ongoing') {
+                    currentCredits += credits;
+                }
+            });
+        });
+
+        return currentCredits.toString();
+    }
+
+    private getNegativeEcts() {
         const { semesterModuleMap } = this.props;
         let currentNegativeCredits = 0;
         const keys = Object.keys(semesterModuleMap);
@@ -94,17 +112,21 @@ class StudyStatistics extends React.Component<StudyStatisticsProps, any> {
         const { classes } = this.props;
 
         return (
-            <div className={classes.root}>
+            <div className={classes.root}
+                 style={{
+                     marginRight: '24px'
+                 }}>
                 <div className={classes.group}>
                     <div className={classes.groupTitle}>ECTS</div>
-                    {this.getChip('ects.total', this.getTotalEcts())}
-                    {this.getChip('ects.passed', this.getTotalPositive())}
-                    {this.getChip('ects.failed', this.getTotalNegative())}
+                    {this.getChip('ectsModules.total', this.getTotalEcts())}
+                    {this.getChip('ectsModules.passed', this.getPositiveEcts())}
+                    {this.getChip('ectsModules.failed', this.getNegativeEcts())}
+                    {this.getChip('ectsModules.pending', this.getPendingEcts())}
                 </div>
                 <div className={classes.group}>
                     <div className={classes.groupTitle}>
                         <Trans>
-                            translation:messages.semesterStatistic.grade.title
+                            translation:messages.statistic.grade.title
                         </Trans>
                     </div>
                     {this.getChip('grade.avg', this.getAvgGrade())}
@@ -122,7 +144,7 @@ class StudyStatistics extends React.Component<StudyStatisticsProps, any> {
                     <div>
                         <div className={classes.label}>
                             <Trans>
-                                translation:messages.semesterStatistic.{label}
+                                translation:messages.statistic.{label}
                             </Trans>
                         </div>
                         <div className={classes.value}>{value}</div>
@@ -132,14 +154,9 @@ class StudyStatistics extends React.Component<StudyStatisticsProps, any> {
                 classes={{
                     root: classes.elem,
                 }}
-                style={{
-                    height: '60px',
-                }}
             />
         );
     }
 }
 
-export default withTranslation()(
-    withStyles(StudyStatisticsStyle)(StudyStatistics)
-);
+export default withTranslation()(withStyles(StatisticsStyle)(StudyStatistics));
