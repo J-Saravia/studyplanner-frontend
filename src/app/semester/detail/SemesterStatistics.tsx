@@ -2,12 +2,10 @@ import * as React from 'react';
 import { Chip, StyledComponentProps, withStyles } from '@material-ui/core';
 import ModuleVisit from '../../../model/ModuleVisit';
 import { ClassNameMap } from '@material-ui/core/styles/withStyles';
-import SemesterStatisticsStyle from './SemesterStatisticsStyle';
 import { Trans, WithTranslation, withTranslation } from 'react-i18next';
+import StatisticsStyle from "../StatisticsStyle";
 
-interface SemesterStatisticsProps
-    extends StyledComponentProps,
-        WithTranslation {
+interface SemesterStatisticsProps extends StyledComponentProps, WithTranslation {
     classes: ClassNameMap;
     moduleVisits: ModuleVisit[];
 }
@@ -31,7 +29,23 @@ class SemesterStatistics extends React.Component<SemesterStatisticsProps, any> {
         return total.toString();
     }
 
-    private getTotalPositive() {
+    private getPendingEcts() {
+        const { moduleVisits } = this.props;
+        let passedModule = moduleVisits.filter((m) => m.state === 'planned' || m.state === 'ongoing');
+        let total = 0;
+        if (passedModule.length !== 0) {
+            total = passedModule
+                .map((m) => m.module.credits)
+                .reduce(function (a, b) {
+                    return a + b;
+                });
+        }
+
+        return total.toString();
+    }
+
+
+    private getPositiveEcts() {
         const { moduleVisits } = this.props;
         let passedModule = moduleVisits.filter((m) => m.state === 'passed');
         let total = 0;
@@ -46,7 +60,7 @@ class SemesterStatistics extends React.Component<SemesterStatisticsProps, any> {
         return total.toString();
     }
 
-    private getTotalNegative() {
+    private getNegativeEcts() {
         const { moduleVisits } = this.props;
         let failedModule = moduleVisits.filter((m) => m.state === 'failed');
         let total = 0;
@@ -125,30 +139,32 @@ class SemesterStatistics extends React.Component<SemesterStatisticsProps, any> {
     }
 
     public render() {
-        const { classes } = this.props;
+        const { classes, moduleVisits } = this.props;
+        const mapMsps = moduleVisits.map((m) => m.module.msp);
 
         return (
             <div className={classes.root}>
                 <div className={classes.group}>
                     <div className={classes.groupTitle}>ECTS</div>
-                    {this.getChip('ects.total', this.getTotalEcts())}
-                    {this.getChip('ects.passed', this.getTotalPositive())}
-                    {this.getChip('ects.failed', this.getTotalNegative())}
+                    {this.getChip('ectsModules.total', this.getTotalEcts())}
+                    {this.getChip('ectsModules.passed', this.getPositiveEcts())}
+                    {this.getChip('ectsModules.failed', this.getNegativeEcts())}
+                    {this.getChip('ectsModules.pending', this.getPendingEcts())}
                 </div>
-                <div className={classes.group}>
-                    <div className={classes.groupTitle}>
-                        <Trans>
-                            translation:messages.semesterStatistic.grade.title
-                        </Trans>
-                    </div>
-                    {this.getChip('grade.avg', this.getAvgGrade())}
-                    {this.getChip('grade.high', this.getHighGrade())}
-                </div>
-                <div className={classes.group}>
+                {mapMsps ? <div className={classes.group}>
                     <div className={classes.groupTitle}>MSP</div>
                     {this.getChip('msp.total', this.getTotalMsps())}
                     {this.getChip('msp.written', this.getWrittenMsps())}
                     {this.getChip('msp.oral', this.getOralMsps())}
+                </div> : ''}
+                <div className={classes.group}>
+                    <div className={classes.groupTitle}>
+                        <Trans>
+                            translation:messages.statistic.grade.title
+                        </Trans>
+                    </div>
+                    {this.getChip('grade.avg', this.getAvgGrade())}
+                    {this.getChip('grade.high', this.getHighGrade())}
                 </div>
             </div>
         );
@@ -163,7 +179,7 @@ class SemesterStatistics extends React.Component<SemesterStatisticsProps, any> {
                     <div>
                         <div className={classes.label}>
                             <Trans>
-                                translation:messages.semesterStatistic.{label}
+                                translation:messages.statistic.{label}
                             </Trans>
                         </div>
                         <div className={classes.value}>{value}</div>
@@ -178,6 +194,4 @@ class SemesterStatistics extends React.Component<SemesterStatisticsProps, any> {
     }
 }
 
-export default withTranslation()(
-    withStyles(SemesterStatisticsStyle)(SemesterStatistics)
-);
+export default withTranslation()(withStyles(StatisticsStyle)(SemesterStatistics));
