@@ -198,6 +198,9 @@ export default class AuthService {
 
     private async refresh(): Promise<AuthResponse> {
         try {
+            if (!this.refreshToken?.isValid()) {
+                throw new Error('Refresh token has expired');
+            }
             const authResponse = await this.restClient
                 .request('POST')
                 .url('refresh')
