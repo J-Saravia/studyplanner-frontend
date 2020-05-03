@@ -34,12 +34,32 @@ export default class AuthService {
     }
 
     /**
+     * Tries to refresh the token if it has expired.
+     * Returns a boolean Promise which will be resolved once the refresh has succeeded/failed
+     */
+    public async tryEnsureLoggedIn(): Promise<boolean> {
+        if (this.isLoggedIn()) {
+            return true;
+        }
+        try {
+            await this.refresh();
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    /**
      * Returns the current student if logged in
      */
     public getCurrentStudent(): Student | undefined {
         return this.currentStudent;
     }
 
+    /**
+     * Overwrites the locally stored user object
+     * @param student
+     */
     public updateCurrentUser(student: Student) {
         this.studentSubject.next(this.currentStudent = student);
     }
@@ -108,6 +128,10 @@ export default class AuthService {
         return this.authStateSubject.subscribe(observer);
     }
 
+    /**
+     * Requests a reset code for the given email address
+     * @param mail
+     */
     public requestPasswordReset(mail: string): Promise<void> {
         return this.restClient
             .request('post')
@@ -117,6 +141,12 @@ export default class AuthService {
             .fetch();
     }
 
+    /**
+     * Tries to reset the password with the given token
+     * @param email
+     * @param forgotToken
+     * @param password
+     */
     public resetPassword(email: string, forgotToken: string, password: string): Promise<void>  {
         return this.restClient
             .request('POST')
@@ -159,20 +189,29 @@ export default class AuthService {
             }
             return { 'Authorization': `Bearer ${this.token?.tokenString}` };
         } catch (e) {
+            // This could cause a memory leak in react if the Promise is resolved after the component has been unmounted due to the change in the login state.
+            // TODO: Refactor code to use something like observables
             this.logout();
             throw e;
         }
     }
 
     private async refresh(): Promise<AuthResponse> {
-        const authResponse = await this.restClient
-            .request('POST')
-            .url('refresh')
-            .body({ refreshToken: this.refreshToken?.tokenString })
-            .noAuthHeader()
-            .fetch<AuthResponse>();
-        await this.handleAuthResponse(authResponse);
-        return authResponse;
+        try {
+            const authResponse = await this.restClient
+                .request('POST')
+                .url('refresh')
+                .body({refreshToken: this.refreshToken?.tokenString})
+                .noAuthHeader()
+                .fetch<AuthResponse>();
+            await this.handleAuthResponse(authResponse);
+            return authResponse;
+        } catch (e) {
+            // This could cause a memory leak in react if the Promise is resolved after the component has been unmounted due to the change in the login state.
+            // TODO: Refactor code to use something like observables
+            this.logout();
+            throw e;
+        }
     }
 
     private async handleAuthResponse(response: AuthResponse) {
