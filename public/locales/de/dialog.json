@@ -1,0 +1,13 @@
+{
+  "confirmation": {
+    "confirm": "Bestätigen",
+    "cancel": "Abbrechen",
+    "content": "Sind Sie sich sicher, dass Sie diese Aktion durchführen wollen?",
+    "title": "Aktion bestätigen"
+  },
+  "selection": {
+    "title": "Auswahl",
+    "select": "Auswählen",
+    "cancel": "Abbrechen"
+  }
+}

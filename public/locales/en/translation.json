@@ -1,0 +1,185 @@
+{
+  "language": "English",
+  "messages": {
+    "initialising": "The page is loading, this may take up to several seconds depending on the current connection.",
+    "yes": "Yes",
+    "no": "No",
+    "title": "Studyplanner",
+    "logout": {
+      "title": "Logout",
+      "content": "Are you sure you want to log out?",
+      "confirm": "Logout"
+    },
+    "semester": {
+      "create": "Add semester",
+      "label": "Semester",
+      "help": "The name of the semester consist of two letters (hs/fs) and the year. (example: hs17)",
+      "cancel": "Cancel",
+      "delete": {
+        "error": "Deletion failed"
+      },
+      "load": {
+        "error": "Failed to load module visits"
+      },
+      "invalid": "This semester is invalid",
+      "backToList": "Back to the semester list"
+    },
+    "moduleGroups": {
+      "title": "Module groups",
+      "othermodulevisits": "Other module visits",
+      "load": {
+        "error": "Failed to load module groups"
+      }
+    },
+    "profiles": {
+      "title": "Profiles"
+    },
+    "module": {
+      "selection": {
+        "loading": "Loading modules...",
+        "empty": "No modules found",
+        "search": "Search modules",
+        "select": "Select module",
+        "code": "Code",
+        "credits": "ECTS",
+        "semester": "Semester",
+        "msp": {
+          "none": "None",
+          "written": "Written",
+          "oral": "Oral"
+        },
+        "state": {
+          "blocked": "Blocked",
+          "failed": "Failed",
+          "passed": "Passed",
+          "ongoing": "Ongoing",
+          "planned": "Planned",
+          "none": ""
+        },
+        "requirements": {
+          "title": "Preceding modules",
+          "none": "No preceding modules",
+          "fulfilled": "Fulfilled all preceding modules"
+        }
+      }
+    },
+    "moduleVisit": {
+      "dialog": {
+        "title": "Modulevisit",
+        "save": "Confirm",
+        "delete": "Delete",
+        "error": "Action failed",
+        "field": {
+          "grade": {
+            "title": "Grade",
+            "help": "0 if no grade is present, 1-6 otherwise."
+          },
+          "semester": {
+            "title": "Semester",
+            "help": ""
+          },
+          "timeStart": {
+            "title": "Start",
+            "help": "Time at which the module starts (or something else if unknown), format: HH:MM."
+          },
+          "timeEnd": {
+            "title": "End",
+            "help": "Time at which the module ends (or something else if unknown), format: HH:MM."
+          },
+          "weekday": {
+            "title": "Day of the week",
+            "0": "Monday",
+            "1": "Tuesday",
+            "2": "Wednesday",
+            "3": "Thursday",
+            "4": "Friday",
+            "5": "Saturday"
+          },
+          "module": {
+            "title": "Module",
+            "select": "Select module",
+            "error": {
+              "empty": "No module selected.",
+              "blocked": "You may not take a module more than twice.",
+              "passed": "You have already passed this module.",
+              "alreadyInSemester": "You have already added this module to the current semester."
+            }
+          },
+          "state": {
+            "title": "Status",
+            "planned": "Planned",
+            "ongoing": "Ongoing",
+            "passed": "Passed",
+            "failed": "Failed"
+          }
+        }
+      },
+      "delete": {
+        "title": "Delete",
+        "text": "You are about to delete a module visit, are you sure you want to do this?",
+        "confirm": "Delete"
+      }
+    },
+    "student": {
+      "title": "Account",
+      "delete": {
+        "title": "Delete account",
+        "confirmation": "Are you sure you want to delete your account? This will irreversibly delete your data."
+      },
+      "error": "Action failed",
+      "successful": "Account has been updated",
+      "form": {
+        "error": "Unable to load data",
+        "submit": "Submit",
+        "field": {
+          "id": {
+            "title": "Id",
+            "help": ""
+          },
+          "email": {
+            "title": "E-Mail address",
+            "help": ""
+          },
+          "password": {
+            "title": "Password",
+            "help": "Password must be at least 10 digits long"
+          },
+          "confirmPassword": {
+            "title": "Confirm password",
+            "help": ""
+          },
+          "semester": {
+            "title": "Semester",
+            "help": ""
+          },
+          "degree": {
+            "title": "Degree",
+            "help": ""
+          }
+        }
+      }
+    },
+    "statistic": {
+      "titleSemester": "Semester statistic",
+      "titleStudy": "Study statistic",
+      "ectsModules": {
+        "modules": "Modules",
+        "total": "Total",
+        "pending": "Pending",
+        "passed": "Passed",
+        "failed": "Failed"
+      },
+      "grade": {
+        "title": "Grades",
+        "avg": "Average",
+        "high": "Highest"
+      },
+      "msp": {
+        "total": "Total",
+        "written": "Written",
+        "oral": "Oral"
+      }
+    },
+    "unauthorized": "Access denied"
+  }
+}

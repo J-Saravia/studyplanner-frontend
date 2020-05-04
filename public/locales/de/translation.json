@@ -1,0 +1,185 @@
+{
+  "language": "Deutsch",
+  "messages": {
+    "initialising": "Die Seite wird gerade initialisiert, dies kann bis zu einigen Sekunden dauern, basierend auf die Geschwindigkeit der aktuellen Verbindung.",
+    "yes": "Ja",
+    "no": "Nein",
+    "title": "Modulplaner",
+    "logout": {
+      "title": "Abmelden",
+      "content": "Sind Sie sich sicher, dass Sie sich abmelden wollen?",
+      "confirm": "Abmelden"
+    },
+    "semester": {
+      "create": "Semester Hinzufügen",
+      "label": "Semestername",
+      "help": "Der Semestername besteht aus dem kürzel hs bzw. fs für Herbs- bzw. Frühlingssemester und der Jahreszahl. (Beispiel: hs17)",
+      "cancel": "Abbrechen",
+      "delete": {
+        "error": "Entfernen fehlgeschlagen"
+      },
+      "load": {
+        "error": "Laden der Modulbesuche fehlgeschlagen"
+      },
+      "invalid": "Dies ist ein ungültiges Semester.",
+      "backToList": "Zur Semesterliste"
+    },
+    "moduleGroups": {
+      "title": "Modulgruppen",
+      "othermodulevisits": "Andere Modulbesuche",
+      "load": {
+        "error": "Laden der Modulgruppen fehlgeschlagen"
+      }
+    },
+    "profiles": {
+      "title": "Vertiefungen"
+    },
+    "module": {
+      "selection": {
+        "loading": "Module werden geladen...",
+        "empty": "Keine Module gefunden",
+        "search": "Module durchsuchen",
+        "select": "Modul auswählen",
+        "code": "Kürzel",
+        "credits": "ECTS",
+        "semester": "Semester",
+        "msp": {
+          "none": "Keine",
+          "written": "Schriftlich",
+          "oral": "Mündlich"
+        },
+        "state": {
+          "blocked": "Gesperrt",
+          "failed": "Ungenügend",
+          "passed": "Bestanden",
+          "ongoing": "Angemeldet",
+          "planned": "Geplant",
+          "none": ""
+        },
+        "requirements": {
+          "title": "Vormodule",
+          "none": "Keine Vordmodule",
+          "fulfilled": "Alle Vormodule bestanden"
+        }
+      }
+    },
+    "moduleVisit": {
+      "dialog": {
+        "title": "Modulbesuch",
+        "save": "Bestätigen",
+        "delete": "Löschen",
+        "error": "Aktion fehlgeschlagen",
+        "field": {
+          "grade": {
+            "title": "Note",
+            "help": "0 Falls das Modul noch keine Note hat oder nur ein Testatmodul ist, 1-6 in anderen Fällen."
+          },
+          "semester": {
+            "title": "Semester",
+            "help": ""
+          },
+          "timeStart": {
+            "title": "Start",
+            "help": "Uhrzeit um welche das Modul startet, im Format HH:MM."
+          },
+          "timeEnd": {
+            "title": "Ende",
+            "help": "Uhrzeit um welche das Modul endet, im Format HH:MM."
+          },
+          "weekday": {
+            "title": "Wochentag",
+            "0": "Montag",
+            "1": "Dienstag",
+            "2": "Mittwoch",
+            "3": "Donnerstag",
+            "4": "Freitag",
+            "5": "Samstag"
+          },
+          "module": {
+            "title": "Modul",
+            "select": "Modul auswählen",
+            "error": {
+              "empty": "Kein Modul ausgewählt.",
+              "blocked": "Modul kann nicht mehr als zweimal gewählt werden.",
+              "passed": "Modul wurde bereits bestanden.",
+              "alreadyInSemester": "Modul wurde bereits in diesem Semester gewählt."
+            }
+          },
+          "state": {
+            "title": "Status",
+            "planned": "Geplant",
+            "ongoing": "Wird besucht",
+            "passed": "Bestanden",
+            "failed": "Ungenügend"
+          }
+        }
+      },
+      "delete": {
+        "title": "Löschen",
+        "text": "Sie sind dabei einen Modulbesuch zu löschen, sind Sie sich sicher?",
+        "confirm": "Löschen"
+      }
+    },
+    "student": {
+      "title": "Benutzer",
+      "delete": {
+        "title": "Benutzer löschen",
+        "confirmation": "Sind Sie sich sicher, dass Sie Ihren Benutzer löschen wollen? Alle Ihre Daten gehen dadurch verloren."
+      },
+      "error": "Aktion fehlgeschlagen",
+      "successful": "Benutzer aktualisiert",
+      "form": {
+        "error": "Daten konnten nicht geladen werden",
+        "submit": "Absenden",
+        "field": {
+          "id": {
+            "title": "Benutzerid",
+            "help": ""
+          },
+          "email": {
+            "title": "E-Mail-Addresse",
+            "help": ""
+          },
+          "password": {
+            "title": "Passwort",
+            "help": "Passwort muss mindestens 10 Zeichen lang sein"
+          },
+          "confirmPassword": {
+            "title": "Passwort bestätigen",
+            "help": ""
+          },
+          "semester": {
+            "title": "Semester",
+            "help": ""
+          },
+          "degree": {
+            "title": "Abschluss",
+            "help": ""
+          }
+        }
+      }
+    },
+    "statistic": {
+      "titleSemester": "Semesterstatistik",
+      "titleStudy": "Studiumstatistik",
+      "ectsModules": {
+        "modules": "Module",
+        "total": "Gesamt",
+        "pending": "Ausstehend",
+        "passed": "Bestanden",
+        "failed": "Ungenügend"
+      },
+      "grade": {
+        "title": "Noten",
+        "avg": "Durchschnitt",
+        "high": "Höchste"
+      },
+      "msp": {
+        "total": "Gesamt",
+        "written": "Schriftlich",
+        "oral": "Mündlich"
+      }
+    },
+    "unauthorized": "Zugriff verweigert"
+  }
+}
