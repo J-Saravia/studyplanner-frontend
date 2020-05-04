@@ -11,22 +11,46 @@ export default class StudentService {
 
     private constructor() {}
 
+    /**
+     * Fetches a single user by id
+     * @param id
+     */
     public findById(id: string): Promise<Student> {
         return this.restClient.getOne<StudentDto>(id).then(this.convertDto);
     }
 
+    /**
+     * Creates (Registeres) a new student
+     * Returns a StudentDto since this fits better into our concept
+     * @param student
+     */
     public create(student: StudentDto): Promise<StudentDto> {
         return this.restClient.post<StudentDto>(student);
     }
 
+    /**
+     * Updates the student with the given id
+     * This will NOT log out the current authenticated student
+     * @param id
+     * @param student
+     */
     public update(id: string, student: StudentDto): Promise<Student> {
         return this.restClient.put<StudentDto>(id, student).then(this.convertDto);
     }
 
+    /**
+     * Deletes the student from the backend
+     * This will NOT log out the current authenticated student
+     * @param id
+     */
     public delete(id: string): Promise<void> {
         return this.restClient.delete(id);
     }
 
+    /**
+     * Converts a dto to a model object
+     * @param dto
+     */
     public async convertDto(dto: StudentDto): Promise<Student> {
         return {
             ...dto,
@@ -34,6 +58,10 @@ export default class StudentService {
         };
     }
 
+    /**
+     * Converts a model to a dto
+     * @param model
+     */
     public convertModel(model: Student): StudentDto {
         return {
             ...model,

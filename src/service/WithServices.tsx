@@ -7,6 +7,11 @@ import { ModuleGroupServiceProps, withModuleGroupService } from './ModuleGroupSe
 import { DegreeServiceProps, withDegreeService } from './DegreeService';
 import { ProfileServiceProps, withProfileService } from './ProfileService';
 
+/**
+ * This is used to inject ALL services into a component
+ */
+
+
 export interface WithServicesProps extends AuthServiceProps,
     StudentServiceProps,
     ModuleServiceProps,

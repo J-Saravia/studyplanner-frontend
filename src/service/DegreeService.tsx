@@ -5,12 +5,14 @@ import CacheableService from './CacheableService';
 import ProfileService from './ProfileService';
 import ModuleGroupService from './ModuleGroupService';
 
+/**
+ * Manages the degrees
+ */
 export default class DegreeService extends CacheableService<Degree>{
 
     public static readonly INSTANCE = new DegreeService();
 
     private restClient = new HttpClient('degrees');
-
 
     private constructor() {
         super();
