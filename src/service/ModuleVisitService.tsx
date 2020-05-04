@@ -15,6 +15,9 @@ export default class ModuleVisitService {
 
     private constructor() {}
 
+    /**
+     * Fetches a flat list of the ModuleVisits for the current student from the backend
+     */
     public async list(): Promise<ModuleVisit[]> {
         const authService = AuthService.INSTANCE;
         if (!await authService.tryEnsureLoggedIn()) {
@@ -32,16 +35,15 @@ export default class ModuleVisitService {
         return visits;
     }
 
+    /**
+     * Fetches all ModuleVisits for the current student from the backend and maps them with the semester as key
+     */
     public async map(): Promise<{ [key: string]: ModuleVisit[] }> {
         const authService = AuthService.INSTANCE;
         if (!await authService.tryEnsureLoggedIn()) {
             throw new Error('Unauthorized');
         }
-        const student = authService.getCurrentStudent();
-        if (!student) {
-            console.error('Invalid state: Student not defined while logged in');
-            throw new Error('Invalid state: Student not defined while logged in');
-        }
+        const student = authService.getCurrentStudent() as Student;
         const dtos = await this.restClient
             .request()
             .query({student: student.id})
@@ -60,24 +62,45 @@ export default class ModuleVisitService {
         return visitMap;
     }
 
+    /**
+     * Sorts a list of ModuleVisits based on state and grade
+     * @param list
+     */
     public sortList(list: ModuleVisit[]) {
         return list.sort((a, b) => ModuleVisitService.compareModuleVisits(a, b));
     }
 
+    /**
+     * Fetches a ModuleVisit with a specific id
+     * @param id
+     */
     public async findById(id: string): Promise<ModuleVisit> {
         return ModuleVisitService.convertToModel(await this.restClient.getOne(id));
     }
 
+    /**
+     * Creates a new ModuleVisit
+     * @param moduleVisit
+     */
     public async create(moduleVisit: ModuleVisit): Promise<ModuleVisit> {
         const dto = await ModuleVisitService.convertToDto(moduleVisit);
         return ModuleVisitService.convertToModel(await this.restClient.post(dto), moduleVisit.student, moduleVisit.module);
     }
 
+    /**
+     * Updates the ModuleVisit with the given id
+     * @param id
+     * @param moduleVisit
+     */
     public async update(id: string, moduleVisit: ModuleVisit): Promise<ModuleVisit> {
         const dto = await ModuleVisitService.convertToDto(moduleVisit);
         return ModuleVisitService.convertToModel(await this.restClient.put(id, dto), moduleVisit.student, moduleVisit.module);
     }
 
+    /**
+     * Deletes the ModuleVisit with the given id
+     * @param id
+     */
     public async delete(id: string) {
         return await this.restClient.delete(id);
     }

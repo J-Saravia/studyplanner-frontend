@@ -5,6 +5,9 @@ import CacheableService from './CacheableService';
 import ModuleInfo from '../model/ModuleInfo';
 import ModuleVisitService from './ModuleVisitService';
 
+/**
+ * Manages the modules
+ */
 export default class ModuleService extends CacheableService<Module> {
 
     public static readonly INSTANCE = new ModuleService();
@@ -15,6 +18,10 @@ export default class ModuleService extends CacheableService<Module> {
         super();
     }
 
+    /**
+     * Creates a list of ModuleInfos
+     * THis will fetch all ModuleVisits for the current student
+     */
     public async generateModuleInfoList(): Promise<ModuleInfo[]> {
         const modules = await this.list();
         const visits = await ModuleVisitService.INSTANCE.list();
