@@ -1,6 +1,10 @@
 import urlJoin from 'url-join';
 import AuthService from './AuthService';
 
+/**
+ * This class is used to fetch data from the Backend
+ * Is bound to an url relative to the API endpoint set in the api.json file
+ */
 export default class HttpClient {
 
     private static readonly config: Promise<{endpoint: string}> =
@@ -43,6 +47,10 @@ export default class HttpClient {
 
 }
 
+/**
+ * This class is used to construct/build a HTTP Request.
+ * A request is always bound to a HttpClient
+ */
 export class Request {
 
     private _useAuthHeader = true;

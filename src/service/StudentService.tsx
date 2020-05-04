@@ -30,6 +30,7 @@ export default class StudentService {
 
     /**
      * Updates the student with the given id
+     * This will NOT log out the current authenticated student
      * @param id
      * @param student
      */
