@@ -6,6 +6,9 @@ import ModuleService from './ModuleService';
 import AuthService from './AuthService';
 import Student from '../model/Student';
 
+/**
+ * Manages the ModuleGroups
+ */
 export default class ModuleGroupService extends CacheableService<ModuleGroup> {
     public static readonly INSTANCE = new ModuleGroupService();
 
@@ -21,6 +24,10 @@ export default class ModuleGroupService extends CacheableService<ModuleGroup> {
         );
     }
 
+    /**
+     * Returns the moduleGroups for the degree of the current student
+     * Student.degree.groups should contain the same information
+     */
     public async getForStudentDegree(): Promise<ModuleGroup[]> {
         const authService = AuthService.INSTANCE;
         if (!await authService.tryEnsureLoggedIn()) {

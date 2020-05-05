@@ -1,3 +1,6 @@
+/**
+ * Class that provides a common base for cacheable services
+ */
 export default abstract class CacheableService<T extends {id?: K}, K = string> {
 
     private maxCacheAge = 1000 * 60 * 60 * 24; // How long the cache should be valid in milliseconds
@@ -9,6 +12,10 @@ export default abstract class CacheableService<T extends {id?: K}, K = string> {
         this.maxCacheAge = maxCacheAge;
     }
 
+
+    /**
+     * Clears the cache, so that it will reload the data from the backend
+     */
     public async clearCache(): Promise<void> {
         if (this.loadingCache) {
             await this.loadingCache;
@@ -21,6 +28,9 @@ export default abstract class CacheableService<T extends {id?: K}, K = string> {
         }));
     }
 
+    /**
+     * Load the cache from the abstract loadData method if needed
+     */
     protected async loadCache(): Promise<T[]> {
         if (this.lastCacheUpdate + this.maxCacheAge < Date.now()) {
             if (!this.loadingCache) {
@@ -40,14 +50,24 @@ export default abstract class CacheableService<T extends {id?: K}, K = string> {
         return this.cache.filter(_ => true);
     }
 
+    /**
+     * Return a copy of the current cache
+     */
     public async list(): Promise<T[]> {
         return await this.loadCache();
     }
 
+    /**
+     * Return one element from the cache
+     * @param id
+     */
     public async findById(id: K): Promise<T> {
         return (await this.loadCache()).find(element => element.id === id) as T;
     }
 
+    /**
+     * Provide data for the cache
+     */
     protected abstract loadData(): Promise<T[]>;
 
 }
